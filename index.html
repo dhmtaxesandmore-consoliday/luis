@@ -816,7 +816,7 @@
             subtitle: "[ FORJA TU FORTALEZA ]",
             desc: "Entrenamiento de fuerza y acondicionamiento muscular de alta eficiencia. Diseñado científicamente para potenciar atletas de resistencia, mejorar la estabilidad del core y prevenir lesiones biomecánicas.",
             badge: "[ FORJA TU FORTALEZA ]",
-            bg: "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg",
+            bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "3 - 5", unit1: "sesiones/sem", label1: "Frecuencia de Fuerza",
                 val2: "100%", unit2: "personalizado", label2: "Enfoque Técnico",
@@ -947,7 +947,7 @@
         const localGallery = localStorage.getItem("galleryData");
 
         // Force upgrade/sync defaultPhaseData if localPhase is outdated or has old background images or lacks strength
-        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg") || !localPhase.includes("\"strength\"")) {
+        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg") || !localPhase.includes("\"strength\"") || localPhase.includes("paolo-candelo-53B17GiIhTA-unsplash.jpg")) {
             phaseData = defaultPhaseData;
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
         } else {
