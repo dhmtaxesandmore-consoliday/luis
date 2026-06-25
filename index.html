@@ -239,6 +239,9 @@
             <a id="nav-run" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('run', event)">
                 ATLETISMO
             </a>
+            <a id="nav-strength" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('strength', event)">
+                GIMNASIO
+            </a>
             <a href="#schedule-section" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer">
                 HORARIOS
             </a>
@@ -268,6 +271,7 @@
         <a id="mob-swim" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('swim', event); toggleMobileMenu();">NATACION</a>
         <a id="mob-bike" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('bike', event); toggleMobileMenu();">CICLISMO</a>
         <a id="mob-run" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('run', event); toggleMobileMenu();">ATLETISMO</a>
+        <a id="mob-strength" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('strength', event); toggleMobileMenu();">GIMNASIO</a>
         <a href="#schedule-section" class="text-on-surface text-lg font-label-sm uppercase tracking-widest" onclick="toggleMobileMenu();">HORARIOS</a>
     </div>
     <button onclick="openAthleteModal(); toggleMobileMenu();" class="font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-8 py-3 uppercase mb-2">
@@ -541,6 +545,7 @@
         <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#plans-section">PLANES</a>
         <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#gallery-section">GALERÍA</a>
         <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#schedule-section">HORARIOS</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('strength', event)">GIMNASIO</a>
         <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="openJoinModal()">CONTACTO</a>
         <a class="font-label-sm text-xs text-[var(--accent-color)] uppercase tracking-wider hover:text-white transition-colors cursor-pointer font-bold" onclick="openAdminLoginModal()">PORTAL ENTRENADOR</a>
     </div>
@@ -603,6 +608,7 @@
                         <option value="swim">Natación (Aguas Abiertas / Piscina)</option>
                         <option value="bike">Ciclismo (Ruta / Contrarreloj)</option>
                         <option value="run">Atletismo (Maratón / Pista)</option>
+                        <option value="strength">Gimnasio & Fortalecimiento</option>
                     </select>
                 </div>
                 <div>
@@ -804,6 +810,48 @@
                     badge: "Gimnasio"
                 }
             ]
+        },
+        strength: {
+            title: "STRENGTH &<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>CONDITIONING</span>",
+            subtitle: "[ FORJA TU FORTALEZA ]",
+            desc: "Entrenamiento de fuerza y acondicionamiento muscular de alta eficiencia. Diseñado científicamente para potenciar atletas de resistencia, mejorar la estabilidad del core y prevenir lesiones biomecánicas.",
+            badge: "[ FORJA TU FORTALEZA ]",
+            bg: "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg",
+            metrics: {
+                val1: "3 - 5", unit1: "sesiones/sem", label1: "Frecuencia de Fuerza",
+                val2: "100%", unit2: "personalizado", label2: "Enfoque Técnico",
+                val3: "PREVENCIÓN", label3: "Enfoque Fásico",
+                zones: `<div class="h-2 w-[30%] bg-white/20" title="Core"></div>
+                        <div class="h-2 w-[40%] bg-[var(--accent-color)]" title="Potencia"></div>
+                        <div class="h-2 w-[30%] bg-white/40" title="Resistencia"></div>`
+            },
+            plansTitle: "GIMNASIO",
+            plans: [
+                {
+                    level: "PLANIFICACIÓN GYM & FORTALECIMIENTO",
+                    duration: "Mensual",
+                    volume: "Personalizado",
+                    focus: "Planificación online personalizada enfocada en el trabajo de gimnasio y acondicionamiento general. Disponible para niños y adultos.",
+                    price: "$150",
+                    badge: "Recomendado"
+                },
+                {
+                    level: "FUERZA PRESENCIAL PERSONALIZADA",
+                    duration: "Mensual",
+                    volume: "2 clases presenciales",
+                    focus: "Planificación online personalizada de gimnasio + 2 sesiones individuales al mes para corrección técnica de levantamientos olímpicos y bio-mecánica.",
+                    price: "$250",
+                    badge: "Presencial"
+                },
+                {
+                    level: "COMBO MULTI-SPORT + GYM",
+                    duration: "Mensual",
+                    volume: "Personalizado",
+                    focus: "Planificación online combinada de fortalecimiento físico y acondicionamiento junto con rutinas de natación, ciclismo o running autónomas. Adultos y niños.",
+                    price: "$180",
+                    badge: "Híbrido"
+                }
+            ]
         }
     };
 
@@ -849,6 +897,11 @@
                 specialty: "HEAD COACH / ATLETISMO",
                 desc: "Especialista en biomecánica de carrera. Se enfoca en optimizar la cadencia de zancada (180ppm), la técnica de pisada de medio-pie, el aumento del VO2 Max y estrategias de ritmo para maratón.",
                 pb: "PB: 2h 38m (Maratón 42k)"
+            },
+            strength: {
+                specialty: "HEAD COACH / GIMNASIO & FUERZA",
+                desc: "Especialista en acondicionamiento físico de fuerza para deportistas de resistencia. Diseña programas que aumentan la potencia muscular, mejoran la estabilidad del core y corrigen la postura para evitar lesiones.",
+                pb: "PB: 180kg Peso Muerto / 140kg Sentadilla"
             }
         }
     };
@@ -893,8 +946,8 @@
         const localClients = localStorage.getItem("clientsList");
         const localGallery = localStorage.getItem("galleryData");
 
-        // Force upgrade/sync defaultPhaseData if localPhase is outdated or has old background images
-        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg")) {
+        // Force upgrade/sync defaultPhaseData if localPhase is outdated or has old background images or lacks strength
+        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg") || !localPhase.includes("\"strength\"")) {
             phaseData = defaultPhaseData;
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
         } else {
@@ -902,7 +955,14 @@
         }
 
         scheduleData = localSched ? JSON.parse(localSched) : defaultScheduleData;
-        coachData = localCoach ? JSON.parse(localCoach) : defaultCoachData;
+        
+        // Force upgrade coachData if it lacks strength sport profile
+        if (!localCoach || !localCoach.includes("\"strength\"")) {
+            coachData = defaultCoachData;
+            localStorage.setItem("coachData", JSON.stringify(coachData));
+        } else {
+            coachData = JSON.parse(localCoach);
+        }
         clientsList = localClients ? JSON.parse(localClients) : defaultClientsList;
         galleryData = localGallery ? JSON.parse(localGallery) : defaultGalleryData;
 
@@ -1040,7 +1100,7 @@
             activePhase = phase;
             document.body.classList.add(`phase-${activePhase}`);
 
-            const navIds = ['tri', 'swim', 'bike', 'run'];
+            const navIds = ['tri', 'swim', 'bike', 'run', 'strength'];
             navIds.forEach(id => {
                 const desktopNav = document.getElementById(`nav-${id}`);
                 const mobileNav = document.getElementById(`mob-${id}`);
@@ -1336,7 +1396,7 @@
         document.getElementById("adminCtaBgPreview").src = ctaBgVal;
         document.getElementById("adminCtaBgName").innerText = "Seleccionar archivo...";
 
-        const phases = ['tri', 'swim', 'bike', 'run'];
+        const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
         phases.forEach(p => {
             document.getElementById(`adminCoachPB_${p}`).value = coachData.sports[p].pb;
             document.getElementById(`adminCoachDesc_${p}`).value = coachData.sports[p].desc;
@@ -1488,7 +1548,7 @@
             coachData.photo = uploadedImages.coachPhoto;
         }
 
-        const phases = ['tri', 'swim', 'bike', 'run'];
+        const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
         phases.forEach(p => {
             coachData.sports[p].pb = document.getElementById(`adminCoachPB_${p}`).value;
             coachData.sports[p].desc = document.getElementById(`adminCoachDesc_${p}`).value;
@@ -1634,7 +1694,8 @@
             tri: "Triatlón (Fase Completa)",
             swim: "Natación",
             bike: "Ciclismo",
-            run: "Atletismo"
+            run: "Atletismo",
+            strength: "Gimnasio & Fortalecimiento"
         };
         document.getElementById("athleteSportInterest").innerText = `Deporte de Interés: ${sportsLabels[client.sport] || client.sport} | Nivel: ${client.level.toUpperCase()}`;
         
@@ -1672,7 +1733,7 @@
             const tr = document.createElement("tr");
             tr.className = "border-b border-white/5 hover:bg-white/5 transition-colors";
             
-            const sportsLabels = { tri: "TRI", swim: "SWIM", bike: "BIKE", run: "RUN" };
+            const sportsLabels = { tri: "TRI", swim: "SWIM", bike: "BIKE", run: "RUN", strength: "GYM" };
             const levelLabels = { principiante: "Novato", intermedio: "Medio", avanzado: "Pro" };
             
             const planBadge = client.plan ? 
@@ -2030,6 +2091,7 @@
                             <option value="swim">NATACIÓN</option>
                             <option value="bike">CICLISMO</option>
                             <option value="run">ATLETISMO</option>
+                            <option value="strength">GIMNASIO & FUERZA</option>
                         </select>
                     </div>
                     <div id="adminPlansContainer" class="flex flex-col gap-8 text-left">
@@ -2121,6 +2183,12 @@
                                         <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs" id="adminCoachPB_run" placeholder="PB: 2h 38m (Maratón)"/>
                                         <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs h-16" id="adminCoachDesc_run"></textarea>
                                     </div>
+                                    
+                                    <span class="font-label-sm text-xs text-white uppercase">GIMNASIO & FUERZA</span>
+                                    <div class="grid grid-cols-1 gap-2">
+                                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs" id="adminCoachPB_strength" placeholder="PB: 180kg Deadlift"/>
+                                        <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs h-16" id="adminCoachDesc_strength"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2198,6 +2266,20 @@
                                         <div class="flex-1 relative bg-surface-container border border-white/10 rounded-sm py-2 px-3 flex items-center justify-between text-xs text-tertiary cursor-pointer hover:border-[var(--accent-color)]/30">
                                             <span class="truncate" id="adminPhaseBgName_run">Seleccionar archivo...</span>
                                             <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleDeviceImageUpload(this, 'phaseBg_run')"/>
+                                            <span class="material-symbols-outlined text-sm">upload</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- GIMNASIO -->
+                                <div>
+                                    <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">GIMNASIO (Hero Background)</label>
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-20 h-12 bg-[#121212] border border-white/10 rounded-sm flex items-center justify-center overflow-hidden shrink-0">
+                                            <img id="adminPhaseBgPreview_strength" src="" class="w-full h-full object-cover" onerror="this.src='fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg';"/>
+                                        </div>
+                                        <div class="flex-1 relative bg-surface-container border border-white/10 rounded-sm py-2 px-3 flex items-center justify-between text-xs text-tertiary cursor-pointer hover:border-[var(--accent-color)]/30">
+                                            <span class="truncate" id="adminPhaseBgName_strength">Seleccionar archivo...</span>
+                                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleDeviceImageUpload(this, 'phaseBg_strength')"/>
                                             <span class="material-symbols-outlined text-sm">upload</span>
                                         </div>
                                     </div>
