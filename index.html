@@ -658,7 +658,7 @@
             subtitle: "[ SIN LÍMITES. SIN EXCUSAS. ]",
             desc: "El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.",
             badge: "[ SIN LÍMITES. SIN EXCUSAS. ]",
-            bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
+            bg: "fpotos/david-jackson-Ftiy9wPLPdA-unsplash.jpg",
             metrics: {
                 val1: "10h - 18h", unit1: "horas/sem", label1: "Entrenamiento",
                 val2: "150 - 250", unit2: "km/sem", label2: "Volumen Total",
@@ -700,7 +700,7 @@
             subtitle: "[ DOMINA EL AGUA ]",
             desc: "Precisión en la piscina que se traduce en dominio en aguas abiertas. Cada brazada calculada, cada respiración bajo control. Mejora tu arrastre hidrodinámico.",
             badge: "[ DOMINA EL AGUA ]",
-            bg: "fpotos/mario-la-pergola-XEOB-7BwrmU-unsplash.jpg",
+            bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "12k - 18k", unit1: "metros/sem", label1: "Volumen Semanal",
                 val2: "1:15", unit2: "/100m pace", label2: "Ritmo Promedio",
@@ -776,7 +776,7 @@
             subtitle: "[ VELOCIDAD Y RESILIENCIA ]",
             desc: "Una zancada fluida y una mente inquebrantable. Entrenamientos dinámicos en pista de atletismo y series de cuestas para forjar corredores eficientes y veloces.",
             badge: "[ VELOCIDAD Y RESILIENCIA ]",
-            bg: "fpotos/david-jackson-Ftiy9wPLPdA-unsplash.jpg",
+            bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "40 - 80", unit1: "km/sem", label1: "Volumen Semanal",
                 val2: "3:45", unit2: "/km pace", label2: "Ritmo de Umbral",
@@ -893,8 +893,8 @@
         const localClients = localStorage.getItem("clientsList");
         const localGallery = localStorage.getItem("galleryData");
 
-        // Force upgrade/sync defaultPhaseData if localPhase is outdated
-        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL")) {
+        // Force upgrade/sync defaultPhaseData if localPhase is outdated or has old background images
+        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg")) {
             phaseData = defaultPhaseData;
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
         } else {
