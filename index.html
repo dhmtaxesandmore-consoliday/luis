@@ -5,6 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>TRI-ACADEMY | Centro de Alto Rendimiento</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
@@ -803,6 +804,104 @@
 </div>
 
 <script>
+    // Supabase Configuration
+    const SUPABASE_URL = "https://qbkfwgrjovknyarkobyx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFia2Z3Z3Jqb3ZrbnlhcmtvYnl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTk4MzcsImV4cCI6MjA5Nzk5NTgzN30.vQ_ImIPfmtkwsbuThksGVXKdxMVIyzfQDlw-8AN9RIY";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Helper to convert base64 image string to Blob
+    function dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type:mime});
+    }
+
+    // Helper to upload a Base64 string or raw File object to Supabase Storage
+    async function uploadBase64OrFileToSupabase(base64OrFile, originalName, folder = 'uploads') {
+        let fileToUpload;
+        let fileName;
+        
+        if (base64OrFile instanceof File) {
+            fileToUpload = base64OrFile;
+            const fileExt = fileToUpload.name.split('.').pop();
+            fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2, 10)}.${fileExt}`;
+        } else if (typeof base64OrFile === 'string' && base64OrFile.startsWith('data:')) {
+            const blob = dataURLtoBlob(base64OrFile);
+            const fileExt = blob.type.split('/')[1] || 'jpg';
+            const cleanName = originalName ? originalName.replace(/[^a-zA-Z0-9]/g, '_') : 'image';
+            fileName = `${folder}/${Date.now()}_${cleanName}.${fileExt}`;
+            fileToUpload = new File([blob], fileName, { type: blob.type });
+        } else {
+            return base64OrFile; // Already a URL or raw text
+        }
+        
+        const { data, error } = await supabaseClient.storage
+            .from('gallery')
+            .upload(fileName, fileToUpload, {
+                cacheControl: '3600',
+                upsert: false
+            });
+            
+        if (error) {
+            throw error;
+        }
+        
+        const { data: { publicUrl } } = supabaseClient.storage
+            .from('gallery')
+            .getPublicUrl(fileName);
+            
+        return publicUrl;
+    }
+
+    // Save a config key to Supabase database
+    async function saveConfigToSupabase(key, value) {
+        try {
+            const { error } = await supabaseClient
+                .from('site_configs')
+                .upsert({ key: key, value: value, updated_at: new Date().toISOString() });
+                
+            if (error) {
+                console.error(`Error saving config ${key} to Supabase:`, error);
+            }
+        } catch (e) {
+            console.error(`Failed to save config ${key}:`, e);
+        }
+    }
+
+    // Load configs from Supabase and sync them
+    async function syncConfigsFromSupabase() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('site_configs')
+                .select('key, value');
+                
+            if (error) {
+                console.error("Error loading configs from Supabase:", error);
+                return;
+            }
+            
+            if (data && data.length > 0) {
+                data.forEach(row => {
+                    localStorage.setItem(row.key, JSON.stringify(row.value));
+                });
+                // Re-initialize system data with updated storage
+                initSystemData();
+                // Re-render UI
+                syncPhaseUI(activePhase);
+                renderPlans();
+                renderCoach();
+                renderGallery();
+                if (typeof renderAdminClients === 'function') renderAdminClients();
+                if (typeof renderAdminGalleryList === 'function') renderAdminGalleryList();
+            }
+        } catch (e) {
+            console.error("Failed to sync configs from Supabase:", e);
+        }
+    }
+
     // State management
     let activePhase = 'tri';
     let activeLevel = 'principiante';
@@ -1117,11 +1216,7 @@
         clientsList = localClients ? JSON.parse(localClients) : defaultClientsList;
         galleryData = localGallery ? JSON.parse(localGallery) : defaultGalleryData;
 
-        // Show editor floating indicator if logged in
-        if (localStorage.getItem("adminLoggedIn") === "true") {
-            const ind = document.getElementById("adminIndicator");
-            if (ind) ind.classList.remove("hidden");
-        }
+
     }
 
     // Dynamic rendering of plans
@@ -1576,6 +1671,7 @@
                 clientsList.push(newClient);
             }
             localStorage.setItem("clientsList", JSON.stringify(clientsList));
+            saveConfigToSupabase("clientsList", clientsList);
             
             goToStep(3);
             
@@ -1792,79 +1888,90 @@
         });
     }
 
-    function saveAdminChanges() {
-        const phase = document.getElementById("adminPhaseSelector").value;
-        
-        // Save current phase's plans
-        phaseData[phase].plans.forEach((plan, index) => {
-            plan.level = document.getElementById(`planTitle-${phase}-${index}`).value;
-            plan.badge = document.getElementById(`planBadge-${phase}-${index}`).value;
-            plan.price = document.getElementById(`planPrice-${phase}-${index}`).value;
-            plan.duration = document.getElementById(`planDuration-${phase}-${index}`).value;
-            plan.volume = document.getElementById(`planVolume-${phase}-${index}`).value;
-            plan.focus = document.getElementById(`planFocus-${phase}-${index}`).value;
-        });
-
-        // Save Coach Data
-        coachData.name = document.getElementById("adminCoachName").value;
-        if (uploadedImages.coachPhoto) {
-            coachData.photo = uploadedImages.coachPhoto;
+    async function saveAdminChanges() {
+        const saveBtn = document.querySelector("button[onclick='saveAdminChanges()']");
+        if (saveBtn) {
+            saveBtn.innerText = "GUARDANDO...";
+            saveBtn.disabled = true;
         }
 
-        const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
-        phases.forEach(p => {
-            coachData.sports[p].pb = document.getElementById(`adminCoachPB_${p}`).value;
-            coachData.sports[p].desc = document.getElementById(`adminCoachDesc_${p}`).value;
-            if (uploadedImages[`phaseBg_${p}`]) {
-                phaseData[p].bg = uploadedImages[`phaseBg_${p}`];
-            }
-        });
-
-        // Save CTA Background path
-        if (uploadedImages.ctaBg) {
-            try {
-                localStorage.setItem("ctaBg", uploadedImages.ctaBg);
-            } catch (e) {
-                console.error("Error setting ctaBg:", e);
-            }
-        }
-
-        // Save everything to localStorage safely
         try {
+            const phase = document.getElementById("adminPhaseSelector").value;
+            
+            // Upload Coach Photo if changed
+            if (uploadedImages.coachPhoto) {
+                const url = await uploadBase64OrFileToSupabase(uploadedImages.coachPhoto, "coachPhoto");
+                coachData.photo = url;
+            }
+
+            // Upload Phase Backgrounds if changed
+            const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
+            for (const p of phases) {
+                coachData.sports[p].pb = document.getElementById(`adminCoachPB_${p}`).value;
+                coachData.sports[p].desc = document.getElementById(`adminCoachDesc_${p}`).value;
+                if (uploadedImages[`phaseBg_${p}`]) {
+                    const url = await uploadBase64OrFileToSupabase(uploadedImages[`phaseBg_${p}`], `phaseBg_${p}`);
+                    phaseData[p].bg = url;
+                }
+            }
+
+            // Upload CTA Background if changed
+            if (uploadedImages.ctaBg) {
+                const url = await uploadBase64OrFileToSupabase(uploadedImages.ctaBg, "ctaBg");
+                localStorage.setItem("ctaBg", url);
+            }
+
+            // Save current phase's plans
+            phaseData[phase].plans.forEach((plan, index) => {
+                plan.level = document.getElementById(`planTitle-${phase}-${index}`).value;
+                plan.badge = document.getElementById(`planBadge-${phase}-${index}`).value;
+                plan.price = document.getElementById(`planPrice-${phase}-${index}`).value;
+                plan.duration = document.getElementById(`planDuration-${phase}-${index}`).value;
+                plan.volume = document.getElementById(`planVolume-${phase}-${index}`).value;
+                plan.focus = document.getElementById(`planFocus-${phase}-${index}`).value;
+            });
+
+            // Save everything to localStorage safely
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
             localStorage.setItem("scheduleData", JSON.stringify(scheduleData));
             localStorage.setItem("coachData", JSON.stringify(coachData));
+
+            // Sync to Supabase Database in background
+            await saveConfigToSupabase("phaseData", phaseData);
+            await saveConfigToSupabase("scheduleData", scheduleData);
+            await saveConfigToSupabase("coachData", coachData);
+            await saveConfigToSupabase("ctaBg", localStorage.getItem("ctaBg"));
+
+            // Update active page renderers
+            renderPlans();
+            renderCoach();
+            filterSchedule(activeScheduleFilter);
+
+            // Update Hero and CTA backgrounds
+            const activeData = phaseData[activePhase];
+            document.getElementById("heroBg").style.backgroundImage = `url('${activeData.bg}')`;
+            document.getElementById("coachPhoto").style.backgroundImage = `url('${coachData.photo}')`;
+
+            const ctaSec = document.getElementById("cta-section");
+            if (ctaSec) {
+                const bgLayer = ctaSec.querySelector(".absolute.inset-0.z-0.bg-cover.bg-center");
+                if (bgLayer) {
+                    const ctaBgVal = localStorage.getItem("ctaBg") || "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg";
+                    bgLayer.style.backgroundImage = `url('${ctaBgVal}')`;
+                }
+            }
+
+            closeAdminPanel();
+            alert("¡Todos los cambios se han guardado con éxito en la nube!");
         } catch (error) {
             console.error("Storage error:", error);
-            alert("No se pudieron guardar los cambios porque las imágenes seleccionadas son demasiado grandes y exceden la capacidad del navegador. Por favor, selecciona una imagen de menor tamaño o resolución.");
-            return;
-        }
-
-        // Update active page renderers
-        renderPlans();
-        renderCoach();
-        filterSchedule(activeScheduleFilter);
-
-        // Update Hero and CTA backgrounds
-        const activeData = phaseData[activePhase];
-        document.getElementById("heroBg").style.backgroundImage = `url('${activeData.bg}')`;
-        document.getElementById("coachPhoto").style.backgroundImage = `url('${coachData.photo}')`;
-
-        const ctaSec = document.getElementById("cta-section");
-        if (ctaSec) {
-            const bgLayer = ctaSec.querySelector(".absolute.inset-0.z-0.bg-cover.bg-center");
-            if (bgLayer) {
-                const ctaBgVal = localStorage.getItem("ctaBg") || "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg";
-                bgLayer.style.backgroundImage = `url('${ctaBgVal}')`;
+            alert("Error al guardar los cambios: " + error.message);
+        } finally {
+            if (saveBtn) {
+                saveBtn.innerText = "GUARDAR CAMBIOS";
+                saveBtn.disabled = false;
             }
         }
-
-        // Show editor floating indicator
-        const ind = document.getElementById("adminIndicator");
-        if (ind) ind.classList.remove("hidden");
-
-        closeAdminPanel();
-        alert("¡Todos los cambios se han guardado con éxito!");
     }
 
     function resetToDefaults() {
@@ -1882,8 +1989,6 @@
 
     function logoutAdmin() {
         localStorage.removeItem("adminLoggedIn");
-        const ind = document.getElementById("adminIndicator");
-        if (ind) ind.classList.add("hidden");
         closeAdminPanel();
         alert("Sesión de administrador cerrada.");
     }
@@ -2117,6 +2222,7 @@
         };
         
         localStorage.setItem("clientsList", JSON.stringify(clientsList));
+        saveConfigToSupabase("clientsList", clientsList);
         renderAdminClients();
         
         // Reset editor
@@ -2331,6 +2437,7 @@
 
     // --- Admin Gallery Management ---
     let tempGalleryBase64 = null;
+    let tempGalleryFile = null;
     let tempGalleryType = "image"; // "image" or "video" or "video_url"
     
     function getYouTubeId(url) {
@@ -2345,6 +2452,7 @@
         if (url) {
             tempGalleryType = "video_url";
             tempGalleryBase64 = null;
+            tempGalleryFile = null;
             // Clear file upload previews & inputs
             document.getElementById("adminGalleryFileInput").value = "";
             document.getElementById("adminGalleryFilePreview").src = "";
@@ -2374,6 +2482,7 @@
     
     function resetGalleryUploadPreviews() {
         tempGalleryBase64 = null;
+        tempGalleryFile = null;
         tempGalleryType = "image";
         document.getElementById("adminGalleryFileInput").value = "";
         document.getElementById("adminGalleryFilePreview").src = "";
@@ -2398,11 +2507,12 @@
         
         // If it's a video file
         if (file.type.startsWith("video/")) {
-            // Warn if the video is larger than 5MB
-            if (file.size > 5 * 1024 * 1024) {
-                alert("Atención: El archivo de video supera los 5MB. Los videos locales grandes pueden agotar el almacenamiento de tu navegador. Se recomienda usar enlaces externos de YouTube o MP4 en la nube.");
+            // Warn if the video is larger than 15MB
+            if (file.size > 15 * 1024 * 1024) {
+                alert("Atención: El archivo de video supera los 15MB. Se recomienda usar archivos más pequeños para optimizar la carga.");
             }
             
+            tempGalleryFile = file;
             const reader = new FileReader();
             reader.onload = function(e) {
                 tempGalleryBase64 = e.target.result;
@@ -2417,6 +2527,7 @@
             };
             reader.readAsDataURL(file);
         } else {
+            tempGalleryFile = null;
             // If it's an image file, use standard compression
             compressAndResizeImage(file, 1000, 0.7, function(compressedBase64) {
                 tempGalleryBase64 = compressedBase64;
@@ -2431,52 +2542,69 @@
         }
     }
     
-    function addPhotoToGallery() {
-        const captionInput = document.getElementById("adminGalleryCaption");
-        const videoUrlInput = document.getElementById("adminGalleryVideoUrl");
-        const caption = captionInput.value.trim();
-        const videoUrl = videoUrlInput.value.trim();
-        
-        let src = "";
-        let type = "image";
-        
-        if (tempGalleryType === "video_url" && videoUrl) {
-            src = videoUrl;
-            type = "video_url";
-        } else if (tempGalleryBase64) {
-            src = tempGalleryBase64;
-            type = tempGalleryType;
-        } else {
-            alert("Por favor, selecciona una foto/video de tu dispositivo o ingresa un enlace de video.");
-            return;
+    async function addPhotoToGallery() {
+        const addBtn = document.querySelector("button[onclick='addPhotoToGallery()']");
+        if (addBtn) {
+            addBtn.innerText = "SUBIENDO...";
+            addBtn.disabled = true;
         }
-        
-        const newItem = {
-            src: src,
-            type: type,
-            caption: caption || (type === "image" ? "Foto de la academia" : "Video de la academia")
-        };
-        
-        galleryData.push(newItem);
-        
+
         try {
+            const captionInput = document.getElementById("adminGalleryCaption");
+            const videoUrlInput = document.getElementById("adminGalleryVideoUrl");
+            const caption = captionInput.value.trim();
+            const videoUrl = videoUrlInput.value.trim();
+            
+            let src = "";
+            let type = "image";
+            
+            if (tempGalleryType === "video_url" && videoUrl) {
+                src = videoUrl;
+                type = "video_url";
+            } else if (tempGalleryFile) {
+                // Upload raw video file
+                src = await uploadBase64OrFileToSupabase(tempGalleryFile, tempGalleryFile.name, "gallery");
+                type = tempGalleryType;
+            } else if (tempGalleryBase64) {
+                // Upload compressed image base64
+                src = await uploadBase64OrFileToSupabase(tempGalleryBase64, "gallery_img", "gallery");
+                type = tempGalleryType;
+            } else {
+                alert("Por favor, selecciona una foto/video de tu dispositivo o ingresa un enlace de video.");
+                return;
+            }
+            
+            const newItem = {
+                src: src,
+                type: type,
+                caption: caption || (type === "image" ? "Foto de la academia" : "Video de la academia")
+            };
+            
+            galleryData.push(newItem);
+            
             localStorage.setItem("galleryData", JSON.stringify(galleryData));
-        } catch (e) {
-            console.error("Storage error:", e);
-            alert("No se pudo guardar en el almacenamiento local porque excede el espacio disponible (QuotaExceededError). Intenta usar un enlace de video en lugar de subir un archivo local.");
-            galleryData.pop(); // Remove it since we couldn't save
-            return;
+            
+            // Sync to Supabase Database
+            await saveConfigToSupabase("galleryData", galleryData);
+            
+            // Reset form
+            resetGalleryUploadPreviews();
+            videoUrlInput.value = "";
+            captionInput.value = "";
+            
+            // Rerender lists
+            renderGallery();
+            renderAdminGalleryList();
+            alert("¡Elemento añadido a la galería con éxito!");
+        } catch (error) {
+            console.error("Gallery save error:", error);
+            alert("Error al subir a la galería: " + error.message);
+        } finally {
+            if (addBtn) {
+                addBtn.innerText = "AGREGAR A LA GALERÍA";
+                addBtn.disabled = false;
+            }
         }
-        
-        // Reset form
-        resetGalleryUploadPreviews();
-        videoUrlInput.value = "";
-        captionInput.value = "";
-        
-        // Rerender lists
-        renderGallery();
-        renderAdminGalleryList();
-        alert("¡Elemento añadido a la galería con éxito!");
     }
     
     function renderAdminGalleryList() {
@@ -2520,10 +2648,11 @@
         });
     }
     
-    function deletePhotoFromGallery(index) {
+    async function deletePhotoFromGallery(index) {
         if (confirm("¿Estás seguro de que deseas eliminar este elemento de la galería?")) {
             galleryData.splice(index, 1);
             localStorage.setItem("galleryData", JSON.stringify(galleryData));
+            await saveConfigToSupabase("galleryData", galleryData);
             renderGallery();
             renderAdminGalleryList();
         }
@@ -2555,6 +2684,9 @@
                 if (bgLayer) bgLayer.style.backgroundImage = `url('${customCta}')`;
             }
         }
+
+        // Background synchronization from Supabase Database
+        syncConfigsFromSupabase();
     };
 </script>
 
@@ -3086,12 +3218,7 @@
     </div>
 </div>
 
-<!-- Floating Admin Status Bar -->
-<div id="adminIndicator" class="fixed bottom-6 right-6 z-40 bg-black/90 border border-green-500/50 text-green-400 font-label-sm text-xs px-4 py-2.5 rounded-sm flex items-center gap-2 hover:bg-neutral-900 transition-colors cursor-pointer hidden" onclick="openAdminPanel()">
-    <span class="h-2 w-2 bg-green-500 rounded-full status-pulse"></span>
-    <span class="uppercase tracking-widest font-bold">EDICIÓN ACTIVA</span>
-    <span class="material-symbols-outlined text-sm ml-2">edit</span>
-</div>
+
 
 </body>
 </html>
