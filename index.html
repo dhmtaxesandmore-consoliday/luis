@@ -1608,13 +1608,23 @@
 
         // Save CTA Background path
         if (uploadedImages.ctaBg) {
-            localStorage.setItem("ctaBg", uploadedImages.ctaBg);
+            try {
+                localStorage.setItem("ctaBg", uploadedImages.ctaBg);
+            } catch (e) {
+                console.error("Error setting ctaBg:", e);
+            }
         }
 
-        // Save everything to localStorage
-        localStorage.setItem("phaseData", JSON.stringify(phaseData));
-        localStorage.setItem("scheduleData", JSON.stringify(scheduleData));
-        localStorage.setItem("coachData", JSON.stringify(coachData));
+        // Save everything to localStorage safely
+        try {
+            localStorage.setItem("phaseData", JSON.stringify(phaseData));
+            localStorage.setItem("scheduleData", JSON.stringify(scheduleData));
+            localStorage.setItem("coachData", JSON.stringify(coachData));
+        } catch (error) {
+            console.error("Storage error:", error);
+            alert("No se pudieron guardar los cambios porque las imágenes seleccionadas son demasiado grandes y exceden la capacidad del navegador. Por favor, selecciona una imagen de menor tamaño o resolución.");
+            return;
+        }
 
         // Update active page renderers
         renderPlans();
@@ -1664,6 +1674,48 @@
         alert("Sesión de administrador cerrada.");
     }
 
+    // Helper function to compress and resize image using Canvas
+    function compressAndResizeImage(file, maxDimension, quality, callback) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > maxDimension || height > maxDimension) {
+                    if (width > height) {
+                        height = Math.round(height * maxDimension / width);
+                        width = maxDimension;
+                    } else {
+                        width = Math.round(width * maxDimension / height);
+                        height = maxDimension;
+                    }
+                }
+                
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Export as compressed JPEG format (significantly smaller than PNG)
+                const base64 = canvas.toDataURL("image/jpeg", quality);
+                callback(base64);
+            };
+            img.onerror = function() {
+                // Fallback to raw base64 if loading image fails
+                callback(e.target.result);
+            };
+            img.src = e.target.result;
+        };
+        reader.onerror = function() {
+            console.error("FileReader error");
+        };
+        reader.readAsDataURL(file);
+    }
+
     // --- Device Image Upload Handling ---
     function handleDeviceImageUpload(input, key) {
         const file = input.files[0];
@@ -1684,15 +1736,13 @@
         const labelSpan = document.getElementById(labelId);
         if (labelSpan) labelSpan.innerText = file.name;
         
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64 = e.target.result;
-            uploadedImages[key] = base64;
+        // Compress to maximum 1200px and 0.7 JPEG quality
+        compressAndResizeImage(file, 1200, 0.7, function(compressedBase64) {
+            uploadedImages[key] = compressedBase64;
             
             const previewImg = document.getElementById(previewId);
-            if (previewImg) previewImg.src = base64;
-        };
-        reader.readAsDataURL(file);
+            if (previewImg) previewImg.src = compressedBase64;
+        });
     }
 
     // --- Athlete Modal Actions ---
@@ -1941,14 +1991,13 @@
         const file = input.files[0];
         if (!file) return;
         
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            tempGalleryBase64 = e.target.result;
+        // Compress to maximum 1000px and 0.7 JPEG quality
+        compressAndResizeImage(file, 1000, 0.7, function(compressedBase64) {
+            tempGalleryBase64 = compressedBase64;
             document.getElementById("adminGalleryFilePreview").src = tempGalleryBase64;
             document.getElementById("adminGalleryFilePreview").classList.remove("hidden");
             document.getElementById("adminGalleryFilePlaceholder").classList.add("hidden");
-        };
-        reader.readAsDataURL(file);
+        });
     }
     
     function addPhotoToGallery() {
