@@ -6,6 +6,9 @@
     <title>TRI-ACADEMY | Centro de Alto Rendimiento</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Cropper.js CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
@@ -885,7 +888,11 @@
             
             if (data && data.length > 0) {
                 data.forEach(row => {
-                    localStorage.setItem(row.key, JSON.stringify(row.value));
+                    if (typeof row.value === 'string') {
+                        localStorage.setItem(row.key, row.value);
+                    } else {
+                        localStorage.setItem(row.key, JSON.stringify(row.value));
+                    }
                 });
                 // Re-initialize system data with updated storage
                 initSystemData();
@@ -1495,6 +1502,7 @@
         if (sportSelect) sportSelect.value = phase;
 
         renderPlans();
+        updateResponsiveBackgrounds();
     }
 
     // Toggle Phase State
@@ -1903,6 +1911,10 @@
                 const url = await uploadBase64OrFileToSupabase(uploadedImages.coachPhoto, "coachPhoto");
                 coachData.photo = url;
             }
+            if (uploadedImages.coachPhoto_mobile) {
+                const urlMobile = await uploadBase64OrFileToSupabase(uploadedImages.coachPhoto_mobile, "coachPhoto_mobile");
+                coachData.photoMobile = urlMobile;
+            }
 
             // Upload Phase Backgrounds if changed
             const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
@@ -1913,12 +1925,20 @@
                     const url = await uploadBase64OrFileToSupabase(uploadedImages[`phaseBg_${p}`], `phaseBg_${p}`);
                     phaseData[p].bg = url;
                 }
+                if (uploadedImages[`phaseBg_${p}_mobile`]) {
+                    const urlMobile = await uploadBase64OrFileToSupabase(uploadedImages[`phaseBg_${p}_mobile`], `phaseBg_${p}_mobile`);
+                    phaseData[p].bgMobile = urlMobile;
+                }
             }
 
             // Upload CTA Background if changed
             if (uploadedImages.ctaBg) {
                 const url = await uploadBase64OrFileToSupabase(uploadedImages.ctaBg, "ctaBg");
                 localStorage.setItem("ctaBg", url);
+            }
+            if (uploadedImages.ctaBg_mobile) {
+                const urlMobile = await uploadBase64OrFileToSupabase(uploadedImages.ctaBg_mobile, "ctaBg_mobile");
+                localStorage.setItem("ctaBgMobile", urlMobile);
             }
 
             // Save current phase's plans
@@ -1941,25 +1961,15 @@
             await saveConfigToSupabase("scheduleData", scheduleData);
             await saveConfigToSupabase("coachData", coachData);
             await saveConfigToSupabase("ctaBg", localStorage.getItem("ctaBg"));
+            await saveConfigToSupabase("ctaBgMobile", localStorage.getItem("ctaBgMobile"));
 
             // Update active page renderers
             renderPlans();
             renderCoach();
             filterSchedule(activeScheduleFilter);
 
-            // Update Hero and CTA backgrounds
-            const activeData = phaseData[activePhase];
-            document.getElementById("heroBg").style.backgroundImage = `url('${activeData.bg}')`;
-            document.getElementById("coachPhoto").style.backgroundImage = `url('${coachData.photo}')`;
-
-            const ctaSec = document.getElementById("cta-section");
-            if (ctaSec) {
-                const bgLayer = ctaSec.querySelector(".absolute.inset-0.z-0.bg-cover.bg-center");
-                if (bgLayer) {
-                    const ctaBgVal = localStorage.getItem("ctaBg") || "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg";
-                    bgLayer.style.backgroundImage = `url('${ctaBgVal}')`;
-                }
-            }
+            // Update Hero, Coach and CTA backgrounds responsively
+            updateResponsiveBackgrounds();
 
             closeAdminPanel();
             alert("¡Todos los cambios se han guardado con éxito en la nube!");
@@ -2035,33 +2045,183 @@
         reader.readAsDataURL(file);
     }
 
+    // --- Responsive Backgrounds Handler ---
+    function updateResponsiveBackgrounds() {
+        const isMobile = window.innerWidth < 768;
+        
+        // 1. Hero background
+        const heroBg = document.getElementById("heroBg");
+        if (heroBg && phaseData && phaseData[activePhase]) {
+            const activeData = phaseData[activePhase];
+            const bgUrl = (isMobile && activeData.bgMobile) ? activeData.bgMobile : activeData.bg;
+            heroBg.style.backgroundImage = `url('${bgUrl}')`;
+        }
+        
+        // 2. Coach photo
+        const coachPhoto = document.getElementById("coachPhoto");
+        if (coachPhoto && coachData) {
+            const photoUrl = (isMobile && coachData.photoMobile) ? coachData.photoMobile : coachData.photo;
+            coachPhoto.style.backgroundImage = `url('${photoUrl}')`;
+        }
+        
+        // 3. CTA background
+        const ctaSec = document.getElementById("cta-section");
+        if (ctaSec) {
+            const bgLayer = ctaSec.querySelector(".absolute.inset-0.z-0.bg-cover.bg-center");
+            if (bgLayer) {
+                const ctaBgVal = localStorage.getItem("ctaBg") || "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg";
+                const ctaBgMobileVal = localStorage.getItem("ctaBgMobile") || ctaBgVal;
+                const finalCtaBg = (isMobile && ctaBgMobileVal) ? ctaBgMobileVal : ctaBgVal;
+                bgLayer.style.backgroundImage = `url('${finalCtaBg}')`;
+            }
+        }
+    }
+
+    // --- Image Cropper State & Logic ---
+    let currentCropper = null;
+    let cropperImageKey = ""; // e.g. "coachPhoto" or "phaseBg_tri"
+    let cropperStep = 1; // 1 = Desktop, 2 = Mobile
+    let originalImageSrc = "";
+    let croppedDesktopBase64 = "";
+    let croppedMobileBase64 = "";
+
+    function getCropperAspectRatio(key, step) {
+        if (key === "coachPhoto") {
+            return 4 / 5; // Portrait aspect ratio for coach photo
+        }
+        // Widescreen aspects for desktop, vertical aspects for mobile
+        return step === 1 ? 16 / 9 : 9 / 16;
+    }
+
+    function openCropper(file, key) {
+        cropperImageKey = key;
+        cropperStep = 1;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            originalImageSrc = e.target.result;
+            
+            const modal = document.getElementById("cropperModal");
+            const img = document.getElementById("cropperImage");
+            if (!modal || !img) return;
+            
+            img.src = originalImageSrc;
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            setTimeout(() => {
+                modal.classList.add("opacity-100");
+                initCropperInstance();
+            }, 50);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function initCropperInstance() {
+        if (currentCropper) {
+            currentCropper.destroy();
+        }
+        
+        const img = document.getElementById("cropperImage");
+        const aspectRatio = getCropperAspectRatio(cropperImageKey, cropperStep);
+        
+        const stepLabel = document.getElementById("cropperStepLabel");
+        const desc = document.getElementById("cropperDesc");
+        const nextBtn = document.getElementById("cropperNextBtn");
+        
+        if (cropperStep === 1) {
+            if (stepLabel) stepLabel.innerText = "[ PASO 1 DE 2: ENCUADRE ESCRITORIO ]";
+            if (desc) desc.innerText = "Selecciona y ajusta la zona visible para pantallas de escritorio (formato horizontal).";
+            if (nextBtn) nextBtn.innerText = "CONFIRMAR Y SIGUIENTE";
+        } else {
+            if (stepLabel) stepLabel.innerText = "[ PASO 2 DE 2: ENCUADRE MÓVIL ]";
+            if (desc) desc.innerText = "Selecciona y ajusta la zona visible para pantallas móviles (formato vertical).";
+            if (nextBtn) nextBtn.innerText = "COMPLETAR ENCUADRE";
+        }
+        
+        currentCropper = new Cropper(img, {
+            aspectRatio: aspectRatio,
+            viewMode: 1,
+            autoCropArea: 0.9,
+            responsive: true,
+            background: false
+        });
+    }
+
+    function nextCropperStep() {
+        if (!currentCropper) return;
+        
+        const canvas = currentCropper.getCroppedCanvas({
+            maxWidth: cropperStep === 1 ? 1600 : 800,
+            maxHeight: cropperStep === 1 ? 900 : 1400
+        });
+        
+        const croppedBase64 = canvas.toDataURL("image/jpeg", 0.75);
+        
+        if (cropperStep === 1) {
+            croppedDesktopBase64 = croppedBase64;
+            cropperStep = 2;
+            
+            currentCropper.destroy();
+            const img = document.getElementById("cropperImage");
+            img.src = originalImageSrc;
+            
+            setTimeout(() => {
+                initCropperInstance();
+            }, 50);
+        } else {
+            croppedMobileBase64 = croppedBase64;
+            
+            // Save crops
+            uploadedImages[cropperImageKey] = croppedDesktopBase64;
+            uploadedImages[cropperImageKey + "_mobile"] = croppedMobileBase64;
+            
+            // Update admin preview
+            let previewId = "";
+            if (cropperImageKey.startsWith("phaseBg_")) {
+                const phaseKey = cropperImageKey.split("_")[1];
+                previewId = `adminPhaseBgPreview_${phaseKey}`;
+            } else {
+                previewId = `admin${cropperImageKey.charAt(0).toUpperCase() + cropperImageKey.slice(1)}Preview`;
+            }
+            
+            const previewImg = document.getElementById(previewId);
+            if (previewImg) previewImg.src = croppedDesktopBase64;
+            
+            closeCropperModal();
+        }
+    }
+
+    function closeCropperModal() {
+        const modal = document.getElementById("cropperModal");
+        if (modal) {
+            modal.classList.remove("opacity-100");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                if (currentCropper) {
+                    currentCropper.destroy();
+                    currentCropper = null;
+                }
+            }, 300);
+        }
+    }
+
     // --- Device Image Upload Handling ---
     function handleDeviceImageUpload(input, key) {
         const file = input.files[0];
         if (!file) return;
         
         let labelId = "";
-        let previewId = "";
-        
         if (key.startsWith("phaseBg_")) {
             const phaseKey = key.split("_")[1];
             labelId = `adminPhaseBgName_${phaseKey}`;
-            previewId = `adminPhaseBgPreview_${phaseKey}`;
         } else {
             labelId = `admin${key.charAt(0).toUpperCase() + key.slice(1)}Name`;
-            previewId = `admin${key.charAt(0).toUpperCase() + key.slice(1)}Preview`;
         }
         
         const labelSpan = document.getElementById(labelId);
         if (labelSpan) labelSpan.innerText = file.name;
         
-        // Compress to maximum 1200px and 0.7 JPEG quality
-        compressAndResizeImage(file, 1200, 0.7, function(compressedBase64) {
-            uploadedImages[key] = compressedBase64;
-            
-            const previewImg = document.getElementById(previewId);
-            if (previewImg) previewImg.src = compressedBase64;
-        });
+        openCropper(file, key);
     }
 
     // --- Athlete Modal Actions ---
@@ -2675,15 +2835,7 @@
         filterSchedule('all');
         renderGallery();
 
-        // Apply custom CTA background if set
-        const customCta = localStorage.getItem("ctaBg");
-        if (customCta) {
-            const ctaSec = document.getElementById("cta-section");
-            if (ctaSec) {
-                const bgLayer = ctaSec.querySelector(".absolute.inset-0.z-0.bg-cover.bg-center");
-                if (bgLayer) bgLayer.style.backgroundImage = `url('${customCta}')`;
-            }
-        }
+        window.addEventListener("resize", updateResponsiveBackgrounds);
 
         // Background synchronization from Supabase Database
         syncConfigsFromSupabase();
@@ -3216,9 +3368,27 @@
             <span class="material-symbols-outlined text-3xl md:text-4xl block">chevron_right</span>
         </button>
     </div>
+<!-- Image Cropper Modal -->
+<div id="cropperModal" class="fixed inset-0 z-[10005] flex items-center justify-center bg-black/90 backdrop-blur-md hidden transition-all duration-300 opacity-0">
+    <div class="w-full max-w-3xl bg-[#121212] border border-white/10 rounded-sm p-6 shadow-2xl relative mx-4 text-left flex flex-col max-h-[90vh]">
+        <button onclick="closeCropperModal()" class="absolute top-4 right-4 text-tertiary hover:text-white transition-colors z-10">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+        <div class="mb-4">
+            <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1" id="cropperStepLabel">[ PASO 1 DE 2: ENCUADRE ESCRITORIO ]</span>
+            <h3 class="font-headline-md text-2xl text-white uppercase italic tracking-tighter" id="cropperTitle">AJUSTAR ENCUADRE DE LA IMAGEN</h3>
+            <p class="font-body-md text-xs text-tertiary mt-1" id="cropperDesc">Ajusta la zona visible para pantallas de escritorio.</p>
+        </div>
+        <div class="flex-1 bg-black rounded-sm overflow-hidden flex items-center justify-center min-h-[300px] max-h-[50vh] relative mb-6">
+            <img id="cropperImage" class="max-w-full max-h-full object-contain"/>
+        </div>
+        <div class="flex justify-between items-center gap-4">
+            <button onclick="closeCropperModal()" class="font-label-sm text-xs border border-white/15 text-tertiary px-6 py-3 uppercase hover:bg-white/5 hover:text-white transition-all">CANCELAR</button>
+            <button id="cropperNextBtn" onclick="nextCropperStep()" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold px-8 py-3 uppercase border border-black hover:bg-white transition-all">CONFIRMAR Y SIGUIENTE</button>
+        </div>
+    </div>
 </div>
-
-
 
 </body>
 </html>
+
