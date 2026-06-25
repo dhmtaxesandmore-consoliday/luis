@@ -375,6 +375,9 @@
                 <button onclick="switchPhase('run', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     ATLETISMO
                 </button>
+                <button onclick="switchPhase('strength', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                    GIMNASIO
+                </button>
             </div>
         </div>
     </section>
@@ -1087,6 +1090,104 @@
         });
     }
 
+    // Sync Phase UI elements synchronously without animations
+    function syncPhaseUI(phase, animateStats = false) {
+        const oldPhase = activePhase;
+        document.body.classList.remove(`phase-${oldPhase}`);
+        activePhase = phase;
+        document.body.classList.add(`phase-${activePhase}`);
+
+        const navIds = ['tri', 'swim', 'bike', 'run', 'strength'];
+        navIds.forEach(id => {
+            const desktopNav = document.getElementById(`nav-${id}`);
+            const mobileNav = document.getElementById(`mob-${id}`);
+            
+            if (desktopNav) {
+                if (id === phase) {
+                    desktopNav.className = "text-[var(--accent-color)] font-bold border-b-2 border-[var(--accent-color)] pb-1 font-label-sm uppercase tracking-widest cursor-pointer transition-all duration-150";
+                } else {
+                    desktopNav.className = "text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer";
+                }
+            }
+            if (mobileNav) {
+                if (id === phase) {
+                    mobileNav.className = "text-[var(--accent-color)] font-bold text-lg font-label-sm uppercase tracking-widest cursor-pointer transition-all";
+                } else {
+                    mobileNav.className = "text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer transition-all";
+                }
+            }
+        });
+
+        // Update inline selector buttons to highlight the active phase in sports selector bar
+        const selectorBtns = document.querySelectorAll(".phase-selector-btn");
+        selectorBtns.forEach(btn => {
+            const onclickAttr = btn.getAttribute("onclick") || "";
+            if (onclickAttr.includes(`'${phase}'`)) {
+                btn.className = "phase-selector-btn active flex-1 md:flex-none font-label-sm text-label-sm bg-[rgba(var(--accent-color-rgb),0.1)] border border-[var(--accent-color)] px-5 py-3 text-white uppercase tracking-wider transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center font-bold";
+            } else {
+                btn.className = "phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center";
+            }
+        });
+
+        const data = phaseData[phase];
+        if (!data) return;
+
+        const heroBg = document.getElementById("heroBg");
+        const heroTitle = document.getElementById("heroTitle");
+        const heroDesc = document.getElementById("heroDesc");
+        const heroBadge = document.getElementById("heroBadge");
+        const plansTitlePhase = document.getElementById("plansTitlePhase");
+
+        if (heroBg) {
+            heroBg.style.backgroundImage = `url('${data.bg}')`;
+        }
+        if (heroTitle) heroTitle.innerHTML = data.title;
+        if (heroDesc) heroDesc.innerText = data.desc;
+        if (heroBadge) heroBadge.innerText = data.badge;
+        if (plansTitlePhase) plansTitlePhase.innerText = data.plansTitle;
+
+        if (heroTitle && heroDesc) {
+            heroTitle.classList.remove("fade-in-up");
+            heroDesc.classList.remove("fade-in-up");
+            void heroTitle.offsetWidth;
+            heroTitle.classList.add("fade-in-up");
+            heroDesc.classList.add("fade-in-up");
+        }
+
+        if (animateStats) {
+            animateCount("statVal1", data.metrics.val1);
+            animateCount("statVal2", data.metrics.val2);
+        } else {
+            const v1 = document.getElementById("statVal1");
+            const v2 = document.getElementById("statVal2");
+            if (v1) v1.innerText = data.metrics.val1;
+            if (v2) v2.innerText = data.metrics.val2;
+        }
+
+        const v3 = document.getElementById("statVal3");
+        const l1 = document.getElementById("statLabel1");
+        const l2 = document.getElementById("statLabel2");
+        const l3 = document.getElementById("statLabel3");
+        const u1 = document.getElementById("statUnit1");
+        const u2 = document.getElementById("statUnit2");
+        const z = document.getElementById("statZones");
+
+        if (v3) v3.innerText = data.metrics.val3;
+        if (l1) l1.innerText = data.metrics.label1;
+        if (l2) l2.innerText = data.metrics.label2;
+        if (l3) l3.innerText = data.metrics.label3;
+        if (u1) u1.innerText = data.metrics.unit1 || "";
+        if (u2) u2.innerText = data.metrics.unit2 || "";
+        if (z) z.innerHTML = data.metrics.zones;
+
+        renderCoach();
+
+        const sportSelect = document.getElementById("sportInterest");
+        if (sportSelect) sportSelect.value = phase;
+
+        renderPlans();
+    }
+
     // Toggle Phase State
     function switchPhase(phase, event) {
         if (event) event.preventDefault();
@@ -1096,59 +1197,7 @@
         sweep.classList.add("animate");
 
         setTimeout(() => {
-            document.body.classList.remove(`phase-${activePhase}`);
-            activePhase = phase;
-            document.body.classList.add(`phase-${activePhase}`);
-
-            const navIds = ['tri', 'swim', 'bike', 'run', 'strength'];
-            navIds.forEach(id => {
-                const desktopNav = document.getElementById(`nav-${id}`);
-                const mobileNav = document.getElementById(`mob-${id}`);
-                
-                if (id === phase) {
-                    desktopNav.className = "text-[var(--accent-color)] font-bold border-b-2 border-[var(--accent-color)] pb-1 font-label-sm uppercase tracking-widest cursor-pointer transition-all duration-150";
-                    mobileNav.className = "text-[var(--accent-color)] font-bold text-lg font-label-sm uppercase tracking-widest cursor-pointer transition-all";
-                } else {
-                    desktopNav.className = "text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer";
-                    mobileNav.className = "text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer transition-all";
-                }
-            });
-
-            const data = phaseData[phase];
-            const heroBg = document.getElementById("heroBg");
-            const heroTitle = document.getElementById("heroTitle");
-            const heroDesc = document.getElementById("heroDesc");
-            const heroBadge = document.getElementById("heroBadge");
-            const plansTitlePhase = document.getElementById("plansTitlePhase");
-
-            heroBg.style.backgroundImage = `url('${data.bg}')`;
-            heroTitle.innerHTML = data.title;
-            heroDesc.innerText = data.desc;
-            heroBadge.innerText = data.badge;
-            plansTitlePhase.innerText = data.plansTitle;
-
-            heroTitle.classList.remove("fade-in-up");
-            heroDesc.classList.remove("fade-in-up");
-            void heroTitle.offsetWidth;
-            heroTitle.classList.add("fade-in-up");
-            heroDesc.classList.add("fade-in-up");
-
-            animateCount("statVal1", data.metrics.val1);
-            animateCount("statVal2", data.metrics.val2);
-            document.getElementById("statVal3").innerText = data.metrics.val3;
-            document.getElementById("statLabel1").innerText = data.metrics.label1;
-            document.getElementById("statLabel2").innerText = data.metrics.label2;
-            document.getElementById("statLabel3").innerText = data.metrics.label3;
-            document.getElementById("statUnit1").innerText = data.metrics.unit1 || "";
-            document.getElementById("statUnit2").innerText = data.metrics.unit2 || "";
-            document.getElementById("statZones").innerHTML = data.metrics.zones;
-
-            renderCoach();
-
-            const sportSelect = document.getElementById("sportInterest");
-            sportSelect.value = phase;
-
-            renderPlans();
+            syncPhaseUI(phase, true);
         }, 450);
 
         setTimeout(() => {
@@ -1982,8 +2031,7 @@
     // Initial render
     window.onload = () => {
         initSystemData();
-        renderPlans();
-        renderCoach();
+        syncPhaseUI(activePhase);
         filterSchedule('all');
         renderGallery();
 
