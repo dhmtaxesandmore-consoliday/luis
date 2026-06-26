@@ -448,10 +448,6 @@
         
         <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-4 md:grid-cols-12 gap-gutter py-12 items-center">
             <div class="col-span-4 md:col-span-7 flex flex-col gap-6">
-                <!-- Tagline Badge -->
-                <span id="heroBadge" class="font-label-sm text-label-sm text-[var(--accent-color)] border border-[var(--accent-color)] px-3 py-1.5 w-fit bg-background/80 backdrop-blur-sm tracking-widest uppercase transition-all duration-300">
-                    [ SIN LÍMITES. SIN EXCUSAS. ]
-                </span>
                 <!-- Main Header with stroke text effect -->
                 <h1 id="heroTitle" class="font-display-lg text-5xl sm:text-6xl md:text-8xl text-white uppercase italic tracking-tighter leading-[0.85]">
                     TRI-ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
@@ -473,42 +469,7 @@
             <div class="hidden md:flex col-span-5 items-center justify-center relative">
                 <img id="heroLogoGraphic" src="LUIS B 2.png" alt="TRI-ACADEMY Brand" class="max-h-[380px] w-auto object-contain transition-all duration-500 hover:scale-105 hover:rotate-2 hero-logo-glow" onerror="this.style.display='none';"/>
             </div>
-        </div>
     </section>
-
-    <!-- Stats/Info Bar (Dynamic and Animated) -->
-    <div id="stats-section" class="w-full bg-surface-container-low border-b border-white/10 py-6 md:py-10 relative overflow-hidden">
-        <!-- Tech grid decorative -->
-        <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
-        <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-            <div class="flex flex-col border-l-2 border-[var(--accent-color)] pl-4 transition-colors duration-500">
-                <span id="statLabel1" class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase mb-1">Volumen Semanal</span>
-                <div class="flex items-baseline gap-1 text-white">
-                    <span id="statVal1" class="font-headline-md text-3xl md:text-4xl">12k - 18k</span>
-                    <span id="statUnit1" class="text-sm font-label-sm text-tertiary">metros</span>
-                </div>
-            </div>
-            <div class="flex flex-col border-l-2 border-[var(--accent-color)] pl-4 transition-colors duration-500">
-                <span id="statLabel2" class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase mb-1">Ritmo Promedio</span>
-                <div class="flex items-baseline gap-1 text-white">
-                    <span id="statVal2" class="font-headline-md text-3xl md:text-4xl">1:15</span>
-                    <span id="statUnit2" class="text-sm font-label-sm text-tertiary">/100m</span>
-                </div>
-            </div>
-            <div class="flex flex-col border-l-2 border-white/10 pl-4">
-                <span id="statLabel3" class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase mb-1">Enfoque Fásico</span>
-                <span id="statVal3" class="font-headline-md text-3xl md:text-4xl text-white uppercase">Eficiencia</span>
-            </div>
-            <div class="flex flex-col border-l-2 border-white/10 pl-4 justify-center">
-                <span id="statLabel4" class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase mb-2">Distribución de Zonas</span>
-                <div class="flex gap-1.5 items-center w-full max-w-[200px]" id="statZones">
-                    <div class="h-2 w-[20%] bg-white/20" title="Z1"></div>
-                    <div class="h-2 w-[50%] bg-[var(--accent-color)] transition-colors duration-500" title="Z2-Z3"></div>
-                    <div class="h-2 w-[30%] bg-white/40" title="Z4-Z5"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Sports Selector Bar (Inline Interactive Section) -->
     <section id="selector-section" class="py-8 bg-background border-b border-white/10">
@@ -1451,7 +1412,6 @@
         const heroBg = document.getElementById("heroBg");
         const heroTitle = document.getElementById("heroTitle");
         const heroDesc = document.getElementById("heroDesc");
-        const heroBadge = document.getElementById("heroBadge");
         const plansTitlePhase = document.getElementById("plansTitlePhase");
 
         if (heroBg) {
@@ -1459,7 +1419,6 @@
         }
         if (heroTitle) heroTitle.innerHTML = data.title;
         if (heroDesc) heroDesc.innerText = data.desc;
-        if (heroBadge) heroBadge.innerText = data.badge;
         if (plansTitlePhase) plansTitlePhase.innerText = data.plansTitle;
 
         if (heroTitle && heroDesc) {
@@ -1469,32 +1428,6 @@
             heroTitle.classList.add("fade-in-up");
             heroDesc.classList.add("fade-in-up");
         }
-
-        if (animateStats) {
-            animateCount("statVal1", data.metrics.val1);
-            animateCount("statVal2", data.metrics.val2);
-        } else {
-            const v1 = document.getElementById("statVal1");
-            const v2 = document.getElementById("statVal2");
-            if (v1) v1.innerText = data.metrics.val1;
-            if (v2) v2.innerText = data.metrics.val2;
-        }
-
-        const v3 = document.getElementById("statVal3");
-        const l1 = document.getElementById("statLabel1");
-        const l2 = document.getElementById("statLabel2");
-        const l3 = document.getElementById("statLabel3");
-        const u1 = document.getElementById("statUnit1");
-        const u2 = document.getElementById("statUnit2");
-        const z = document.getElementById("statZones");
-
-        if (v3) v3.innerText = data.metrics.val3;
-        if (l1) l1.innerText = data.metrics.label1;
-        if (l2) l2.innerText = data.metrics.label2;
-        if (l3) l3.innerText = data.metrics.label3;
-        if (u1) u1.innerText = data.metrics.unit1 || "";
-        if (u2) u2.innerText = data.metrics.unit2 || "";
-        if (z) z.innerHTML = data.metrics.zones;
 
         renderCoach();
 
@@ -1514,27 +1447,12 @@
         sweep.classList.add("animate");
 
         setTimeout(() => {
-            syncPhaseUI(phase, true);
+            syncPhaseUI(phase);
         }, 450);
 
         setTimeout(() => {
             sweep.classList.remove("animate");
         }, 900);
-    }
-
-    function animateCount(elemId, finalVal) {
-        const elem = document.getElementById(elemId);
-        if (!elem) return;
-
-        let count = 0;
-        const interval = setInterval(() => {
-            elem.innerText = Math.random().toString(36).substring(2, 6).toUpperCase();
-            count++;
-            if (count > 8) {
-                clearInterval(interval);
-                elem.innerText = finalVal;
-            }
-        }, 40);
     }
 
     function filterSchedule(sport) {
