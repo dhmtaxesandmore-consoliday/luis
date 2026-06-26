@@ -1438,13 +1438,8 @@
             }
         }
 
-        const adminLoggedIn = localStorage.getItem("adminLoggedIn");
-        if (adminLoggedIn === "true") {
-            const modal = document.getElementById("adminPanelModal");
-            if (modal && modal.classList.contains("hidden")) {
-                openAdminPanel();
-            }
-        }
+        // Coach admin auto-login on load is disabled to open directly on home page.
+        // Session status is preserved in localStorage so coach doesn't re-enter passcode on Portal Entrenador click.
     }
 
     function showNotificationToast(title, message) {
@@ -2865,6 +2860,11 @@
 
     // 2. COACH ADMIN PORTAL ACTIONS & LOGIC
     function openAdminLoginModal() {
+        const adminLoggedIn = localStorage.getItem("adminLoggedIn");
+        if (adminLoggedIn === "true") {
+            openAdminPanel();
+            return;
+        }
         const modal = document.getElementById("adminLoginModal");
         if (!modal) return;
         const mainLanding = document.getElementById("mainLandingPage");
