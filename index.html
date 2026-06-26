@@ -367,6 +367,7 @@
 <!-- Speed Sweep Transition Screen Overlay -->
 <div id="transitionSweep" class="transition-sweep"></div>
 
+<div id="mainLandingPage" class="w-full flex flex-col">
 <!-- TopNavBar -->
 <nav class="sticky top-0 bg-background/80 backdrop-blur-md border-b border-white/10 shadow-[4px_4px_0px_#000000] z-50 transition-all duration-200">
     <div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-screen-2xl mx-auto">
@@ -533,44 +534,172 @@
     <section id="schedule-section" class="py-12 md:py-20 bg-background border-b border-white/10 relative">
         <div class="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-16 gap-6">
-                <div>
-                    <span data-i18n="sched_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ AGENDA DE LA SEMANA ]</span>
-                    <h2 data-i18n="sched_title" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">HORARIO DE SESIONES</h2>
+            <!-- Contenedor del Horario Público (Visible por defecto) -->
+            <div id="publicScheduleContainer" class="flex flex-col">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-16 gap-6">
+                    <div>
+                        <span data-i18n="sched_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ AGENDA DE LA SEMANA ]</span>
+                        <h2 data-i18n="sched_title" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">HORARIO DE SESIONES</h2>
+                    </div>
+                    <!-- Interactive filters for schedule -->
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto bg-surface-container p-1 rounded-sm border border-white/15">
+                        <button onclick="filterSchedule('all')" id="sched-all" data-i18n="sched_filter_all" class="sched-filter-btn active px-4 py-2 font-label-sm text-xs uppercase text-white font-bold bg-[var(--accent-color)] text-black transition-all">TODOS</button>
+                        <button onclick="filterSchedule('swim')" id="sched-swim" data-i18n="sched_filter_swim" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">NATACIÓN</button>
+                        <button onclick="filterSchedule('bike')" id="sched-bike" data-i18n="sched_filter_bike" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CICLISMO</button>
+                        <button onclick="filterSchedule('run')" id="sched-run" data-i18n="sched_filter_run" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CARRERA</button>
+                    </div>
                 </div>
-                <!-- Interactive filters for schedule -->
-                <div class="flex flex-wrap gap-2 w-full md:w-auto bg-surface-container p-1 rounded-sm border border-white/15">
-                    <button onclick="filterSchedule('all')" id="sched-all" data-i18n="sched_filter_all" class="sched-filter-btn active px-4 py-2 font-label-sm text-xs uppercase text-white font-bold bg-[var(--accent-color)] text-black transition-all">TODOS</button>
-                    <button onclick="filterSchedule('swim')" id="sched-swim" data-i18n="sched_filter_swim" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">NATACIÓN</button>
-                    <button onclick="filterSchedule('bike')" id="sched-bike" data-i18n="sched_filter_bike" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CICLISMO</button>
-                    <button onclick="filterSchedule('run')" id="sched-run" data-i18n="sched_filter_run" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CARRERA</button>
+
+                <!-- Scroll Helper on Mobile -->
+                <div class="block md:hidden flex justify-end items-center gap-1 mb-2 font-label-sm text-[10px] text-tertiary-fixed-dim uppercase tracking-wider">
+                    <span data-i18n="swipe_helper">Deslizar lateralmente</span>
+                    <span class="material-symbols-outlined text-sm">swipe_left</span>
+                </div>
+
+                <!-- Schedule Timetable Grid -->
+                <div class="overflow-x-auto no-scrollbar border border-white/10 glass-panel">
+                    <table class="w-full min-w-[800px] border-collapse text-left">
+                        <thead>
+                            <tr class="border-b border-white/15 bg-white/5">
+                                <th data-i18n="sched_header_period" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10 w-[150px]">Fase Horaria</th>
+                                <th data-i18n="sched_header_mon" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Lunes</th>
+                                <th data-i18n="sched_header_tue" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Martes</th>
+                                <th data-i18n="sched_header_wed" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Miércoles</th>
+                                <th data-i18n="sched_header_thu" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Jueves</th>
+                                <th data-i18n="sched_header_fri" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Viernes</th>
+                                <th data-i18n="sched_header_sat" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider">Sábado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleBody" class="divide-y divide-white/10">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Access trigger link below schedule -->
+                <div class="mt-8 text-center">
+                    <button onclick="showAthleteLoginInline()" class="font-label-sm text-xs border border-white/20 bg-white/5 text-white font-bold px-6 py-2.5 uppercase hover:bg-white hover:text-black transition-all">
+                        ACCEDER A MI PLAN PERSONALIZADO
+                    </button>
                 </div>
             </div>
 
-            <!-- Scroll Helper on Mobile -->
-            <div class="block md:hidden flex justify-end items-center gap-1 mb-2 font-label-sm text-[10px] text-tertiary-fixed-dim uppercase tracking-wider">
-                <span data-i18n="swipe_helper">Deslizar lateralmente</span>
-                <span class="material-symbols-outlined text-sm">swipe_left</span>
+            <!-- Contenedor del Login Inline de Atleta -->
+            <div id="athleteLoginContainer" class="hidden w-full max-w-md mx-auto bg-[#121212] border border-white/10 rounded-sm p-6 md:p-8 shadow-[8px_8px_0px_var(--accent-color)] relative">
+                <button onclick="hideAthleteLoginInline()" class="absolute top-6 right-6 text-tertiary hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+                <div class="flex flex-col gap-6 text-center">
+                    <span class="material-symbols-outlined text-5xl text-[var(--accent-color)]">directions_run</span>
+                    <div>
+                        <span data-i18n="athlete_login_title" class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO ATLETAS ]</span>
+                        <h3 data-i18n="athlete_login_header" class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">MI PLAN DE ENTRENAMIENTO</h3>
+                    </div>
+                    <p data-i18n="athlete_login_desc" class="font-body-md text-sm text-tertiary leading-relaxed">
+                        Ingresa el correo electrónico con el que te registraste en la academia para acceder a tu planificación semanal y notas del entrenador.
+                    </p>
+                    <div class="flex flex-col gap-2 text-left">
+                        <label data-i18n="athlete_login_label_email" class="font-label-sm text-xs text-tertiary uppercase block mb-1">Correo Electrónico</label>
+                        <input data-i18n="athlete_login_placeholder" class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="athleteEmail" placeholder="juan@correo.com" type="email" onkeyup="if(event.key === 'Enter') loginAthlete()"/>
+                        <span data-i18n="athlete_login_error" id="athleteLoginError" class="font-label-sm text-xs text-red-500 mt-1 hidden font-bold">No se encontró ningún registro para este correo. Por favor, inscríbete primero o verifica la dirección.</span>
+                    </div>
+                    <button onclick="loginAthlete()" data-i18n="athlete_login_btn" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+                        ACCEDER A MI PLAN
+                    </button>
+                </div>
             </div>
 
-            <!-- Schedule Timetable Grid -->
-            <div class="overflow-x-auto no-scrollbar border border-white/10 glass-panel">
-                <table class="w-full min-w-[800px] border-collapse text-left">
-                    <thead>
-                        <tr class="border-b border-white/15 bg-white/5">
-                            <th data-i18n="sched_header_period" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10 w-[150px]">Fase Horaria</th>
-                            <th data-i18n="sched_header_mon" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Lunes</th>
-                            <th data-i18n="sched_header_tue" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Martes</th>
-                            <th data-i18n="sched_header_wed" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Miércoles</th>
-                            <th data-i18n="sched_header_thu" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Jueves</th>
-                            <th data-i18n="sched_header_fri" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Viernes</th>
-                            <th data-i18n="sched_header_sat" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider">Sábado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scheduleBody" class="divide-y divide-white/10">
-                        <!-- Rendered dynamically -->
-                    </tbody>
-                </table>
+            <!-- Contenedor del Dashboard del Atleta (Se muestra al iniciar sesión) -->
+            <div id="athleteDashboardContainer" class="hidden w-full bg-[#121212] border border-white/10 rounded-sm p-6 md:p-8 shadow-[8px_8px_0px_var(--accent-color)] flex flex-col gap-6">
+                <!-- Header -->
+                <div class="border-b border-white/10 pb-4 flex justify-between items-end">
+                    <div>
+                        <span data-i18n="athlete_plan_active_tag" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
+                        <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter" id="athleteAthleteName">HOLA, DEPORTISTA</h3>
+                        <p class="font-body-md text-xs text-tertiary mt-1" id="athleteSportInterest">Fase: Triatlón</p>
+                    </div>
+                    
+                    <!-- Tab Selector for Athlete -->
+                    <div class="flex gap-2 bg-surface-container p-0.5 rounded-sm border border-white/15 font-label-sm text-[10px]">
+                        <button id="athleteTabBtn-plan" onclick="switchAthleteViewTab('plan')" class="px-3 py-1.5 uppercase font-bold text-black bg-[var(--accent-color)] rounded-sm transition-all">Plan General</button>
+                        <button id="athleteTabBtn-calendar" onclick="switchAthleteViewTab('calendar')" class="px-3 py-1.5 uppercase text-tertiary hover:text-white transition-all" data-i18n="athlete_tab_calendar">Mi Calendario</button>
+                        <button id="athleteTabBtn-chat" onclick="switchAthleteViewTab('chat')" class="px-3 py-1.5 uppercase text-tertiary hover:text-white transition-all">Entrenamientos & Chat</button>
+                    </div>
+                </div>
+                
+                <!-- Athlete Tab: Plan General -->
+                <div id="athleteSubtab-plan" class="flex flex-col gap-6">
+                    <!-- Bento-style personalized plan details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                        <!-- Plan Title Card -->
+                        <div class="bg-[#181818] border border-white/5 p-5 rounded-sm">
+                            <span data-i18n="athlete_plan_assigned" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
+                            <h4 class="font-headline-md text-xl text-white uppercase italic" id="athletePlanTitle">PLAN PERSONALIZADO</h4>
+                        </div>
+                        
+                        <!-- Plan Metrics Card -->
+                        <div class="bg-[#181818] border border-white/5 p-5 rounded-sm grid grid-cols-2 gap-4">
+                            <div>
+                                <span data-i18n="athlete_plan_duration" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
+                                <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanDuration">12 Semanas</span>
+                            </div>
+                            <div>
+                                <span data-i18n="athlete_plan_volume" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
+                                <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanVolume">6-8 hrs/sem</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Notes and Guidelines (Spans both cols) -->
+                        <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
+                            <span data-i18n="athlete_plan_general_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES GENERALES ]</span>
+                            <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
+                                Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
+                            </p>
+                        </div>
+                        
+                        <!-- Daily Plan (Spans both cols) -->
+                        <div class="md:col-span-2 flex flex-col gap-3">
+                            <span data-i18n="athlete_plan_daily_header" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-1 font-bold">[ PLANIFICACIÓN DIARIA ]</span>
+                            <div id="athleteDailyPlanContainer" class="flex flex-col gap-3">
+                                <!-- Daily cards generated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Athlete Tab: Mi Calendario -->
+                <div id="athleteSubtab-calendar" class="flex flex-col gap-4 hidden text-left">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                        <span data-i18n="athlete_calendar_title" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase font-bold">[ CRONOGRAMA DE ENTRENAMIENTOS DE LA SEMANA ]</span>
+                    </div>
+                    <div class="flex flex-col gap-3" id="athleteCalendarDays">
+                        <!-- Days will be dynamically rendered here -->
+                    </div>
+                </div>
+                
+                <!-- Athlete Tab: Chat & Workouts -->
+                <div id="athleteSubtab-chat" class="flex flex-col gap-4 hidden text-left">
+                    <!-- Chat Feed -->
+                    <div id="athleteChatFeed" class="w-full h-80 bg-[#181818] border border-white/5 p-4 rounded-sm overflow-y-auto flex flex-col gap-4 text-xs text-left">
+                        <!-- Messages rendered dynamically -->
+                    </div>
+                    
+                    <!-- Send message inputs -->
+                    <div class="flex gap-2">
+                        <input class="flex-1 bg-[#181818] border border-white/10 rounded-sm text-white px-3 py-2.5 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs" id="athleteChatMessage" placeholder="Envía un comentario o duda a tu coach..." type="text" onkeyup="if(event.key === 'Enter') sendAthleteTextMessage()"/>
+                        <button onclick="sendAthleteTextMessage()" class="bg-[var(--accent-color)] text-black hover:bg-white font-bold px-4 py-2.5 uppercase text-xs transition-all border border-black">
+                            Enviar
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Footer area / Logout -->
+                <div class="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
+                    <span data-i18n="athlete_plan_system" class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-ACADEMY SYSTEM 2026</span>
+                    <button onclick="logoutAthlete()" data-i18n="athlete_plan_logout" class="font-label-sm text-xs border border-white/10 text-tertiary px-4 py-2 hover:bg-white/5 hover:text-white transition-all">
+                        SALIR / CERRAR
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -678,6 +807,7 @@
         <a class="font-label-sm text-xs text-[var(--accent-color)] uppercase tracking-wider hover:text-white transition-colors cursor-pointer font-bold" onclick="openAdminLoginModal()" data-i18n="menu_coach_portal">PORTAL ENTRENADOR</a>
     </div>
 </footer>
+</div> <!-- /mainLandingPage -->
 
 <!-- Interactive JOIN ELITE Modal (Claro / High Contrast) -->
 <div id="joinModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-all duration-300 opacity-0">
@@ -1363,10 +1493,277 @@
                 translatePage();
                 if (typeof renderAdminClients === 'function') renderAdminClients();
                 if (typeof renderAdminGalleryList === 'function') renderAdminGalleryList();
+                
+                // Persistence check
+                checkAutoLogins();
             }
         } catch (e) {
             console.error("Failed to sync configs from Supabase:", e);
         }
+    }
+
+    // --- Realtime Notifications & Auto-login Persistence ---
+    function checkAutoLogins() {
+        const loggedInEmail = localStorage.getItem("loggedInAthleteEmail");
+        if (loggedInEmail) {
+            const pubSched = document.getElementById("publicScheduleContainer");
+            const athLog = document.getElementById("athleteLoginContainer");
+            const athDash = document.getElementById("athleteDashboardContainer");
+            if (pubSched) pubSched.classList.add("hidden");
+            if (athLog) athLog.classList.add("hidden");
+            if (athDash) athDash.classList.remove("hidden");
+            const emailInput = document.getElementById("athleteEmail");
+            if (emailInput) emailInput.value = loggedInEmail;
+            
+            const client = clientsList ? clientsList.find(c => c.email === loggedInEmail) : null;
+            if (client) {
+                const nameHeader = document.getElementById("athleteAthleteName");
+                if (nameHeader) nameHeader.innerText = (currentLang === "en" ? "HELLO, " : "¡HOLA, ") + client.name.toUpperCase() + "!";
+                const sportsLabels = { tri: t("menu_tri"), swim: t("menu_swim"), bike: t("menu_bike"), run: t("menu_run"), strength: t("menu_strength") };
+                const levelLabels = { principiante: t("join_opt_beginner"), intermedio: t("join_opt_intermediate"), avanzado: t("join_opt_advanced") };
+                const levelStr = levelLabels[client.level] || client.level;
+                const sportInterest = document.getElementById("athleteSportInterest");
+                if (sportInterest) sportInterest.innerText = `${t("join_label_sport")}: ${sportsLabels[client.sport] || client.sport} | ${t("join_label_level")}: ${levelStr.toUpperCase()}`;
+                refreshAthleteDashboard(client);
+            }
+        }
+
+        const adminLoggedIn = localStorage.getItem("adminLoggedIn");
+        if (adminLoggedIn === "true") {
+            const modal = document.getElementById("adminPanelModal");
+            if (modal && modal.classList.contains("hidden")) {
+                openAdminPanel();
+            }
+        }
+    }
+
+    function showNotificationToast(title, message) {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+        
+        const toast = document.createElement("div");
+        toast.className = "pointer-events-auto bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-sm p-4 shadow-[4px_4px_0px_var(--accent-color)] text-white w-80 flex flex-col gap-1 transition-all duration-300 opacity-0 translate-y-2";
+        toast.innerHTML = `
+            <div class="flex justify-between items-start">
+                <span class="font-label-sm text-[10px] text-[var(--accent-color)] font-bold tracking-wider uppercase">[ ${currentLang === 'en' ? 'NOTIFICATION' : 'NOTIFICACIÓN'} ]</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-tertiary hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <strong class="font-headline-md text-sm uppercase italic tracking-tight">${title}</strong>
+            <p class="font-body-md text-xs text-tertiary leading-relaxed">${message}</p>
+        `;
+        container.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => {
+            toast.classList.remove("opacity-0", "translate-y-2");
+            toast.classList.add("opacity-100", "translate-y-0");
+        }, 10);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove("opacity-100", "translate-y-0");
+            toast.classList.add("opacity-0", "translate-y-2");
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+
+    function updateCoachSidebarBadges() {
+        const tabBtn = document.getElementById("tabBtn-clients");
+        if (!tabBtn) return;
+        
+        const totalUnread = clientsList ? clientsList.reduce((acc, c) => acc + (c.unreadMessagesCount || 0), 0) : 0;
+        
+        // Remove existing badge if any
+        const existingBadge = tabBtn.querySelector(".sidebar-badge");
+        if (existingBadge) existingBadge.remove();
+        
+        if (totalUnread > 0) {
+            const badgeSpan = document.createElement("span");
+            badgeSpan.className = "sidebar-badge ml-2 bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold font-label-sm animate-pulse inline-block";
+            badgeSpan.innerText = totalUnread;
+            tabBtn.appendChild(badgeSpan);
+        }
+    }
+
+    function refreshAthleteDashboard(client) {
+        if (!client) return;
+        
+        const planTitle = document.getElementById("athletePlanTitle");
+        const planDuration = document.getElementById("athletePlanDuration");
+        const planVolume = document.getElementById("athletePlanVolume");
+        const planNotes = document.getElementById("athletePlanNotes");
+        
+        if (client.plan) {
+            if (planTitle) planTitle.innerText = getLocalizedValue(client.plan.title) || (currentLang === "en" ? "Custom Plan" : "Plan Personalizado");
+            if (planDuration) planDuration.innerText = getLocalizedValue(client.plan.duration) || "N/A";
+            if (planVolume) planVolume.innerText = getLocalizedValue(client.plan.volume) || "N/A";
+            if (planNotes) planNotes.innerText = getLocalizedValue(client.plan.notes) || t("athlete_plan_default_notes");
+            
+            // Render Daily Plan
+            const dailyContainer = document.getElementById("athleteDailyPlanContainer");
+            if (dailyContainer) {
+                dailyContainer.innerHTML = "";
+                const days = [
+                    { key: "monday", label: t("day_monday") },
+                    { key: "tuesday", label: t("day_tuesday") },
+                    { key: "wednesday", label: t("day_wednesday") },
+                    { key: "thursday", label: t("day_thursday") },
+                    { key: "friday", label: t("day_friday") },
+                    { key: "saturday", label: t("day_saturday") },
+                    { key: "sunday", label: t("day_sunday") }
+                ];
+                
+                const todayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday, etc.
+                const dayKeys = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+                const currentDayKey = dayKeys[todayIndex];
+
+                days.forEach(day => {
+                    const isToday = currentDayKey === day.key;
+                    const rawNotes = client.plan.dailyNotes ? client.plan.dailyNotes[day.key] : "";
+                    const dayNotes = rawNotes ? getLocalizedValue(rawNotes) : "";
+                    
+                    const dayCard = document.createElement("div");
+                    dayCard.className = `bg-[#181818] border ${isToday ? 'border-[var(--accent-color)]/30 bg-[#202020]' : 'border-white/5'} p-4 rounded-sm flex flex-col gap-2 text-xs transition-all`;
+                    
+                    dayCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="font-label-sm font-bold uppercase tracking-wider ${isToday ? 'text-[var(--accent-color)]' : 'text-white'}">${day.label}</span>
+                            ${isToday ? `<span class="bg-[var(--accent-color)] text-black font-bold px-1.5 py-0.5 rounded-sm text-[8px] uppercase font-label-sm">TODAY</span>` : ''}
+                        </div>
+                        <p class="font-body-md text-sm ${dayNotes ? 'text-secondary leading-relaxed' : 'text-tertiary italic'} whitespace-pre-wrap mt-1">
+                            ${dayNotes || t("day_rest_default")}
+                        </p>
+                    `;
+                    dailyContainer.appendChild(dayCard);
+                });
+            }
+        } else {
+            if (planTitle) planTitle.innerText = t("athlete_plan_pending_title");
+            if (planDuration) planDuration.innerText = t("athlete_plan_pending_duration");
+            if (planVolume) planVolume.innerText = t("athlete_plan_pending_volume");
+            if (planNotes) planNotes.innerText = t("athlete_plan_pending_notes");
+            
+            const dailyContainer = document.getElementById("athleteDailyPlanContainer");
+            if (dailyContainer) dailyContainer.innerHTML = "";
+        }
+        
+        // Refresh chat
+        renderAthleteChatFeed(client);
+        
+        // Refresh calendar
+        if (typeof renderAthleteCalendar === 'function') renderAthleteCalendar(client);
+    }
+
+    function setupSupabaseRealtime() {
+        supabaseClient
+            .channel('site_configs_changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'site_configs',
+                    filter: 'key=eq.clientsList'
+                },
+                (payload) => {
+                    if (payload && payload.new && payload.new.value) {
+                        let parsedVal = payload.new.value;
+                        if (typeof parsedVal === 'string') {
+                            try { parsedVal = JSON.parse(parsedVal); } catch(e) {}
+                        }
+                        handleClientsListUpdate(parsedVal);
+                    }
+                }
+            )
+            .subscribe();
+    }
+
+    function handleClientsListUpdate(newClientsList) {
+        if (!newClientsList || !Array.isArray(newClientsList)) return;
+        
+        const oldClientsList = clientsList || [];
+        
+        // Update local variable
+        clientsList = newClientsList;
+        localStorage.setItem("clientsList", JSON.stringify(newClientsList));
+        
+        let hasChanges = false;
+        
+        // Let's check for new messages
+        newClientsList.forEach(newClient => {
+            const oldClient = oldClientsList.find(c => c.email === newClient.email);
+            
+            // Check if there are new messages
+            const newMsgs = newClient.chatMessages || [];
+            const oldMsgs = oldClient ? (oldClient.chatMessages || []) : [];
+            
+            if (newMsgs.length > oldMsgs.length) {
+                // There are new messages!
+                const addedMsgs = newMsgs.slice(oldMsgs.length);
+                
+                addedMsgs.forEach(msg => {
+                    // Scenario A: Athlete sends a message, Coach is logged in
+                    if (msg.sender === "athlete") {
+                        const coachActive = localStorage.getItem("adminLoggedIn") === "true";
+                        const adminPanel = document.getElementById("adminPanelModal");
+                        const selectedEmailEl = document.getElementById("selectedClientEmail");
+                        const isChatOpen = coachActive && 
+                                           adminPanel && !adminPanel.classList.contains("hidden") &&
+                                           selectedEmailEl && selectedEmailEl.value === newClient.email &&
+                                           activeClientEditTab === 'chat';
+                        
+                        if (coachActive) {
+                            if (isChatOpen) {
+                                // Coach has the chat active, update chat feed in real-time
+                                renderAdminChatFeed(newClient);
+                            } else {
+                                // Coach does not have the chat active.
+                                // Show Toast Notification
+                                showNotificationToast(
+                                    currentLang === "en" ? `New message from ${newClient.name}` : `Nuevo mensaje de ${newClient.name}`,
+                                    msg.text
+                                );
+                                // Increment unread count locally
+                                newClient.unreadMessagesCount = (newClient.unreadMessagesCount || 0) + 1;
+                                hasChanges = true;
+                            }
+                        }
+                    }
+                    // Scenario B: Coach sends a message, Athlete is logged in
+                    else if (msg.sender === "coach") {
+                        const loggedInEmail = localStorage.getItem("loggedInAthleteEmail");
+                        if (loggedInEmail && loggedInEmail === newClient.email) {
+                            const isChatTabActive = activeAthleteTab === 'chat';
+                            if (isChatTabActive) {
+                                renderAthleteChatFeed(newClient);
+                            } else {
+                                showNotificationToast(
+                                    currentLang === "en" ? "New message from Coach Luis" : "Nuevo mensaje del Coach Luis",
+                                    msg.text
+                                );
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // If the logged-in athlete's plan or info changed, refresh their dashboard in real-time
+            const loggedInEmail = localStorage.getItem("loggedInAthleteEmail");
+            if (loggedInEmail && loggedInEmail === newClient.email) {
+                refreshAthleteDashboard(newClient);
+            }
+        });
+        
+        if (hasChanges) {
+            localStorage.setItem("clientsList", JSON.stringify(newClientsList));
+            saveConfigToSupabase("clientsList", newClientsList);
+        }
+        
+        // Rerender lists
+        if (typeof renderAdminClients === 'function') renderAdminClients();
+        updateCoachSidebarBadges();
     }
 
     // State management
@@ -2515,6 +2912,8 @@
     function openAdminLoginModal() {
         const modal = document.getElementById("adminLoginModal");
         if (!modal) return;
+        const mainLanding = document.getElementById("mainLandingPage");
+        if (mainLanding) mainLanding.classList.add("hidden");
         modal.classList.remove("hidden");
         setTimeout(() => {
             modal.classList.add("opacity-100");
@@ -2528,6 +2927,10 @@
         modal.classList.remove("opacity-100");
         setTimeout(() => {
             modal.classList.add("hidden");
+            const mainLanding = document.getElementById("mainLandingPage");
+            if (mainLanding && (!document.getElementById("adminPanelModal") || document.getElementById("adminPanelModal").classList.contains("hidden"))) {
+                mainLanding.classList.remove("hidden");
+            }
         }, 300);
         document.getElementById("loginError").classList.add("hidden");
         document.getElementById("adminPasscode").value = "";
@@ -2547,6 +2950,8 @@
         closeAdminLoginModal();
         const modal = document.getElementById("adminPanelModal");
         if (!modal) return;
+        const mainLanding = document.getElementById("mainLandingPage");
+        if (mainLanding) mainLanding.classList.add("hidden");
         modal.classList.remove("hidden");
         setTimeout(() => {
             modal.classList.add("opacity-100");
@@ -2591,6 +2996,8 @@
         modal.classList.remove("opacity-100");
         setTimeout(() => {
             modal.classList.add("hidden");
+            const mainLanding = document.getElementById("mainLandingPage");
+            if (mainLanding) mainLanding.classList.remove("hidden");
         }, 300);
     }
 
@@ -3091,31 +3498,51 @@
 
     // --- Athlete Modal Actions ---
     function openAthleteModal() {
-        const modal = document.getElementById("athleteModal");
-        modal.classList.remove("hidden");
-        setTimeout(() => {
-            modal.classList.add("opacity-100");
-        }, 10);
+        const scheduleSection = document.getElementById("schedule-section");
+        if (scheduleSection) {
+            scheduleSection.scrollIntoView({ behavior: 'smooth' });
+        }
         
-        // Clear login form
-        document.getElementById("athleteEmail").value = "";
-        document.getElementById("athleteLoginError").classList.add("hidden");
-        
-        // Show step 1 (login form)
-        document.getElementById("athleteLoginView").classList.remove("hidden");
-        document.getElementById("athletePlanView").classList.add("hidden");
+        const loggedInEmail = localStorage.getItem("loggedInAthleteEmail");
+        if (loggedInEmail) {
+            document.getElementById("publicScheduleContainer").classList.add("hidden");
+            document.getElementById("athleteLoginContainer").classList.add("hidden");
+            document.getElementById("athleteDashboardContainer").classList.remove("hidden");
+            document.getElementById("athleteEmail").value = loggedInEmail;
+            loginAthlete();
+        } else {
+            showAthleteLoginInline();
+        }
     }
 
     function closeAthleteModal() {
-        const modal = document.getElementById("athleteModal");
-        modal.classList.remove("opacity-100");
-        setTimeout(() => {
-            modal.classList.add("hidden");
-        }, 300);
+        // Stub for backward compatibility
+    }
+
+    function showAthleteLoginInline() {
+        const scheduleContainer = document.getElementById("publicScheduleContainer");
+        const loginContainer = document.getElementById("athleteLoginContainer");
+        const dashboardContainer = document.getElementById("athleteDashboardContainer");
+        if (scheduleContainer) scheduleContainer.classList.add("hidden");
+        if (dashboardContainer) dashboardContainer.classList.add("hidden");
+        if (loginContainer) {
+            loginContainer.classList.remove("hidden");
+            document.getElementById("athleteLoginError").classList.add("hidden");
+            document.getElementById("athleteEmail").value = "";
+            document.getElementById("athleteEmail").focus();
+        }
+    }
+
+    function hideAthleteLoginInline() {
+        const scheduleContainer = document.getElementById("publicScheduleContainer");
+        const loginContainer = document.getElementById("athleteLoginContainer");
+        if (loginContainer) loginContainer.classList.add("hidden");
+        if (scheduleContainer) scheduleContainer.classList.remove("hidden");
     }
 
     function loginAthlete() {
-        const email = document.getElementById("athleteEmail").value.trim().toLowerCase();
+        const emailInput = document.getElementById("athleteEmail");
+        const email = emailInput.value.trim().toLowerCase();
         if (!email) return;
         
         const client = clientsList.find(c => c.email === email);
@@ -3126,9 +3553,13 @@
         
         document.getElementById("athleteLoginError").classList.add("hidden");
         
-        // Show athlete plan view
-        document.getElementById("athleteLoginView").classList.add("hidden");
-        document.getElementById("athletePlanView").classList.remove("hidden");
+        // Save session in localStorage
+        localStorage.setItem("loggedInAthleteEmail", email);
+        
+        // Toggle view containers
+        document.getElementById("publicScheduleContainer").classList.add("hidden");
+        document.getElementById("athleteLoginContainer").classList.add("hidden");
+        document.getElementById("athleteDashboardContainer").classList.remove("hidden");
         
         // Populate plan view details
         document.getElementById("athleteAthleteName").innerText = (currentLang === "en" ? "HELLO, " : "¡HOLA, ") + client.name.toUpperCase() + "!";
@@ -3208,9 +3639,10 @@
     }
 
     function logoutAthlete() {
-        document.getElementById("athletePlanView").classList.add("hidden");
-        document.getElementById("athleteLoginView").classList.remove("hidden");
+        localStorage.removeItem("loggedInAthleteEmail");
         document.getElementById("athleteEmail").value = "";
+        document.getElementById("athleteDashboardContainer").classList.add("hidden");
+        document.getElementById("publicScheduleContainer").classList.remove("hidden");
     }
 
     // --- Admin Clients Management ---
@@ -3235,9 +3667,13 @@
                 `<span class="ml-2 font-label-sm text-[9px] px-1.5 py-0.5 rounded-sm bg-green-500/20 text-green-400 font-bold border border-green-500/30">CON PLAN</span>` :
                 `<span class="ml-2 font-label-sm text-[9px] px-1.5 py-0.5 rounded-sm bg-yellow-500/20 text-yellow-400 font-bold border border-yellow-500/30">SIN PLAN</span>`;
             
+            const unreadBadge = client.unreadMessagesCount && client.unreadMessagesCount > 0 ? 
+                `<span class="ml-2 bg-red-600 animate-pulse text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold font-label-sm">${client.unreadMessagesCount} NUEVO${client.unreadMessagesCount > 1 ? 'S' : ''}</span>` :
+                '';
+            
             tr.innerHTML = `
                 <td class="py-3 px-3">
-                    <div class="font-bold text-white flex items-center">${client.name} ${planBadge}</div>
+                    <div class="font-bold text-white flex items-center">${client.name} ${planBadge} ${unreadBadge}</div>
                     <div class="text-tertiary text-[10px]">${client.email}</div>
                     <div class="text-tertiary text-[10px]">${client.phone || "-"}</div>
                 </td>
@@ -3258,12 +3694,21 @@
         });
     }
 
-        function editClientPlan(email) {
+    function editClientPlan(email) {
         const client = clientsList.find(c => c.email === email);
         if (!client) return;
         
         document.getElementById("selectedClientEmail").value = client.email;
         document.getElementById("editorClientName").value = `${client.name} (${client.email})`;
+        
+        // Reset unread count if > 0
+        if (client.unreadMessagesCount && client.unreadMessagesCount > 0) {
+            client.unreadMessagesCount = 0;
+            localStorage.setItem("clientsList", JSON.stringify(clientsList));
+            saveConfigToSupabase("clientsList", clientsList);
+            updateCoachSidebarBadges();
+            renderAdminClients();
+        }
         
         if (client.plan) {
             document.getElementById("editorPlanTitle").value = getLocalizedValue(client.plan.title) || "";
@@ -3815,6 +4260,13 @@
             const email = document.getElementById("selectedClientEmail").value;
             const client = clientsList.find(c => c.email === email);
             if (client) {
+                if (client.unreadMessagesCount && client.unreadMessagesCount > 0) {
+                    client.unreadMessagesCount = 0;
+                    localStorage.setItem("clientsList", JSON.stringify(clientsList));
+                    saveConfigToSupabase("clientsList", clientsList);
+                    updateCoachSidebarBadges();
+                    renderAdminClients();
+                }
                 renderAdminChatFeed(client);
             }
         } else if (tab === 'calendar') {
@@ -4613,13 +5065,19 @@
 
         // Background synchronization from Supabase Database
         syncConfigsFromSupabase();
+
+        // Check local sessions immediately
+        checkAutoLogins();
+
+        // Initialize Supabase Realtime Channel
+        setupSupabaseRealtime();
     };
 </script>
 
 <!-- Admin Modals & Floating Indicator -->
 <!-- Admin Login Modal -->
-<div id="adminLoginModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-all duration-300 opacity-0">
-    <div class="w-full max-w-md bg-[#121212] border border-white/10 rounded-sm p-6 md:p-8 shadow-[8px_8px_0px_var(--accent-color)] transition-all duration-300 relative mx-4 text-left">
+<div id="adminLoginModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0c0c0c] hidden transition-all duration-300 opacity-0">
+    <div class="w-full max-w-md bg-[#121212] border border-white/10 rounded-sm p-8 md:p-10 shadow-[8px_8px_0px_var(--accent-color)] relative mx-4 text-left">
         <button onclick="closeAdminLoginModal()" class="absolute top-6 right-6 text-tertiary hover:text-white transition-colors">
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>
@@ -4644,8 +5102,8 @@
 </div>
 
 <!-- Fullscreen Admin Panel Modal -->
-<div id="adminPanelModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md hidden transition-all duration-300 opacity-0 text-left">
-    <div class="w-full max-w-5xl h-[85vh] bg-[#121212] border border-white/10 rounded-sm flex flex-col shadow-[12px_12px_0px_var(--accent-color)] transition-all duration-300 relative mx-4 overflow-hidden">
+<div id="adminPanelModal" class="fixed inset-0 z-[9999] w-screen h-screen bg-[#121212] hidden transition-all duration-300 opacity-0 text-left overflow-hidden">
+    <div class="w-full h-full flex flex-col overflow-hidden">
         
         <!-- Header -->
         <div class="flex justify-between items-center border-b border-white/10 px-6 py-4 bg-surface-container-low">
@@ -5165,130 +5623,7 @@
 </div>
 
 <!-- Athlete Access Modal -->
-<div id="athleteModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-all duration-300 opacity-0">
-    <div class="w-full max-w-2xl bg-[#121212] border border-white/10 rounded-sm p-6 md:p-8 shadow-[8px_8px_0px_var(--accent-color)] transition-all duration-300 relative mx-4 max-h-[90vh] overflow-y-auto no-scrollbar text-left">
-        <button onclick="closeAthleteModal()" class="absolute top-6 right-6 text-tertiary hover:text-white transition-colors">
-            <span class="material-symbols-outlined text-3xl">close</span>
-        </button>
-        
-        <!-- Step 1: Login Form -->
-        <div id="athleteLoginView" class="flex flex-col gap-6">
-            <div class="text-center flex flex-col items-center">
-                <span class="material-symbols-outlined text-5xl text-[var(--accent-color)] mb-2">directions_run</span>
-                <div>
-                    <span data-i18n="athlete_login_title" class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO ATLETAS ]</span>
-                    <h3 data-i18n="athlete_login_header" class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">MI PLAN DE ENTRENAMIENTO</h3>
-                </div>
-                <p data-i18n="athlete_login_desc" class="font-body-md text-sm text-tertiary leading-relaxed mt-4 max-w-md mx-auto">
-                    Ingresa el correo electrónico con el que te registraste en la academia para acceder a tu planificación semanal y notas del entrenador.
-                </p>
-            </div>
-            
-            <div class="flex flex-col gap-2 max-w-md mx-auto w-full">
-                <label data-i18n="athlete_login_label_email" class="font-label-sm text-xs text-tertiary uppercase block mb-1">Correo Electrónico</label>
-                <input data-i18n="athlete_login_placeholder" class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="athleteEmail" placeholder="juan@correo.com" type="email" onkeyup="if(event.key === 'Enter') loginAthlete()"/>
-                <span data-i18n="athlete_login_error" id="athleteLoginError" class="font-label-sm text-xs text-red-500 mt-1 hidden">No se encontró ningún registro para este correo. Por favor, inscríbete primero o verifica la dirección.</span>
-            </div>
-            
-            <div class="flex flex-col gap-2 max-w-md mx-auto w-full">
-                <button onclick="loginAthlete()" data-i18n="athlete_login_btn" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
-                    ACCEDER A MI PLAN
-                </button>
-            </div>
-        </div>
-        
-        <!-- Step 2: Plan Display -->
-        <div id="athletePlanView" class="flex flex-col gap-6 hidden">
-            <div class="border-b border-white/10 pb-4 flex justify-between items-end">
-                <div>
-                    <span data-i18n="athlete_plan_active_tag" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
-                    <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter" id="athleteAthleteName">HOLA, DEPORTISTA</h3>
-                    <p class="font-body-md text-xs text-tertiary mt-1" id="athleteSportInterest">Fase: Triatlón</p>
-                </div>
-                
-                <!-- Tab Selector for Athlete -->
-                <div class="flex gap-2 bg-surface-container p-0.5 rounded-sm border border-white/15 font-label-sm text-[10px]">
-                    <button id="athleteTabBtn-plan" onclick="switchAthleteViewTab('plan')" class="px-3 py-1.5 uppercase font-bold text-black bg-[var(--accent-color)] rounded-sm transition-all">Plan General</button>
-                    <button id="athleteTabBtn-calendar" onclick="switchAthleteViewTab('calendar')" class="px-3 py-1.5 uppercase text-tertiary hover:text-white transition-all" data-i18n="athlete_tab_calendar">Mi Calendario</button>
-                    <button id="athleteTabBtn-chat" onclick="switchAthleteViewTab('chat')" class="px-3 py-1.5 uppercase text-tertiary hover:text-white transition-all">Entrenamientos & Chat</button>
-                </div>
-            </div>
-            
-            <!-- Athlete Tab: Plan General -->
-            <div id="athleteSubtab-plan" class="flex flex-col gap-6">
-                <!-- Bento-style personalized plan details -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                    <!-- Plan Title Card -->
-                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm">
-                        <span data-i18n="athlete_plan_assigned" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
-                        <h4 class="font-headline-md text-xl text-white uppercase italic" id="athletePlanTitle">PLAN PERSONALIZADO</h4>
-                    </div>
-                    
-                    <!-- Plan Metrics Card -->
-                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm grid grid-cols-2 gap-4">
-                        <div>
-                            <span data-i18n="athlete_plan_duration" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
-                            <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanDuration">12 Semanas</span>
-                        </div>
-                        <div>
-                            <span data-i18n="athlete_plan_volume" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
-                            <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanVolume">6-8 hrs/sem</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Notes and Guidelines (Spans both cols) -->
-                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
-                        <span data-i18n="athlete_plan_general_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES GENERALES ]</span>
-                        <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
-                            Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
-                        </p>
-                    </div>
-                    
-                    <!-- Daily Plan (Spans both cols) -->
-                    <div class="md:col-span-2 flex flex-col gap-3">
-                        <span data-i18n="athlete_plan_daily_header" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-1 font-bold">[ PLANIFICACIÓN DIARIA ]</span>
-                        <div id="athleteDailyPlanContainer" class="flex flex-col gap-3">
-                            <!-- Daily cards generated dynamically -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Athlete Tab: Mi Calendario -->
-            <div id="athleteSubtab-calendar" class="flex flex-col gap-4 hidden text-left">
-                <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                    <span data-i18n="athlete_calendar_title" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase font-bold">[ CRONOGRAMA DE ENTRENAMIENTOS DE LA SEMANA ]</span>
-                </div>
-                <div class="flex flex-col gap-3" id="athleteCalendarDays">
-                    <!-- Days will be dynamically rendered here -->
-                </div>
-            </div>
-            
-            <!-- Athlete Tab: Chat & Workouts -->
-            <div id="athleteSubtab-chat" class="flex flex-col gap-4 hidden">
-                <!-- Chat Feed -->
-                <div id="athleteChatFeed" class="w-full h-80 bg-[#181818] border border-white/5 p-4 rounded-sm overflow-y-auto flex flex-col gap-4 text-xs text-left">
-                    <!-- Messages rendered dynamically -->
-                </div>
-                
-                <!-- Send message inputs -->
-                <div class="flex gap-2">
-                    <input class="flex-1 bg-[#181818] border border-white/10 rounded-sm text-white px-3 py-2.5 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs" id="athleteChatMessage" placeholder="Envía un comentario o duda a tu coach..." type="text" onkeyup="if(event.key === 'Enter') sendAthleteTextMessage()"/>
-                    <button onclick="sendAthleteTextMessage()" class="bg-[var(--accent-color)] text-black hover:bg-white font-bold px-4 py-2.5 uppercase text-xs transition-all border border-black">
-                        Enviar
-                    </button>
-                </div>
-            </div>
-            
-            <div class="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
-                <span data-i18n="athlete_plan_system" class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-ACADEMY SYSTEM 2026</span>
-                <button onclick="logoutAthlete()" data-i18n="athlete_plan_logout" class="font-label-sm text-xs border border-white/10 text-tertiary px-4 py-2 hover:bg-white/5 hover:text-white transition-all">
-                    SALIR / CERRAR
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Athlete Access Modal removed (now inline inside schedule-section) -->
 
 <!-- Lightbox Modal -->
 <div id="lightboxModal" class="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md hidden flex-col justify-between p-4 md:p-8 transition-all duration-300 opacity-0">
@@ -5340,6 +5675,9 @@
         </div>
     </div>
 </div>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 z-[10010] flex flex-col gap-3 pointer-events-none"></div>
 
 </body>
 </html>
