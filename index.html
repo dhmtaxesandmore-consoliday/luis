@@ -938,10 +938,33 @@
             "cropper_step_2_label": "[ STEP 2 OF 2: MOBILE CROP ]",
             "cropper_step_2_desc": "Adjust the visible area for mobile screens (vertical format).",
             "cropper_step_2_btn": "COMPLETE CROP",
-            "cropper_cancel": "CANCEL",
             "contact_success_title": "APPLICATION RECEIVED",
             "contact_success_desc": "We have received your sports profile successfully. A coach will contact you via WhatsApp or Email within 24 hours to coordinate your bonus placement test.",
-            "contact_success_btn": "UNDERSTOOD"
+            "contact_success_btn": "UNDERSTOOD",
+            "tab_general_plan": "General Plan",
+            "tab_workouts_chat": "Workouts & Chat",
+            "chat_coach_placeholder": "Quick message for athlete...",
+            "chat_athlete_placeholder": "Send a comment or question to your coach...",
+            "btn_design_workout": "DESIGN DYNAMIC WORKOUT",
+            "workout_composer_title": "Workout Title",
+            "workout_composer_desc": "Description / Objectives",
+            "workout_composer_exercises": "Exercises / Sets",
+            "workout_composer_add_row": "Add Row",
+            "workout_composer_ex_placeholder": "Exercise / Description",
+            "workout_composer_sets_placeholder": "Sets",
+            "workout_composer_reps_placeholder": "Reps/Dist",
+            "workout_composer_intensity_placeholder": "Intensity",
+            "btn_send_plan": "Send Plan",
+            "chat_status_completed": "COMPLETED",
+            "chat_status_pending": "PENDING",
+            "workout_card_exercises": "EXERCISES",
+            "workout_card_sets": "SETS",
+            "workout_card_reps": "REPS/DIST",
+            "workout_card_intensity": "INTENSITY",
+            "btn_complete_workout": "Complete Workout",
+            "workout_feedback_placeholder": "Workout comments (optional)...",
+            "btn_confirm_completion": "Confirm",
+            "workout_feedback_label": "Athlete Feedback:"
         },
         es: {
             "menu_tri": "TRIATLÓN",
@@ -1092,10 +1115,33 @@
             "cropper_step_2_label": "[ PASO 2 DE 2: ENCUADRE MÓVIL ]",
             "cropper_step_2_desc": "Selecciona y ajusta la zona visible para pantallas móviles (formato vertical).",
             "cropper_step_2_btn": "COMPLETAR ENCUADRE",
-            "cropper_cancel": "CANCELAR",
             "contact_success_title": "SOLICITUD RECIBIDA",
             "contact_success_desc": "Hemos recibido tu perfil deportivo con éxito. Un entrenador se pondrá en contacto contigo vía WhatsApp o Email dentro de las próximas 24 horas para coordinar tu test de nivelación bonificado.",
-            "contact_success_btn": "ENTENDIDO"
+            "contact_success_btn": "ENTENDIDO",
+            "tab_general_plan": "Plan General",
+            "tab_workouts_chat": "Entrenamientos & Chat",
+            "chat_coach_placeholder": "Mensaje rápido para el atleta...",
+            "chat_athlete_placeholder": "Envía un comentario o duda a tu coach...",
+            "btn_design_workout": "DISEÑAR ENTRENAMIENTO DINÁMICO",
+            "workout_composer_title": "Título del Entrenamiento",
+            "workout_composer_desc": "Descripción / Objetivos",
+            "workout_composer_exercises": "Ejercicios / Series",
+            "workout_composer_add_row": "Añadir Fila",
+            "workout_composer_ex_placeholder": "Ejercicio / Descripción",
+            "workout_composer_sets_placeholder": "Series",
+            "workout_composer_reps_placeholder": "Reps/Dist",
+            "workout_composer_intensity_placeholder": "Intensidad",
+            "btn_send_plan": "Enviar Plan",
+            "chat_status_completed": "COMPLETADO",
+            "chat_status_pending": "PENDIENTE",
+            "workout_card_exercises": "EJERCICIO",
+            "workout_card_sets": "SERIES",
+            "workout_card_reps": "REPS/DIST",
+            "workout_card_intensity": "INTENSIDAD",
+            "btn_complete_workout": "Completar Entrenamiento",
+            "workout_feedback_placeholder": "Comentarios del entrenamiento (opcional)...",
+            "btn_confirm_completion": "Confirmar",
+            "workout_feedback_label": "Comentarios del Atleta:"
         }
     };
 
@@ -2949,6 +2995,10 @@
         // Populate plan view details
         document.getElementById("athleteAthleteName").innerText = (currentLang === "en" ? "HELLO, " : "¡HOLA, ") + client.name.toUpperCase() + "!";
         
+        // Reset subtab and render chat feed
+        switchAthleteViewTab('plan');
+        renderAthleteChatFeed(client);
+        
         const sportsLabels = {
             tri: t("menu_tri"),
             swim: t("menu_swim"),
@@ -3049,6 +3099,9 @@
         
         document.getElementById("adminPlanEditorPlaceholder").classList.add("hidden");
         document.getElementById("adminPlanEditor").classList.remove("hidden");
+        
+        switchClientEditTab('plan');
+        renderAdminChatFeed(client);
     }
 
     function saveClientPlan() {
@@ -3523,6 +3576,474 @@
         }
     });
 
+    // --- Structured Private Workouts & Chat Engine ---
+    let activeClientEditTab = 'plan';
+    function switchClientEditTab(tab) {
+        activeClientEditTab = tab;
+        const subtabPlan = document.getElementById("clientEditSubtab-plan");
+        const subtabChat = document.getElementById("clientEditSubtab-chat");
+        const btnPlan = document.getElementById("clientEditTabBtn-plan");
+        const btnChat = document.getElementById("clientEditTabBtn-chat");
+        
+        if (tab === 'plan') {
+            if (subtabPlan) subtabPlan.classList.remove("hidden");
+            if (subtabChat) subtabChat.classList.add("hidden");
+            if (btnPlan) {
+                btnPlan.classList.add("text-[var(--accent-color)]", "border-b-2", "border-[var(--accent-color)]");
+                btnPlan.classList.remove("text-tertiary");
+            }
+            if (btnChat) {
+                btnChat.classList.remove("text-[var(--accent-color)]", "border-b-2", "border-[var(--accent-color)]");
+                btnChat.classList.add("text-tertiary");
+            }
+        } else {
+            if (subtabPlan) subtabPlan.classList.add("hidden");
+            if (subtabChat) subtabChat.classList.remove("hidden");
+            if (btnPlan) {
+                btnPlan.classList.remove("text-[var(--accent-color)]", "border-b-2", "border-[var(--accent-color)]");
+                btnPlan.classList.add("text-tertiary");
+            }
+            if (btnChat) {
+                btnChat.classList.add("text-[var(--accent-color)]", "border-b-2", "border-[var(--accent-color)]");
+                btnChat.classList.remove("text-tertiary");
+            }
+            // Render chat feed when switched
+            const email = document.getElementById("selectedClientEmail").value;
+            const client = clientsList.find(c => c.email === email);
+            if (client) {
+                renderAdminChatFeed(client);
+            }
+        }
+    }
+
+    let activeAthleteTab = 'plan';
+    function switchAthleteViewTab(tab) {
+        activeAthleteTab = tab;
+        const subtabPlan = document.getElementById("athleteSubtab-plan");
+        const subtabChat = document.getElementById("athleteSubtab-chat");
+        const btnPlan = document.getElementById("athleteTabBtn-plan");
+        const btnChat = document.getElementById("athleteTabBtn-chat");
+        
+        if (tab === 'plan') {
+            if (subtabPlan) subtabPlan.classList.remove("hidden");
+            if (subtabChat) subtabChat.classList.add("hidden");
+            if (btnPlan) {
+                btnPlan.classList.add("text-black", "bg-[var(--accent-color)]");
+                btnPlan.classList.remove("text-tertiary");
+            }
+            if (btnChat) {
+                btnChat.classList.remove("text-black", "bg-[var(--accent-color)]");
+                btnChat.classList.add("text-tertiary");
+            }
+        } else {
+            if (subtabPlan) subtabPlan.classList.add("hidden");
+            if (subtabChat) subtabChat.classList.remove("hidden");
+            if (btnPlan) {
+                btnPlan.classList.remove("text-black", "bg-[var(--accent-color)]");
+                btnPlan.classList.add("text-tertiary");
+            }
+            if (btnChat) {
+                btnChat.classList.add("text-black", "bg-[var(--accent-color)]");
+                btnChat.classList.remove("text-tertiary");
+            }
+            
+            // Render athlete chat feed when switched
+            const email = document.getElementById("athleteEmail").value.trim().toLowerCase();
+            const client = clientsList.find(c => c.email === email);
+            if (client) {
+                renderAthleteChatFeed(client);
+            }
+        }
+    }
+
+    function renderAdminChatFeed(client) {
+        const feed = document.getElementById("adminChatFeed");
+        if (!feed) return;
+        feed.innerHTML = "";
+        
+        const messages = client.chatMessages || [];
+        if (messages.length === 0) {
+            feed.innerHTML = `<div class="text-center py-8 text-tertiary italic">No hay mensajes en el chat. Envíale un mensaje o plan de entrenamiento.</div>`;
+            return;
+        }
+        
+        messages.forEach(msg => {
+            const div = document.createElement("div");
+            const time = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            if (msg.type === 'text') {
+                if (msg.sender === 'coach') {
+                    div.className = "flex justify-end";
+                    div.innerHTML = `
+                        <div class="bg-[rgba(var(--accent-color-rgb),0.1)] border border-[var(--accent-color)]/30 rounded-sm py-2 px-3 max-w-[80%] text-white text-left">
+                            <p class="mb-0.5">${msg.text}</p>
+                            <span class="text-[9px] text-white/30 block text-right">${time}</span>
+                        </div>
+                    `;
+                } else {
+                    div.className = "flex justify-start";
+                    div.innerHTML = `
+                        <div class="bg-surface-container border border-white/5 rounded-sm py-2 px-3 max-w-[80%] text-white text-left">
+                            <span class="text-[9px] text-[var(--accent-color)] font-bold block mb-0.5 uppercase">${client.name}</span>
+                            <p class="mb-0.5">${msg.text}</p>
+                            <span class="text-[9px] text-white/30 block text-right">${time}</span>
+                        </div>
+                    `;
+                }
+            } else if (msg.type === 'workout') {
+                const workout = msg.workout;
+                let rowsHtml = "";
+                workout.exercises.forEach((ex, idx) => {
+                    rowsHtml += `
+                        <tr class="${idx % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}">
+                            <td class="py-1.5 px-2 border-r border-white/5 font-bold">${ex.name}</td>
+                            <td class="py-1.5 px-2 border-r border-white/5 text-center">${ex.sets || "-"}</td>
+                            <td class="py-1.5 px-2 border-r border-white/5 text-center">${ex.reps || "-"}</td>
+                            <td class="py-1.5 px-2 text-center">${ex.intensity || "-"}</td>
+                        </tr>
+                    `;
+                });
+                
+                const statusBadge = workout.completed ? 
+                    `<span class="px-2 py-0.5 bg-green-500/20 text-green-400 font-bold border border-green-500/30 text-[9px] uppercase">${t("chat_status_completed")}</span>` :
+                    `<span class="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold border border-yellow-500/30 text-[9px] uppercase">${t("chat_status_pending")}</span>`;
+                    
+                const feedbackHtml = workout.completed && workout.feedback ?
+                    `<div class="mt-3 pt-2.5 border-t border-white/10 text-white/80">
+                        <span class="font-bold text-[9px] text-[var(--accent-color)] uppercase tracking-wider block mb-0.5">${t("workout_feedback_label")}</span>
+                        <p class="italic text-[11px] font-body-md">"${workout.feedback}"</p>
+                    </div>` : '';
+
+                div.className = "w-full flex justify-center";
+                div.innerHTML = `
+                    <div class="w-full bg-[#181818] border-l-4 border-[var(--accent-color)] rounded-sm p-4 text-left shadow-lg border-y border-r border-white/10">
+                        <div class="flex justify-between items-center mb-3">
+                            <h5 class="font-headline-md text-base text-white uppercase italic tracking-wider">${workout.title}</h5>
+                            ${statusBadge}
+                        </div>
+                        ${workout.notes ? `<p class="text-tertiary mb-3 text-[11px] leading-relaxed whitespace-pre-wrap">${workout.notes}</p>` : ''}
+                        <div class="border border-white/10 rounded-sm overflow-hidden text-[10px]">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-white/10 border-b border-white/10 text-[9px] font-label-sm uppercase tracking-wider text-tertiary">
+                                        <th class="py-1.5 px-2 border-r border-white/10">${t("workout_card_exercises")}</th>
+                                        <th class="py-1.5 px-2 border-r border-white/10 text-center">${t("workout_card_sets")}</th>
+                                        <th class="py-1.5 px-2 border-r border-white/10 text-center">${t("workout_card_reps")}</th>
+                                        <th class="py-1.5 px-2 text-center">${t("workout_card_intensity")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5">
+                                    ${rowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                        ${feedbackHtml}
+                        <span class="text-[9px] text-white/30 block text-right mt-3">${time}</span>
+                    </div>
+                `;
+            }
+            
+            feed.appendChild(div);
+        });
+        
+        feed.scrollTop = feed.scrollHeight;
+    }
+
+    function renderAthleteChatFeed(client) {
+        const feed = document.getElementById("athleteChatFeed");
+        if (!feed) return;
+        feed.innerHTML = "";
+        
+        const messages = client.chatMessages || [];
+        if (messages.length === 0) {
+            feed.innerHTML = `<div class="text-center py-12 text-tertiary italic">No hay mensajes. Comienza saludando a tu coach.</div>`;
+            return;
+        }
+        
+        messages.forEach(msg => {
+            const div = document.createElement("div");
+            const time = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            if (msg.type === 'text') {
+                if (msg.sender === 'athlete') {
+                    div.className = "flex justify-end";
+                    div.innerHTML = `
+                        <div class="bg-[rgba(var(--accent-color-rgb),0.1)] border border-[var(--accent-color)]/30 rounded-sm py-2.5 px-3 max-w-[80%] text-white text-left">
+                            <p class="mb-0.5">${msg.text}</p>
+                            <span class="text-[9px] text-white/30 block text-right">${time}</span>
+                        </div>
+                    `;
+                } else {
+                    div.className = "flex justify-start";
+                    div.innerHTML = `
+                        <div class="bg-surface-container border border-white/5 rounded-sm py-2.5 px-3 max-w-[80%] text-white text-left">
+                            <span class="text-[9px] text-[var(--accent-color)] font-bold block mb-0.5 uppercase">COACH LUIS</span>
+                            <p class="mb-0.5">${msg.text}</p>
+                            <span class="text-[9px] text-white/30 block text-right">${time}</span>
+                        </div>
+                    `;
+                }
+            } else if (msg.type === 'workout') {
+                const workout = msg.workout;
+                let rowsHtml = "";
+                workout.exercises.forEach((ex, idx) => {
+                    rowsHtml += `
+                        <tr class="${idx % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}">
+                            <td class="py-1.5 px-2 border-r border-white/5 font-bold">${ex.name}</td>
+                            <td class="py-1.5 px-2 border-r border-white/5 text-center">${ex.sets || "-"}</td>
+                            <td class="py-1.5 px-2 border-r border-white/5 text-center">${ex.reps || "-"}</td>
+                            <td class="py-1.5 px-2 text-center">${ex.intensity || "-"}</td>
+                        </tr>
+                    `;
+                });
+                
+                let footerArea = "";
+                if (workout.completed) {
+                    footerArea = `
+                        <div class="flex flex-col gap-1 mt-3 pt-2.5 border-t border-white/10">
+                            <div class="flex items-center gap-1.5 text-green-400 font-bold text-[10px] uppercase">
+                                <span class="material-symbols-outlined text-sm">check_circle</span>
+                                <span>${t("chat_status_completed")}</span>
+                            </div>
+                            ${workout.feedback ? `<p class="italic text-tertiary text-[11px] mt-1 font-body-md">"${workout.feedback}"</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    footerArea = `
+                        <div class="mt-4 pt-3 border-t border-white/10" id="workoutFooter-${msg.id}">
+                            <button onclick="showWorkoutFeedbackForm('${msg.id}')" class="w-full font-label-sm text-[10px] bg-[var(--accent-color)] text-black hover:bg-white font-bold py-2 uppercase border border-black transition-all text-center rounded-sm">
+                                ${t("btn_complete_workout")}
+                            </button>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/10 hidden flex flex-col gap-2" id="workoutFeedbackForm-${msg.id}">
+                            <label class="font-label-sm text-[9px] text-tertiary uppercase block">${t("workout_feedback_placeholder")}</label>
+                            <div class="flex gap-2">
+                                <input class="flex-1 bg-[#121212] border border-white/10 rounded-sm text-white px-2 py-1.5 text-[11px] focus:outline-none" id="workoutFeedbackInput-${msg.id}" placeholder="e.g. 50 mins, felt good"/>
+                                <button onclick="submitWorkoutCompletion('${msg.id}')" class="bg-white text-black font-bold px-3 py-1.5 text-[10px] uppercase transition-all hover:bg-neutral-200 rounded-sm">
+                                    ${t("btn_confirm_completion")}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                div.className = "w-full flex justify-center";
+                div.innerHTML = `
+                    <div class="w-full bg-[#181818] border-l-4 border-[var(--accent-color)] rounded-sm p-4 text-left shadow-lg border-y border-r border-white/10">
+                        <div class="flex justify-between items-center mb-3">
+                            <h5 class="font-headline-md text-base text-white uppercase italic tracking-wider">${workout.title}</h5>
+                            <span class="px-2 py-0.5 bg-yellow-500/10 text-yellow-400 font-bold border border-yellow-500/20 text-[9px] uppercase ${workout.completed ? 'hidden' : ''}">${t("chat_status_pending")}</span>
+                        </div>
+                        ${workout.notes ? `<p class="text-tertiary mb-3 text-[11px] leading-relaxed whitespace-pre-wrap">${workout.notes}</p>` : ''}
+                        <div class="border border-white/10 rounded-sm overflow-hidden text-[10px]">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-white/10 border-b border-white/10 text-[9px] font-label-sm uppercase tracking-wider text-tertiary">
+                                        <th class="py-1.5 px-2 border-r border-white/10">${t("workout_card_exercises")}</th>
+                                        <th class="py-1.5 px-2 border-r border-white/10 text-center">${t("workout_card_sets")}</th>
+                                        <th class="py-1.5 px-2 border-r border-white/10 text-center">${t("workout_card_reps")}</th>
+                                        <th class="py-1.5 px-2 text-center">${t("workout_card_intensity")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5">
+                                    ${rowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                        ${footerArea}
+                        <span class="text-[9px] text-white/30 block text-right mt-3">${time}</span>
+                    </div>
+                `;
+            }
+            
+            feed.appendChild(div);
+        });
+        
+        feed.scrollTop = feed.scrollHeight;
+    }
+
+    function showWorkoutFeedbackForm(msgId) {
+        const footer = document.getElementById(`workoutFooter-${msgId}`);
+        const form = document.getElementById(`workoutFeedbackForm-${msgId}`);
+        if (footer) footer.classList.add("hidden");
+        if (form) form.classList.remove("hidden");
+    }
+
+    function submitWorkoutCompletion(msgId) {
+        const feedbackInput = document.getElementById(`workoutFeedbackInput-${msgId}`);
+        const feedback = feedbackInput ? feedbackInput.value.trim() : "";
+        completeWorkout(msgId, feedback);
+    }
+
+    function completeWorkout(msgId, feedback) {
+        const email = document.getElementById("athleteEmail").value.trim().toLowerCase();
+        const clientIndex = clientsList.findIndex(c => c.email === email);
+        if (clientIndex < 0) return;
+        
+        const client = clientsList[clientIndex];
+        client.chatMessages = client.chatMessages || [];
+        const msg = client.chatMessages.find(m => m.id === msgId);
+        if (msg && msg.type === 'workout') {
+            msg.workout.completed = true;
+            msg.workout.completed_at = new Date().toISOString();
+            msg.workout.feedback = feedback || (currentLang === "en" ? "Completed without comments" : "Completado sin comentarios");
+            
+            clientsList[clientIndex] = client;
+            localStorage.setItem("clientsList", JSON.stringify(clientsList));
+            saveConfigToSupabase("clientsList", clientsList);
+            
+            renderAthleteChatFeed(client);
+        }
+    }
+
+    function sendCoachTextMessage() {
+        const email = document.getElementById("selectedClientEmail").value;
+        const clientIndex = clientsList.findIndex(c => c.email === email);
+        if (clientIndex < 0) return;
+        
+        const input = document.getElementById("adminChatMessage");
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const client = clientsList[clientIndex];
+        client.chatMessages = client.chatMessages || [];
+        
+        const msg = {
+            id: "msg_" + Date.now(),
+            sender: "coach",
+            type: "text",
+            timestamp: new Date().toISOString(),
+            text: text
+        };
+        
+        client.chatMessages.push(msg);
+        clientsList[clientIndex] = client;
+        
+        localStorage.setItem("clientsList", JSON.stringify(clientsList));
+        saveConfigToSupabase("clientsList", clientsList);
+        
+        input.value = "";
+        renderAdminChatFeed(client);
+    }
+
+    function sendAthleteTextMessage() {
+        const email = document.getElementById("athleteEmail").value.trim().toLowerCase();
+        const clientIndex = clientsList.findIndex(c => c.email === email);
+        if (clientIndex < 0) return;
+        
+        const input = document.getElementById("athleteChatMessage");
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const client = clientsList[clientIndex];
+        client.chatMessages = client.chatMessages || [];
+        
+        const msg = {
+            id: "msg_" + Date.now(),
+            sender: "athlete",
+            type: "text",
+            timestamp: new Date().toISOString(),
+            text: text
+        };
+        
+        client.chatMessages.push(msg);
+        clientsList[clientIndex] = client;
+        
+        localStorage.setItem("clientsList", JSON.stringify(clientsList));
+        saveConfigToSupabase("clientsList", clientsList);
+        
+        input.value = "";
+        renderAthleteChatFeed(client);
+    }
+
+    function toggleWorkoutComposer() {
+        const form = document.getElementById("workoutComposerForm");
+        if (!form) return;
+        form.classList.toggle("hidden");
+        if (!form.classList.contains("hidden")) {
+            document.getElementById("workoutTitle").value = "";
+            document.getElementById("workoutNotes").value = "";
+            const container = document.getElementById("workoutRowsContainer");
+            if (container) {
+                container.innerHTML = "";
+                addWorkoutRow();
+            }
+        }
+    }
+
+    function addWorkoutRow() {
+        const container = document.getElementById("workoutRowsContainer");
+        if (!container) return;
+        
+        const div = document.createElement("div");
+        div.className = "flex items-center gap-1.5 bg-surface-container p-1.5 rounded-sm border border-white/5";
+        div.innerHTML = `
+            <input class="flex-1 bg-[#121212] border border-white/10 rounded-sm text-white px-2 py-1 focus:outline-none text-[11px]" placeholder="${t("workout_composer_ex_placeholder")}" type="text" name="exName"/>
+            <input class="w-12 bg-[#121212] border border-white/10 rounded-sm text-white px-1 py-1 text-center focus:outline-none text-[11px]" placeholder="${t("workout_composer_sets_placeholder")}" type="text" name="exSets"/>
+            <input class="w-14 bg-[#121212] border border-white/10 rounded-sm text-white px-1 py-1 text-center focus:outline-none text-[11px]" placeholder="${t("workout_composer_reps_placeholder")}" type="text" name="exReps"/>
+            <input class="w-16 bg-[#121212] border border-white/10 rounded-sm text-white px-1 py-1 text-center focus:outline-none text-[11px]" placeholder="${t("workout_composer_intensity_placeholder")}" type="text" name="exLoad"/>
+            <button onclick="this.parentElement.remove()" class="text-tertiary hover:text-red-500 flex items-center">
+                <span class="material-symbols-outlined text-[16px]">delete</span>
+            </button>
+        `;
+        container.appendChild(div);
+    }
+
+    function sendCoachWorkout() {
+        const email = document.getElementById("selectedClientEmail").value;
+        const clientIndex = clientsList.findIndex(c => c.email === email);
+        if (clientIndex < 0) return;
+        
+        const titleInput = document.getElementById("workoutTitle");
+        const title = titleInput.value.trim();
+        if (!title) return;
+        
+        const notes = document.getElementById("workoutNotes").value.trim();
+        const container = document.getElementById("workoutRowsContainer");
+        const rows = container.querySelectorAll("div");
+        const exercises = [];
+        
+        rows.forEach(row => {
+            const name = row.querySelector('input[name="exName"]').value.trim();
+            const sets = row.querySelector('input[name="exSets"]').value.trim();
+            const reps = row.querySelector('input[name="exReps"]').value.trim();
+            const intensity = row.querySelector('input[name="exLoad"]').value.trim();
+            
+            if (name) {
+                exercises.push({ name, sets, reps, intensity });
+            }
+        });
+        
+        if (exercises.length === 0) return;
+        
+        const client = clientsList[clientIndex];
+        client.chatMessages = client.chatMessages || [];
+        
+        const msg = {
+            id: "msg_" + Date.now(),
+            sender: "coach",
+            type: "workout",
+            timestamp: new Date().toISOString(),
+            workout: {
+                title: title,
+                notes: notes,
+                exercises: exercises,
+                completed: false,
+                completed_at: null,
+                feedback: ""
+            }
+        };
+        
+        client.chatMessages.push(msg);
+        clientsList[clientIndex] = client;
+        
+        localStorage.setItem("clientsList", JSON.stringify(clientsList));
+        saveConfigToSupabase("clientsList", clientsList);
+        
+        toggleWorkoutComposer();
+        renderAdminChatFeed(client);
+    }
+
     // Initial render
     window.onload = () => {
         initSystemData();
@@ -3854,11 +4375,11 @@
                             </table>
                         </div>
                         
-                        <!-- Personalized Plan Creator -->
+                        <!-- Personalized Plan Creator / Chat -->
                         <div class="lg:col-span-5 border border-white/5 rounded-sm p-4 bg-[#181818] flex flex-col gap-4">
-                            <span class="font-label-sm text-xs text-[var(--accent-color)] font-bold block uppercase border-b border-white/10 pb-2">[ DISEÑAR PLAN PERSONALIZADO ]</span>
+                            <span class="font-label-sm text-xs text-[var(--accent-color)] font-bold block uppercase border-b border-white/10 pb-2">[ PANEL DEL ATLETA ]</span>
                             <div id="adminPlanEditorPlaceholder" class="text-center py-12 text-tertiary font-body-md text-xs">
-                                Selecciona un deportista de la lista para diseñar o editar su plan de entrenamiento personalizado.
+                                Selecciona un deportista de la lista para gestionar su plan o enviar entrenamientos.
                             </div>
                             <div id="adminPlanEditor" class="flex flex-col gap-4 hidden">
                                 <input type="hidden" id="selectedClientEmail"/>
@@ -3866,28 +4387,90 @@
                                     <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Deportista Seleccionado</label>
                                     <input class="w-full bg-[#121212] border border-white/5 rounded-sm text-white/50 px-3 py-2 font-body-md text-sm cursor-not-allowed" id="editorClientName" type="text" disabled/>
                                 </div>
-                                <div>
-                                    <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Título del Plan Personalizado</label>
-                                    <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanTitle" placeholder="Ej: Preparación Half Ironman Miami" type="text"/>
+
+                                <!-- Tab Switcher inside Athlete Panel -->
+                                <div class="flex border-b border-white/10 mt-2">
+                                    <button onclick="switchClientEditTab('plan')" id="clientEditTabBtn-plan" class="flex-1 py-2 text-center font-label-sm text-xs uppercase font-bold text-[var(--accent-color)] border-b-2 border-[var(--accent-color)] transition-all">
+                                        Plan General
+                                    </button>
+                                    <button onclick="switchClientEditTab('chat')" id="clientEditTabBtn-chat" class="flex-1 py-2 text-center font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">
+                                        Entrenamientos & Chat
+                                    </button>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
+
+                                <!-- Subtab: Plan General -->
+                                <div id="clientEditSubtab-plan" class="flex flex-col gap-4">
                                     <div>
-                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Duración (Semanas)</label>
-                                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanDuration" placeholder="Ej: 16 Semanas" type="text"/>
+                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Título del Plan Personalizado</label>
+                                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanTitle" placeholder="Ej: Preparación Half Ironman Miami" type="text"/>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Duración (Semanas)</label>
+                                            <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanDuration" placeholder="Ej: 16 Semanas" type="text"/>
+                                        </div>
+                                        <div>
+                                            <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Volumen Semanal</label>
+                                            <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanVolume" placeholder="Ej: 8 - 12 horas" type="text"/>
+                                        </div>
                                     </div>
                                     <div>
-                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Volumen Semanal</label>
-                                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanVolume" placeholder="Ej: 8 - 12 horas" type="text"/>
+                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Indicaciones Especiales y Planificación</label>
+                                        <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs h-32" id="editorPlanNotes" placeholder="Describe el plan detallado, días de descanso, nutrición y ritmos..."></textarea>
                                     </div>
-                                </div>
-                                <div>
-                                    <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Indicaciones Especiales y Planificación</label>
-                                    <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs h-32" id="editorPlanNotes" placeholder="Describe el plan detallado, días de descanso, nutrición y ritmos..."></textarea>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="saveClientPlan()" class="flex-1 font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold py-2.5 uppercase border border-black hover:bg-white transition-all">
+                                    <button onclick="saveClientPlan()" class="w-full font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold py-2.5 uppercase border border-black hover:bg-white transition-all">
                                         ASIGNAR PLAN
                                     </button>
+                                </div>
+
+                                <!-- Subtab: Chat & Workouts -->
+                                <div id="clientEditSubtab-chat" class="flex flex-col gap-4 hidden">
+                                    <!-- Chat Container -->
+                                    <div id="adminChatFeed" class="w-full h-64 bg-[#121212] border border-white/5 rounded-sm p-3 overflow-y-auto flex flex-col gap-3 text-xs">
+                                        <!-- Messages will render dynamically -->
+                                    </div>
+
+                                    <!-- Quick text msg inputs -->
+                                    <div class="flex gap-2">
+                                        <input class="flex-1 bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs" id="adminChatMessage" placeholder="Mensaje rápido para el atleta..." type="text" onkeyup="if(event.key === 'Enter') sendCoachTextMessage()"/>
+                                        <button onclick="sendCoachTextMessage()" class="bg-white/10 text-white hover:bg-white hover:text-black font-bold px-3 py-2 uppercase text-xs transition-all">
+                                            Enviar
+                                        </button>
+                                    </div>
+
+                                    <!-- Collapsible Workout Creator -->
+                                    <div class="border-t border-white/15 pt-3">
+                                        <button onclick="toggleWorkoutComposer()" class="w-full font-label-sm text-[10px] bg-white/5 text-white hover:bg-white/10 font-bold py-2 uppercase border border-white/10 rounded-sm flex items-center justify-center gap-1.5 transition-all">
+                                            <span class="material-symbols-outlined text-sm">fitness_center</span>
+                                            <span>DISEÑAR ENTRENAMIENTO DINÁMICO</span>
+                                        </button>
+
+                                        <div id="workoutComposerForm" class="flex flex-col gap-3 bg-[#121212] p-3 border border-white/5 rounded-sm mt-2 hidden text-xs">
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-1">Título del Entrenamiento</label>
+                                                <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-2.5 py-1.5 focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="workoutTitle" placeholder="Ej: Series Intervaladas 5x1000m" type="text"/>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-1">Descripción / Objetivos</label>
+                                                <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-2.5 py-1.5 focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-14" id="workoutNotes" placeholder="Ej: Zona 4 aeróbico, descanso 2 mins..."></textarea>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between items-center mb-1">
+                                                    <label class="font-label-sm text-[9px] text-tertiary uppercase">Ejercicios / Series</label>
+                                                    <button onclick="addWorkoutRow()" class="text-[var(--accent-color)] hover:text-white font-bold text-[9px] uppercase font-label-sm flex items-center gap-0.5">
+                                                        <span class="material-symbols-outlined text-[11px]">add</span> Añadir Fila
+                                                    </button>
+                                                </div>
+                                                <div id="workoutRowsContainer" class="flex flex-col gap-2 max-h-40 overflow-y-auto no-scrollbar">
+                                                    <!-- Dynamic rows will be injected here -->
+                                                </div>
+                                            </div>
+                                            <div class="flex gap-2 pt-1 border-t border-white/5">
+                                                <button onclick="toggleWorkoutComposer()" class="flex-1 font-label-sm text-[9px] border border-white/10 text-tertiary py-2 uppercase hover:bg-white/5 transition-all text-center">Cancelar</button>
+                                                <button onclick="sendCoachWorkout()" class="flex-1 font-label-sm text-[9px] bg-[var(--accent-color)] text-black font-bold py-2 uppercase border border-black hover:bg-white transition-all text-center">Enviar Plan</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3987,38 +4570,65 @@
         
         <!-- Step 2: Plan Display -->
         <div id="athletePlanView" class="flex flex-col gap-6 hidden">
-            <div class="border-b border-white/10 pb-4">
-                <span data-i18n="athlete_plan_active_tag" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
-                <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter" id="athleteAthleteName">HOLA, DEPORTISTA</h3>
-                <p class="font-body-md text-xs text-tertiary mt-1" id="athleteSportInterest">Fase: Triatlón</p>
+            <div class="border-b border-white/10 pb-4 flex justify-between items-end">
+                <div>
+                    <span data-i18n="athlete_plan_active_tag" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
+                    <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter" id="athleteAthleteName">HOLA, DEPORTISTA</h3>
+                    <p class="font-body-md text-xs text-tertiary mt-1" id="athleteSportInterest">Fase: Triatlón</p>
+                </div>
+                
+                <!-- Tab Selector for Athlete -->
+                <div class="flex gap-2 bg-surface-container p-0.5 rounded-sm border border-white/15 font-label-sm text-[10px]">
+                    <button id="athleteTabBtn-plan" onclick="switchAthleteViewTab('plan')" class="px-3 py-1.5 uppercase font-bold text-black bg-[var(--accent-color)] rounded-sm transition-all">Plan General</button>
+                    <button id="athleteTabBtn-chat" onclick="switchAthleteViewTab('chat')" class="px-3 py-1.5 uppercase text-tertiary hover:text-white transition-all">Entrenamientos & Chat</button>
+                </div>
             </div>
             
-            <!-- Bento-style personalized plan details -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <!-- Plan Title Card -->
-                <div class="bg-[#181818] border border-white/5 p-5 rounded-sm">
-                    <span data-i18n="athlete_plan_assigned" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
-                    <h4 class="font-headline-md text-xl text-white uppercase italic" id="athletePlanTitle">PLAN PERSONALIZADO</h4>
+            <!-- Athlete Tab: Plan General -->
+            <div id="athleteSubtab-plan" class="flex flex-col gap-6">
+                <!-- Bento-style personalized plan details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <!-- Plan Title Card -->
+                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm">
+                        <span data-i18n="athlete_plan_assigned" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
+                        <h4 class="font-headline-md text-xl text-white uppercase italic" id="athletePlanTitle">PLAN PERSONALIZADO</h4>
+                    </div>
+                    
+                    <!-- Plan Metrics Card -->
+                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm grid grid-cols-2 gap-4">
+                        <div>
+                            <span data-i18n="athlete_plan_duration" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
+                            <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanDuration">12 Semanas</span>
+                        </div>
+                        <div>
+                            <span data-i18n="athlete_plan_volume" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
+                            <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanVolume">6-8 hrs/sem</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes and Guidelines (Spans both cols) -->
+                    <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
+                        <span data-i18n="athlete_plan_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES DEL COACH LUIS ]</span>
+                        <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
+                            Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Athlete Tab: Chat & Workouts -->
+            <div id="athleteSubtab-chat" class="flex flex-col gap-4 hidden">
+                <!-- Chat Feed -->
+                <div id="athleteChatFeed" class="w-full h-80 bg-[#181818] border border-white/5 p-4 rounded-sm overflow-y-auto flex flex-col gap-4 text-xs text-left">
+                    <!-- Messages rendered dynamically -->
                 </div>
                 
-                <!-- Plan Metrics Card -->
-                <div class="bg-[#181818] border border-white/5 p-5 rounded-sm grid grid-cols-2 gap-4">
-                    <div>
-                        <span data-i18n="athlete_plan_duration" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
-                        <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanDuration">12 Semanas</span>
-                    </div>
-                    <div>
-                        <span data-i18n="athlete_plan_volume" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
-                        <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanVolume">6-8 hrs/sem</span>
-                    </div>
-                </div>
-                
-                <!-- Notes and Guidelines (Spans both cols) -->
-                <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
-                    <span data-i18n="athlete_plan_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES DEL COACH LUIS ]</span>
-                    <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
-                        Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
-                    </p>
+                <!-- Send message inputs -->
+                <div class="flex gap-2">
+                    <input class="flex-1 bg-[#181818] border border-white/10 rounded-sm text-white px-3 py-2.5 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs" id="athleteChatMessage" placeholder="Envía un comentario o duda a tu coach..." type="text" onkeyup="if(event.key === 'Enter') sendAthleteTextMessage()"/>
+                    <button onclick="sendAthleteTextMessage()" class="bg-[var(--accent-color)] text-black hover:bg-white font-bold px-4 py-2.5 uppercase text-xs transition-all border border-black">
+                        Enviar
+                    </button>
                 </div>
             </div>
             
