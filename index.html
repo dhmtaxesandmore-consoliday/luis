@@ -6,9 +6,9 @@
     <title>TRI-ACADEMY | Centro de Alto Rendimiento</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Cropper.js CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <!-- Cropper.js Local -->
+    <link href="lib/cropper.min.css" rel="stylesheet">
+    <script src="lib/cropper.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
@@ -3315,13 +3315,16 @@
             const img = document.getElementById("cropperImage");
             if (!modal || !img) return;
             
+            img.onload = function() {
+                img.onload = null; // Clean up handler to prevent loops
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+                setTimeout(() => {
+                    modal.classList.add("opacity-100");
+                    initCropperInstance();
+                }, 50);
+            };
             img.src = originalImageSrc;
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-            setTimeout(() => {
-                modal.classList.add("opacity-100");
-                initCropperInstance();
-            }, 50);
         };
         reader.readAsDataURL(file);
     }
@@ -3373,11 +3376,13 @@
             
             currentCropper.destroy();
             const img = document.getElementById("cropperImage");
+            img.onload = function() {
+                img.onload = null;
+                setTimeout(() => {
+                    initCropperInstance();
+                }, 50);
+            };
             img.src = originalImageSrc;
-            
-            setTimeout(() => {
-                initCropperInstance();
-            }, 50);
         } else {
             croppedMobileBase64 = croppedBase64;
             
