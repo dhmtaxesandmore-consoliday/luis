@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>TRI-ACADEMY | Centro de Alto Rendimiento</title>
+    <title>TRI-LION ACADEMY | Centro de Alto Rendimiento</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Cropper.js Local -->
@@ -300,7 +300,7 @@
     <div class="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10 px-6 max-w-4xl text-center md:text-left">
         <!-- Logo -->
         <div class="splash-logo-container transform -translate-x-10 opacity-0 transition-all duration-700 ease-out">
-            <img src="LUIS B 2.png" alt="TRI-ACADEMY Logo" class="h-24 md:h-36 w-auto object-contain hero-logo-glow" onerror="this.src='LUIS B3.png'"/>
+            <img src="LUIS B 2.png" alt="TRI-LION ACADEMY Logo" class="h-24 md:h-36 w-auto object-contain hero-logo-glow" onerror="this.src='LUIS B3.png'"/>
         </div>
         
         <!-- Divider -->
@@ -372,8 +372,8 @@
 <nav class="sticky top-0 bg-background/80 backdrop-blur-md border-b border-white/10 shadow-[4px_4px_0px_#000000] z-50 transition-all duration-200">
     <div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-screen-2xl mx-auto">
         <a class="flex items-center gap-2 hover:skew-x-[-5deg] transition-all duration-200" href="#" onclick="switchPhase('tri', event)">
-            <img src="LUIS B3.png" alt="TRI-ACADEMY Logo" class="h-9 md:h-12 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"/>
-            <span class="hidden font-headline-md text-2xl md:text-3xl italic uppercase tracking-tighter text-on-surface">TRI-ACADEMY</span>
+            <img src="LUIS B3.png" alt="TRI-LION ACADEMY Logo" class="h-9 md:h-12 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"/>
+            <span class="hidden font-headline-md text-2xl md:text-3xl italic uppercase tracking-tighter text-on-surface">TRI-LION ACADEMY</span>
         </a>
         <div class="hidden md:flex items-center gap-6">
             <a id="nav-tri" data-i18n="menu_tri" class="text-[var(--accent-color)] font-bold border-b-2 border-[var(--accent-color)] pb-1 font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('tri', event)">
@@ -420,7 +420,7 @@
     <button class="absolute top-6 right-6 text-on-surface" onclick="toggleMobileMenu()">
         <span class="material-symbols-outlined text-4xl">close</span>
     </button>
-    <a class="text-2xl font-headline-md italic uppercase tracking-tighter text-on-surface hover:text-[var(--accent-color)]" href="#" onclick="switchPhase('tri', event); toggleMobileMenu();">TRI-ACADEMY</a>
+    <a class="text-2xl font-headline-md italic uppercase tracking-tighter text-on-surface hover:text-[var(--accent-color)]" href="#" onclick="switchPhase('tri', event); toggleMobileMenu();">TRI-LION ACADEMY</a>
     <div class="flex flex-col gap-6 text-center">
         <a id="mob-tri" data-i18n="menu_tri" class="text-[var(--accent-color)] font-bold text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('tri', event); toggleMobileMenu();">TRIATHLON</a>
         <a id="mob-swim" data-i18n="menu_swim" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('swim', event); toggleMobileMenu();">SWIMMING</a>
@@ -454,11 +454,24 @@
         </div>
         
         <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-4 md:grid-cols-12 gap-gutter py-12 items-center">
-            <div class="col-span-4 md:col-span-7 flex flex-col gap-6">
-                <!-- Main Header with stroke text effect -->
-                <h1 id="heroTitle" class="font-display-lg text-5xl sm:text-6xl md:text-8xl text-white uppercase italic tracking-tighter leading-[0.85]">
-                    TRI-ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
+            <div class="col-span-4 md:col-span-7 flex flex-col gap-6 w-full">
+                <!-- Main Header with stroke text effect (Desktop) -->
+                <h1 id="heroTitle" class="hidden md:block font-display-lg text-5xl sm:text-6xl md:text-8xl text-white uppercase italic tracking-tighter leading-[0.85]">
+                    TRI-LION ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
                 </h1>
+                
+                <!-- Mobile Swipe Zone & Header -->
+                <div id="mobileSwipeZone" class="block md:hidden w-full py-5 px-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-center gap-1 cursor-pointer select-none active:bg-white/[0.04] transition-all">
+                    <span class="font-label-sm text-[10px] text-tertiary tracking-widest uppercase mb-1">[ TRI-LION ACADEMY ]</span>
+                    <h1 id="mobileHeroTitle" class="font-display-lg text-5xl text-white uppercase italic tracking-tighter leading-none">
+                        TRIATLÓN
+                    </h1>
+                    <div class="flex items-center gap-1.5 text-tertiary font-label-sm text-[9px] uppercase tracking-widest mt-2 animate-pulse">
+                        <span class="material-symbols-outlined text-[10px]">chevron_left</span>
+                        <span>Deslizar para cambiar</span>
+                        <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                    </div>
+                </div>
                 <!-- Description -->
                 <p id="heroDesc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
                     El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.
@@ -474,7 +487,7 @@
             </div>
             <!-- Interactive Floating Logo Graphic -->
             <div class="hidden md:flex col-span-5 items-center justify-center relative">
-                <img id="heroLogoGraphic" src="LUIS B 2.png" alt="TRI-ACADEMY Brand" class="max-h-[380px] w-auto object-contain transition-all duration-500 hover:scale-105 hover:rotate-2 hero-logo-glow" onerror="this.style.display='none';"/>
+                <img id="heroLogoGraphic" src="LUIS B 2.png" alt="TRI-LION ACADEMY Brand" class="max-h-[380px] w-auto object-contain transition-all duration-500 hover:scale-105 hover:rotate-2 hero-logo-glow" onerror="this.style.display='none';"/>
             </div>
     </section>
 
@@ -590,7 +603,7 @@
                     <h2 data-i18n="coach_title" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">TU ENTRENADOR</h2>
                 </div>
                 <p data-i18n="coach_desc" class="font-body-md text-body-md text-tertiary max-w-md">
-                    TRI-ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.
+                    TRI-LION ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.
                 </p>
             </div>
 
@@ -669,10 +682,10 @@
 <footer class="w-full bg-surface-container-lowest border-t-2 border-on-surface flex flex-col md:flex-row justify-between items-start md:items-center px-margin-mobile md:px-margin-desktop py-16 gap-gutter transition-all duration-500 accent-border">
     <div class="flex flex-col gap-4">
         <div class="flex items-center gap-2">
-            <img src="LUIS B1.png" alt="TRI-ACADEMY Logo" class="h-10 md:h-12 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"/>
-            <span class="hidden font-headline-lg-mobile text-3xl text-[var(--accent-color)] italic uppercase tracking-tighter transition-colors duration-500">TRI-ACADEMY</span>
+            <img src="LUIS B1.png" alt="TRI-LION ACADEMY Logo" class="h-10 md:h-12 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"/>
+            <span class="hidden font-headline-lg-mobile text-3xl text-[var(--accent-color)] italic uppercase tracking-tighter transition-colors duration-500">TRI-LION ACADEMY</span>
         </div>
-        <p class="font-body-md text-sm text-tertiary-fixed-dim">© 2026 TRI-ACADEMY. NO LIMITS. NO EXCUSES.</p>
+        <p class="font-body-md text-sm text-tertiary-fixed-dim">© 2026 TRI-LION ACADEMY. NO LIMITS. NO EXCUSES.</p>
     </div>
     <div class="flex flex-wrap gap-8 mt-6 md:mt-0">
         <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('tri', event)" data-i18n="menu_coaching">COACHING</a>
@@ -693,7 +706,7 @@
             <span class="material-symbols-outlined text-3xl">close</span>
         </button>
         <!-- Black transparent logo for maximum contrast on light background -->
-        <img src="TRASN2.png" alt="TRI-ACADEMY Logo" class="h-16 w-auto object-contain mx-auto mb-6" onerror="this.style.display='none';"/>
+        <img src="TRASN2.png" alt="TRI-LION ACADEMY Logo" class="h-16 w-auto object-contain mx-auto mb-6" onerror="this.style.display='none';"/>
         
         <!-- Steps Progress Indicator -->
         <div class="flex items-center gap-2 mb-8" id="modalProgress">
@@ -850,7 +863,7 @@
             "sched_sport_strength": "STRENGTH / GYM",
             "coach_tag": "[ ELITE COACHING ]",
             "coach_title": "YOUR COACH",
-            "coach_desc": "TRI-ACADEMY is led by Luis Plasencia, combining sports science with advanced methodologies to provide you with comprehensive precision coaching.",
+            "coach_desc": "TRI-LION ACADEMY is led by Luis Plasencia, combining sports science with advanced methodologies to provide you with comprehensive precision coaching.",
             "coach_role_founder": "Founder",
             "coach_header_specialty": "SPECIALTY",
             "coach_header_description": "HEAD COACH",
@@ -919,7 +932,7 @@
             "athlete_plan_duration": "DURATION",
             "athlete_plan_volume": "VOLUME",
             "athlete_plan_notes": "[ COACH LUIS GUIDELINES ]",
-            "athlete_plan_system": "TRI-ACADEMY SYSTEM 2026",
+            "athlete_plan_system": "TRI-LION ACADEMY SYSTEM 2026",
             "athlete_plan_logout": "LOGOUT / CLOSE",
             "athlete_plan_pending_title": "PLAN IS BEING DESIGNED",
             "athlete_plan_pending_duration": "Pending",
@@ -1052,7 +1065,7 @@
             "sched_sport_strength": "FUERZA / GYM",
             "coach_tag": "[ ELITE COACHING ]",
             "coach_title": "TU ENTRENADOR",
-            "coach_desc": "TRI-ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.",
+            "coach_desc": "TRI-LION ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.",
             "coach_role_founder": "Fundador",
             "coach_header_specialty": "ESPECIALIDAD",
             "coach_header_description": "ENTRENADOR PRINCIPAL",
@@ -1121,7 +1134,7 @@
             "athlete_plan_duration": "DURACIÓN",
             "athlete_plan_volume": "VOLUMEN",
             "athlete_plan_notes": "[ INDICACIONES DEL COACH LUIS ]",
-            "athlete_plan_system": "TRI-ACADEMY SYSTEM 2026",
+            "athlete_plan_system": "TRI-LION ACADEMY SYSTEM 2026",
             "athlete_plan_logout": "SALIR / CERRAR",
             "athlete_plan_pending_title": "TU PLAN ESTÁ EN DISEÑO",
             "athlete_plan_pending_duration": "Pendiente",
@@ -1279,9 +1292,11 @@
             const heroTitle = document.getElementById("heroTitle");
             const heroDesc = document.getElementById("heroDesc");
             const plansTitlePhase = document.getElementById("plansTitlePhase");
+            const mobileHeroTitle = document.getElementById("mobileHeroTitle");
             if (heroTitle) heroTitle.innerHTML = getLocalizedValue(phaseDataActive.title);
             if (heroDesc) heroDesc.innerText = getLocalizedValue(phaseDataActive.desc);
             if (plansTitlePhase) plansTitlePhase.innerText = getLocalizedValue(phaseDataActive.plansTitle);
+            if (mobileHeroTitle) mobileHeroTitle.innerText = getLocalizedValue(phaseDataActive.plansTitle);
         }
 
         // Re-render UI elements
@@ -1679,8 +1694,8 @@
     const defaultPhaseData = {
         tri: {
             title: {
-                en: "TRI-ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>",
-                es: "TRI-ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>"
+                en: "TRI-LION ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>",
+                es: "TRI-LION ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>"
             },
             subtitle: {
                 en: "[ NO LIMITS. NO EXCUSES. ]",
@@ -2586,6 +2601,10 @@
         if (heroTitle) heroTitle.innerHTML = getLocalizedValue(data.title);
         if (heroDesc) heroDesc.innerText = getLocalizedValue(data.desc);
         if (plansTitlePhase) plansTitlePhase.innerText = getLocalizedValue(data.plansTitle);
+        const mobileHeroTitle = document.getElementById("mobileHeroTitle");
+        if (mobileHeroTitle) {
+            mobileHeroTitle.innerText = getLocalizedValue(data.plansTitle);
+        }
 
         if (heroTitle && heroDesc) {
             heroTitle.classList.remove("fade-in-up");
@@ -5046,11 +5065,55 @@
         }
     }
 
+    function initMobileSwipeGestures() {
+        const swipeZone = document.getElementById("mobileSwipeZone");
+        if (swipeZone) {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let touchEndY = 0;
+
+            swipeZone.addEventListener("touchstart", function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            swipeZone.addEventListener("touchend", function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipeGesture();
+            }, { passive: true });
+
+            function handleSwipeGesture() {
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+
+                // Only trigger if horizontal swipe is significant and vertical movement is minor
+                if (Math.abs(diffX) > 40 && Math.abs(diffY) < 40) {
+                    const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
+                    let currentIndex = phases.indexOf(activePhase);
+                    if (currentIndex === -1) currentIndex = 0;
+
+                    if (diffX < 0) {
+                        // Swipe left -> Next phase
+                        let nextIndex = (currentIndex + 1) % phases.length;
+                        switchPhase(phases[nextIndex]);
+                    } else {
+                        // Swipe right -> Previous phase
+                        let nextIndex = (currentIndex - 1 + phases.length) % phases.length;
+                        switchPhase(phases[nextIndex]);
+                    }
+                }
+            }
+        }
+    }
+
     // Initial render
     window.onload = () => {
         initSystemData();
         syncPhaseUI(activePhase);
         translatePage();
+        initMobileSwipeGestures();
 
         window.addEventListener("resize", updateResponsiveBackgrounds);
 
@@ -5727,7 +5790,7 @@
         
         <!-- Footer area / Logout -->
         <div class="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
-            <span data-i18n="athlete_plan_system" class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-ACADEMY SYSTEM 2026</span>
+            <span data-i18n="athlete_plan_system" class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-LION ACADEMY SYSTEM 2026</span>
             <button onclick="logoutAthlete()" data-i18n="athlete_plan_logout" class="font-label-sm text-xs border border-white/10 text-tertiary px-4 py-2 hover:bg-white/5 hover:text-white transition-all">
                 SALIR / CERRAR
             </button>
