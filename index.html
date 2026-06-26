@@ -606,7 +606,7 @@
                         <span id="coachSpecialty" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase font-bold transition-colors duration-300">HEAD COACH / TRIATLÓN</span>
                         <span data-i18n="coach_role_founder" class="font-label-sm text-[10px] text-white/40 uppercase bg-white/5 border border-white/10 px-2 py-0.5 rounded-sm">Fundador</span>
                     </div>
-                    <h3 class="font-headline-md text-3xl md:text-4xl text-white uppercase italic tracking-tighter">Luis Plasencia</h3>
+                    <h3 id="coachNameShow" class="font-headline-md text-3xl md:text-4xl text-white uppercase italic tracking-tighter">Luis Plasencia</h3>
                     <p id="coachDesc" class="font-body-md text-sm md:text-base text-tertiary leading-relaxed">
                         Fundador y Head Coach. Atleta de resistencia multidisciplinario. Diseña programas integrales combinando natación, ciclismo y atletismo con metodologías de periodización científica para todos los niveles.
                     </p>
@@ -1224,8 +1224,14 @@
     function translatePage() {
         document.querySelectorAll("[data-i18n]").forEach(elem => {
             const key = elem.getAttribute("data-i18n");
-            const translation = translations[currentLang][key];
+            let translation = translations[currentLang][key];
             if (translation) {
+                // Dynamically replace default coach name if custom name exists
+                if (coachData && coachData.name) {
+                    if (key === "coach_desc" || key === "athlete_plan_notes_pending" || key === "athlete_plan_pending_notes") {
+                        translation = translation.replace(/Luis Plasencia/g, coachData.name);
+                    }
+                }
                 if (elem.tagName === "INPUT" || elem.tagName === "TEXTAREA") {
                     elem.placeholder = translation;
                 } else {
@@ -2259,6 +2265,7 @@
     let galleryData = null;
     let stripeConfig = null;
     let uploadedImages = {}; // Temp device uploads
+    let activePlansRenderedPhase = null;
 
     // Load state from local storage or fallback to defaults
     function initSystemData() {
@@ -2339,6 +2346,11 @@
         const coachPhoto = document.getElementById("coachPhoto");
         if (coachPhoto) {
             coachPhoto.style.backgroundImage = `url('${coachData.photo}')`;
+        }
+        
+        const coachNameShow = document.getElementById("coachNameShow");
+        if (coachNameShow) {
+            coachNameShow.innerText = coachData.name || "Luis Plasencia";
         }
         
         // Update coach display based on active phase
@@ -2852,9 +2864,15 @@
 
         // Reset temporary uploads
         uploadedImages = {};
+        activePlansRenderedPhase = null;
 
         // Populate panel inputs and previews with active states
         document.getElementById("adminCoachName").value = coachData.name;
+        const adminCoachHeader = document.getElementById("adminCoachDataHeader");
+        if (adminCoachHeader) {
+            adminCoachHeader.innerText = `[ DATOS DE ${(coachData.name || "LUIS PLASENCIA").toUpperCase()} ]`;
+        }
+        
         if (document.getElementById("adminStripePublicKey")) {
             document.getElementById("adminStripePublicKey").value = stripeConfig.publishableKey;
         }
@@ -2972,8 +2990,58 @@
     }
 
     // Plans bindings inside the admin workspace
+    function saveCurrentPlansToState() {
+        if (activePlansRenderedPhase && phaseData[activePlansRenderedPhase]) {
+            phaseData[activePlansRenderedPhase].plans.forEach((plan, index) => {
+                const levelInput = document.getElementById(`planTitle-${activePlansRenderedPhase}-${index}`);
+                const badgeInput = document.getElementById(`planBadge-${activePlansRenderedPhase}-${index}`);
+                const priceInput = document.getElementById(`planPrice-${activePlansRenderedPhase}-${index}`);
+                const durationInput = document.getElementById(`planDuration-${activePlansRenderedPhase}-${index}`);
+                const volumeInput = document.getElementById(`planVolume-${activePlansRenderedPhase}-${index}`);
+                const focusInput = document.getElementById(`planFocus-${activePlansRenderedPhase}-${index}`);
+                const stripeLinkInput = document.getElementById(`planStripeLink-${activePlansRenderedPhase}-${index}`);
+
+                if (levelInput) {
+                    if (typeof plan.level !== 'object') plan.level = { en: plan.level, es: plan.level };
+                    plan.level[currentLang] = levelInput.value;
+                }
+                if (badgeInput) {
+                    if (typeof plan.badge !== 'object') plan.badge = { en: plan.badge, es: plan.badge };
+                    plan.badge[currentLang] = badgeInput.value;
+                }
+                if (priceInput) {
+                    plan.price = priceInput.value;
+                }
+                if (durationInput) {
+                    if (typeof plan.duration !== 'object') plan.duration = { en: plan.duration, es: plan.duration };
+                    plan.duration[currentLang] = durationInput.value;
+                }
+                if (volumeInput) {
+                    if (typeof plan.volume !== 'object') plan.volume = { en: plan.volume, es: plan.volume };
+                    plan.volume[currentLang] = volumeInput.value;
+                }
+                if (focusInput) {
+                    if (typeof plan.focus !== 'object') plan.focus = { en: plan.focus, es: plan.focus };
+                    plan.focus[currentLang] = focusInput.value;
+                }
+                if (stripeLinkInput) {
+                    plan.stripeLink = stripeLinkInput.value.trim();
+                }
+            });
+        }
+    }
+
     function loadPhasePlansForm() {
-        const phase = document.getElementById("adminPhaseSelector").value;
+        const selector = document.getElementById("adminPhaseSelector");
+        if (!selector) return;
+        
+        // Save the inputs of the previously rendered phase first
+        saveCurrentPlansToState();
+
+        const phase = selector.value;
+        // Track this phase as the currently rendered one
+        activePlansRenderedPhase = phase;
+
         const container = document.getElementById("adminPlansContainer");
         if (!container) return;
         container.innerHTML = "";
@@ -2987,23 +3055,23 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Nombre / Título del Plan</label>
-                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planTitle-${phase}-${index}" type="text" value="${plan.level}"/>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planTitle-${phase}-${index}" type="text" value="${getLocalizedValue(plan.level)}"/>
                     </div>
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Etiqueta / Badge</label>
-                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planBadge-${phase}-${index}" type="text" value="${plan.badge}"/>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planBadge-${phase}-${index}" type="text" value="${getLocalizedValue(plan.badge)}"/>
                     </div>
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Precio</label>
-                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planPrice-${phase}-${index}" type="text" value="${plan.price}"/>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planPrice-${phase}-${index}" type="text" value="${plan.price || ''}"/>
                     </div>
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Duración</label>
-                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planDuration-${phase}-${index}" type="text" value="${plan.duration}"/>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planDuration-${phase}-${index}" type="text" value="${getLocalizedValue(plan.duration)}"/>
                     </div>
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Volumen Semanal</label>
-                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planVolume-${phase}-${index}" type="text" value="${plan.volume}"/>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planVolume-${phase}-${index}" type="text" value="${getLocalizedValue(plan.volume)}"/>
                     </div>
                     <div>
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">ID de Precio o Link de Pago (Stripe)</label>
@@ -3012,7 +3080,7 @@
                 </div>
                 <div>
                     <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Enfoque del Plan / Descripción</label>
-                    <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs h-16 focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planFocus-${phase}-${index}">${plan.focus}</textarea>
+                    <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs h-16 focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planFocus-${phase}-${index}">${getLocalizedValue(plan.focus)}</textarea>
                 </div>
             `;
             container.appendChild(planCard);
@@ -3027,8 +3095,16 @@
         }
 
         try {
-            const phase = document.getElementById("adminPhaseSelector").value;
-            
+            // Save Coach Name
+            const coachNameInput = document.getElementById("adminCoachName");
+            if (coachNameInput) {
+                coachData.name = coachNameInput.value.trim();
+            }
+            const adminCoachHeader = document.getElementById("adminCoachDataHeader");
+            if (adminCoachHeader) {
+                adminCoachHeader.innerText = `[ DATOS DE ${(coachData.name || "LUIS PLASENCIA").toUpperCase()} ]`;
+            }
+
             // Upload Coach Photo if changed
             if (uploadedImages.coachPhoto) {
                 const url = await uploadBase64OrFileToSupabase(uploadedImages.coachPhoto, "coachPhoto");
@@ -3075,42 +3151,8 @@
                 localStorage.setItem("ctaBgMobile", urlMobile);
             }
 
-            // Save current phase's plans
-            phaseData[phase].plans.forEach((plan, index) => {
-                const levelVal = document.getElementById(`planTitle-${phase}-${index}`).value;
-                const badgeVal = document.getElementById(`planBadge-${phase}-${index}`).value;
-                const durationVal = document.getElementById(`planDuration-${phase}-${index}`).value;
-                const volumeVal = document.getElementById(`planVolume-${phase}-${index}`).value;
-                const focusVal = document.getElementById(`planFocus-${phase}-${index}`).value;
-
-                if (typeof plan.level !== 'object') {
-                    plan.level = { en: plan.level, es: plan.level };
-                }
-                plan.level[currentLang] = levelVal;
-
-                if (typeof plan.badge !== 'object') {
-                    plan.badge = { en: plan.badge, es: plan.badge };
-                }
-                plan.badge[currentLang] = badgeVal;
-
-                if (typeof plan.duration !== 'object') {
-                    plan.duration = { en: plan.duration, es: plan.duration };
-                }
-                plan.duration[currentLang] = durationVal;
-
-                if (typeof plan.volume !== 'object') {
-                    plan.volume = { en: plan.volume, es: plan.volume };
-                }
-                plan.volume[currentLang] = volumeVal;
-
-                if (typeof plan.focus !== 'object') {
-                    plan.focus = { en: plan.focus, es: plan.focus };
-                }
-                plan.focus[currentLang] = focusVal;
-
-                plan.price = document.getElementById(`planPrice-${phase}-${index}`).value;
-                plan.stripeLink = document.getElementById(`planStripeLink-${phase}-${index}`).value.trim();
-            });
+            // Save the currently rendered plans to state (handles currently active tab/phase)
+            saveCurrentPlansToState();
 
             // Save everything to localStorage safely
             const stripePubVal = document.getElementById("adminStripePublicKey") ? document.getElementById("adminStripePublicKey").value.trim() : stripeConfig.publishableKey;
@@ -3132,6 +3174,9 @@
             renderPlans();
             renderCoach();
             filterSchedule(activeScheduleFilter);
+
+            // Translate page to dynamic content
+            translatePage();
 
             // Update Hero, Coach and CTA backgrounds responsively
             updateResponsiveBackgrounds();
@@ -5101,7 +5146,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Trainer Info -->
                         <div class="border border-white/5 rounded-sm p-4 bg-[#181818] flex flex-col gap-4">
-                            <span class="font-label-sm text-xs text-white font-bold block uppercase border-b border-white/10 pb-2">[ DATOS DE LUIS PLASENCIA ]</span>
+                            <span id="adminCoachDataHeader" class="font-label-sm text-xs text-white font-bold block uppercase border-b border-white/10 pb-2">[ DATOS DE LUIS PLASENCIA ]</span>
                             <div>
                                 <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Nombre</label>
                                 <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="adminCoachName" type="text"/>
