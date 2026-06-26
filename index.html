@@ -375,36 +375,42 @@
             <span class="hidden font-headline-md text-2xl md:text-3xl italic uppercase tracking-tighter text-on-surface">TRI-ACADEMY</span>
         </a>
         <div class="hidden md:flex items-center gap-6">
-            <a id="nav-tri" class="text-[var(--accent-color)] font-bold border-b-2 border-[var(--accent-color)] pb-1 font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('tri', event)">
-                TRIATLON
+            <a id="nav-tri" data-i18n="menu_tri" class="text-[var(--accent-color)] font-bold border-b-2 border-[var(--accent-color)] pb-1 font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('tri', event)">
+                TRIATHLON
             </a>
-            <a id="nav-swim" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('swim', event)">
-                NATACION
+            <a id="nav-swim" data-i18n="menu_swim" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('swim', event)">
+                SWIMMING
             </a>
-            <a id="nav-bike" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('bike', event)">
-                CICLISMO
+            <a id="nav-bike" data-i18n="menu_bike" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('bike', event)">
+                CYCLING
             </a>
-            <a id="nav-run" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('run', event)">
-                ATLETISMO
+            <a id="nav-run" data-i18n="menu_run" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('run', event)">
+                RUNNING
             </a>
-            <a id="nav-strength" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('strength', event)">
-                GIMNASIO
+            <a id="nav-strength" data-i18n="menu_strength" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchPhase('strength', event)">
+                STRENGTH
             </a>
-            <a id="nav-gallery" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchView('gallery', event)">
-                GALERÍA
+            <a id="nav-gallery" data-i18n="menu_gallery" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer" onclick="switchView('gallery', event)">
+                GALLERY
             </a>
-            <a href="#schedule-section" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer">
-                HORARIOS
+            <a href="#schedule-section" data-i18n="menu_schedule" class="text-on-surface font-label-sm uppercase tracking-widest hover:text-[var(--accent-color)] hover:skew-x-[-10deg] transition-all duration-150 cursor-pointer">
+                SCHEDULE
             </a>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="openAthleteModal()" class="hidden md:block font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-4 py-2 uppercase hover:bg-white hover:text-black hover:border-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0.5">
-                MI PLAN
+            <!-- Language Selector Desktop -->
+            <div class="hidden md:flex items-center gap-1.5 font-label-sm border-r border-white/20 pr-3 mr-1 text-xs">
+                <button id="lang-btn-en" onclick="toggleLanguage('en')" class="hover:text-[var(--accent-color)] transition-colors duration-150 font-bold uppercase tracking-widest text-[var(--accent-color)]">EN</button>
+                <span class="text-white/20">|</span>
+                <button id="lang-btn-es" onclick="toggleLanguage('es')" class="hover:text-[var(--accent-color)] transition-colors duration-150 font-bold uppercase tracking-widest text-tertiary">ES</button>
+            </div>
+            <button onclick="openAthleteModal()" data-i18n="menu_my_plan" class="hidden md:block font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-4 py-2 uppercase hover:bg-white hover:text-black hover:border-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0.5">
+                MY PLAN
             </button>
-            <button onclick="openJoinModal()" class="hidden md:block font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold px-6 py-2 uppercase hover:bg-white hover:text-black transition-all duration-150 border border-black hover:-translate-y-0.5 active:translate-y-0.5">
+            <button onclick="openJoinModal()" data-i18n="menu_join_elite" class="hidden md:block font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold px-6 py-2 uppercase hover:bg-white hover:text-black transition-all duration-150 border border-black hover:-translate-y-0.5 active:translate-y-0.5">
                 JOIN ELITE
             </button>
-            <button class="md:hidden text-on-surface" onclick="toggleMobileMenu()">
+            <button class="md:hidden text-on-surface flex items-center" onclick="toggleMobileMenu()">
                 <span class="material-symbols-outlined text-3xl">menu</span>
             </button>
         </div>
@@ -418,18 +424,24 @@
     </button>
     <a class="text-2xl font-headline-md italic uppercase tracking-tighter text-on-surface hover:text-[var(--accent-color)]" href="#" onclick="switchPhase('tri', event); toggleMobileMenu();">TRI-ACADEMY</a>
     <div class="flex flex-col gap-6 text-center">
-        <a id="mob-tri" class="text-[var(--accent-color)] font-bold text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('tri', event); toggleMobileMenu();">TRIATLON</a>
-        <a id="mob-swim" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('swim', event); toggleMobileMenu();">NATACION</a>
-        <a id="mob-bike" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('bike', event); toggleMobileMenu();">CICLISMO</a>
-        <a id="mob-run" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('run', event); toggleMobileMenu();">ATLETISMO</a>
-        <a id="mob-strength" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('strength', event); toggleMobileMenu();">GIMNASIO</a>
-        <a id="mob-gallery" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchView('gallery', event); toggleMobileMenu();">GALERÍA</a>
-        <a href="#schedule-section" class="text-on-surface text-lg font-label-sm uppercase tracking-widest" onclick="toggleMobileMenu();">HORARIOS</a>
+        <a id="mob-tri" data-i18n="menu_tri" class="text-[var(--accent-color)] font-bold text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('tri', event); toggleMobileMenu();">TRIATHLON</a>
+        <a id="mob-swim" data-i18n="menu_swim" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('swim', event); toggleMobileMenu();">SWIMMING</a>
+        <a id="mob-bike" data-i18n="menu_bike" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('bike', event); toggleMobileMenu();">CYCLING</a>
+        <a id="mob-run" data-i18n="menu_run" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('run', event); toggleMobileMenu();">RUNNING</a>
+        <a id="mob-strength" data-i18n="menu_strength" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchPhase('strength', event); toggleMobileMenu();">STRENGTH</a>
+        <a id="mob-gallery" data-i18n="menu_gallery" class="text-on-surface text-lg font-label-sm uppercase tracking-widest cursor-pointer" onclick="switchView('gallery', event); toggleMobileMenu();">GALLERY</a>
+        <a href="#schedule-section" data-i18n="menu_schedule" class="text-on-surface text-lg font-label-sm uppercase tracking-widest" onclick="toggleMobileMenu();">SCHEDULE</a>
     </div>
-    <button onclick="openAthleteModal(); toggleMobileMenu();" class="font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-8 py-3 uppercase mb-2">
-        MI PLAN
+    <!-- Language Selector Mobile -->
+    <div class="flex items-center gap-3 font-label-sm text-lg py-2">
+        <button id="lang-btn-en-mob" onclick="toggleLanguage('en')" class="hover:text-[var(--accent-color)] transition-colors duration-150 font-bold uppercase tracking-widest text-[var(--accent-color)]">EN</button>
+        <span class="text-white/20">|</span>
+        <button id="lang-btn-es-mob" onclick="toggleLanguage('es')" class="hover:text-[var(--accent-color)] transition-colors duration-150 font-bold uppercase tracking-widest text-tertiary">ES</button>
+    </div>
+    <button onclick="openAthleteModal(); toggleMobileMenu();" data-i18n="menu_my_plan" class="font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-8 py-3 uppercase mb-2">
+        MY PLAN
     </button>
-    <button onclick="openJoinModal(); toggleMobileMenu();" class="font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold px-8 py-3 uppercase border border-black">
+    <button onclick="openJoinModal(); toggleMobileMenu();" data-i18n="menu_join_elite" class="font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold px-8 py-3 uppercase border border-black">
         JOIN ELITE
     </button>
 </div>
@@ -453,14 +465,14 @@
                     TRI-ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
                 </h1>
                 <!-- Description -->
-                <p id="heroDesc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
+                <p id="heroDesc" data-i18n="hero_desc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
                     El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.
                 </p>
                 <div class="flex flex-wrap gap-4 mt-6">
-                    <button onclick="openJoinModal()" class="font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold px-8 py-4 uppercase border border-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#ffffff] active:translate-y-0 active:shadow-none transition-all duration-150 hard-shadow-btn">
+                    <button onclick="openJoinModal()" data-i18n="btn_join_team" class="font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold px-8 py-4 uppercase border border-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#ffffff] active:translate-y-0 active:shadow-none transition-all duration-150 hard-shadow-btn">
                         UNIRSE AL EQUIPO
                     </button>
-                    <a href="#plans-section" class="font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-8 py-4 uppercase hover:bg-white hover:text-black hover:border-white transition-all duration-200 flex items-center justify-center">
+                    <a href="#plans-section" data-i18n="btn_view_plans" class="font-label-sm text-label-sm border border-white/20 bg-white/5 text-white font-bold px-8 py-4 uppercase hover:bg-white hover:text-black hover:border-white transition-all duration-200 flex items-center justify-center">
                         VER PLANES
                     </a>
                 </div>
@@ -474,21 +486,21 @@
     <!-- Sports Selector Bar (Inline Interactive Section) -->
     <section id="selector-section" class="py-8 bg-background border-b border-white/10">
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop flex flex-wrap gap-4 justify-between items-center">
-            <span class="font-label-sm text-label-sm text-tertiary uppercase tracking-widest">[ SELECCIONA UNA FASE PARA ENTRAR EN DETALLE ]</span>
+            <span data-i18n="selector_label" class="font-label-sm text-label-sm text-tertiary uppercase tracking-widest">[ SELECCIONA UNA FASE PARA ENTRAR EN DETALLE ]</span>
             <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                <button onclick="switchPhase('tri', event)" class="phase-selector-btn active flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                <button onclick="switchPhase('tri', event)" data-i18n="menu_tri" class="phase-selector-btn active flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     TRIATLON
                 </button>
-                <button onclick="switchPhase('swim', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                <button onclick="switchPhase('swim', event)" data-i18n="menu_swim" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     NATACION
                 </button>
-                <button onclick="switchPhase('bike', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                <button onclick="switchPhase('bike', event)" data-i18n="menu_bike" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     CICLISMO
                 </button>
-                <button onclick="switchPhase('run', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                <button onclick="switchPhase('run', event)" data-i18n="menu_run" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     ATLETISMO
                 </button>
-                <button onclick="switchPhase('strength', event)" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
+                <button onclick="switchPhase('strength', event)" data-i18n="menu_strength" class="phase-selector-btn flex-1 md:flex-none font-label-sm text-label-sm bg-surface-container border border-white/10 px-5 py-3 text-white uppercase hover:border-[var(--accent-color)] tracking-wider hover:text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0 text-center">
                     GIMNASIO
                 </button>
             </div>
@@ -500,12 +512,12 @@
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-16 gap-6">
                 <div>
-                    <span class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ PROGRAMAS CIENTÍFICOS ]</span>
+                    <span data-i18n="plans_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ PROGRAMAS CIENTÍFICOS ]</span>
                     <h2 class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">
-                        PLANES DE ENTRENAMIENTO <span class="accent-text" id="plansTitlePhase">TRIATLÓN</span>
+                        <span data-i18n="plans_title">PLANES DE ENTRENAMIENTO</span> <span class="accent-text" id="plansTitlePhase">TRIATLÓN</span>
                     </h2>
                 </div>
-                <p class="font-body-md text-body-md text-tertiary max-w-md">
+                <p data-i18n="plans_desc" class="font-body-md text-body-md text-tertiary max-w-md">
                     Programas estructurados por bloques periódicos que combinan volumen, intensidad y técnica para alcanzar tu pico de forma de manera inteligente.
                 </p>
             </div>
@@ -523,21 +535,21 @@
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-16 gap-6">
                 <div>
-                    <span class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase">[ AGENDA DE LA SEMANA ]</span>
-                    <h2 class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">HORARIO DE SESIONES</h2>
+                    <span data-i18n="sched_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ AGENDA DE LA SEMANA ]</span>
+                    <h2 data-i18n="sched_title" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">HORARIO DE SESIONES</h2>
                 </div>
                 <!-- Interactive filters for schedule -->
                 <div class="flex flex-wrap gap-2 w-full md:w-auto bg-surface-container p-1 rounded-sm border border-white/15">
-                    <button onclick="filterSchedule('all')" id="sched-all" class="sched-filter-btn active px-4 py-2 font-label-sm text-xs uppercase text-white font-bold bg-[var(--accent-color)] text-black transition-all">TODOS</button>
-                    <button onclick="filterSchedule('swim')" id="sched-swim" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">NATACIÓN</button>
-                    <button onclick="filterSchedule('bike')" id="sched-bike" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CICLISMO</button>
-                    <button onclick="filterSchedule('run')" id="sched-run" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CARRERA</button>
+                    <button onclick="filterSchedule('all')" id="sched-all" data-i18n="sched_filter_all" class="sched-filter-btn active px-4 py-2 font-label-sm text-xs uppercase text-white font-bold bg-[var(--accent-color)] text-black transition-all">TODOS</button>
+                    <button onclick="filterSchedule('swim')" id="sched-swim" data-i18n="sched_filter_swim" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">NATACIÓN</button>
+                    <button onclick="filterSchedule('bike')" id="sched-bike" data-i18n="sched_filter_bike" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CICLISMO</button>
+                    <button onclick="filterSchedule('run')" id="sched-run" data-i18n="sched_filter_run" class="sched-filter-btn px-4 py-2 font-label-sm text-xs uppercase text-tertiary hover:text-white transition-all">CARRERA</button>
                 </div>
             </div>
 
             <!-- Scroll Helper on Mobile -->
             <div class="block md:hidden flex justify-end items-center gap-1 mb-2 font-label-sm text-[10px] text-tertiary-fixed-dim uppercase tracking-wider">
-                <span>Deslizar lateralmente</span>
+                <span data-i18n="swipe_helper">Deslizar lateralmente</span>
                 <span class="material-symbols-outlined text-sm">swipe_left</span>
             </div>
 
@@ -546,13 +558,13 @@
                 <table class="w-full min-w-[800px] border-collapse text-left">
                     <thead>
                         <tr class="border-b border-white/15 bg-white/5">
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10 w-[150px]">Fase Horaria</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Lunes</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Martes</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Miércoles</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Jueves</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Viernes</th>
-                            <th class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider">Sábado</th>
+                            <th data-i18n="sched_header_period" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10 w-[150px]">Fase Horaria</th>
+                            <th data-i18n="sched_header_mon" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Lunes</th>
+                            <th data-i18n="sched_header_tue" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Martes</th>
+                            <th data-i18n="sched_header_wed" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Miércoles</th>
+                            <th data-i18n="sched_header_thu" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Jueves</th>
+                            <th data-i18n="sched_header_fri" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider border-r border-white/10">Viernes</th>
+                            <th data-i18n="sched_header_sat" class="py-5 px-6 font-label-sm text-label-sm text-white uppercase tracking-wider">Sábado</th>
                         </tr>
                     </thead>
                     <tbody id="scheduleBody" class="divide-y divide-white/10">
@@ -568,10 +580,10 @@
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-16 gap-6">
                 <div>
-                    <span class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ ELITE COACHING ]</span>
-                    <h2 class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">TU ENTRENADOR</h2>
+                    <span data-i18n="coach_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ ELITE COACHING ]</span>
+                    <h2 data-i18n="coach_title" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">TU ENTRENADOR</h2>
                 </div>
-                <p class="font-body-md text-body-md text-tertiary max-w-md">
+                <p data-i18n="coach_desc" class="font-body-md text-body-md text-tertiary max-w-md">
                     TRI-ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.
                 </p>
             </div>
@@ -586,7 +598,7 @@
                 <div class="col-span-1 md:col-span-7 flex flex-col justify-center gap-4">
                     <div class="flex flex-wrap gap-2 items-center">
                         <span id="coachSpecialty" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase font-bold transition-colors duration-300">HEAD COACH / TRIATLÓN</span>
-                        <span class="font-label-sm text-[10px] text-white/40 uppercase bg-white/5 border border-white/10 px-2 py-0.5 rounded-sm">Fundador</span>
+                        <span data-i18n="coach_role_founder" class="font-label-sm text-[10px] text-white/40 uppercase bg-white/5 border border-white/10 px-2 py-0.5 rounded-sm">Fundador</span>
                     </div>
                     <h3 class="font-headline-md text-3xl md:text-4xl text-white uppercase italic tracking-tighter">Luis Plasencia</h3>
                     <p id="coachDesc" class="font-body-md text-sm md:text-base text-tertiary leading-relaxed">
@@ -610,12 +622,12 @@
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-16 gap-6">
                 <div>
-                    <span class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ GALERÍA DE LA ACADEMIA ]</span>
-                    <h2 class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">
+                    <span data-i18n="gallery_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase transition-colors duration-300">[ GALERÍA DE LA ACADEMIA ]</span>
+                    <h2 data-i18n="gallery_header" class="font-headline-lg text-headline-lg text-white uppercase italic tracking-tighter mt-2">
                         GALERÍA DE FOTOS
                     </h2>
                 </div>
-                <p class="font-body-md text-body-md text-tertiary max-w-md">
+                <p data-i18n="gallery_desc" class="font-body-md text-body-md text-tertiary max-w-md">
                     Descubre nuestras instalaciones, entrenamientos y atletas en acción. Una comunidad enfocada en la excelencia.
                 </p>
             </div>
@@ -633,14 +645,14 @@
         <div class="absolute inset-0 z-0 bg-cover bg-center mix-blend-luminosity opacity-15" style="background-image: url('fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg')"></div>
         <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full opacity-5 pointer-events-none skew-x-[-15deg] bg-[var(--accent-color)] transition-colors duration-500"></div>
         <div class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop relative z-10 flex flex-col items-center text-center gap-6">
-            <span class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase">[ INSCRIPCIONES ABIERTAS ]</span>
-            <h2 class="font-display-lg text-4xl sm:text-5xl md:text-7xl text-white uppercase italic tracking-tighter max-w-4xl leading-none">
+            <span data-i18n="cta_tag" class="font-label-sm text-label-sm text-[var(--accent-color)] tracking-widest uppercase">[ INSCRIPCIONES ABIERTAS ]</span>
+            <h2 data-i18n="cta_header" class="font-display-lg text-4xl sm:text-5xl md:text-7xl text-white uppercase italic tracking-tighter max-w-4xl leading-none">
                 ¿TIENES LO QUE SE NECESITA PARA SER ELITE?
             </h2>
-            <p class="font-body-lg text-body-lg text-tertiary max-w-2xl">
+            <p data-i18n="cta_desc" class="font-body-lg text-body-lg text-tertiary max-w-2xl">
                 Los límites están solo en tu mente. Entrena con profesionales, mejora tu biomecánica y supera tus marcas históricas. Tu primer test de rendimiento está bonificado al 100%.
             </p>
-            <button onclick="openJoinModal()" class="mt-4 font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold px-10 py-5 uppercase border border-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#ffffff] active:translate-y-0 active:shadow-none transition-all duration-150 hard-shadow-btn">
+            <button onclick="openJoinModal()" data-i18n="cta_btn" class="mt-4 font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold px-10 py-5 uppercase border border-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#ffffff] active:translate-y-0 active:shadow-none transition-all duration-150 hard-shadow-btn">
                 AGENDAR MI TEST GRATUITO
             </button>
         </div>
@@ -657,13 +669,13 @@
         <p class="font-body-md text-sm text-tertiary-fixed-dim">© 2026 TRI-ACADEMY. NO LIMITS. NO EXCUSES.</p>
     </div>
     <div class="flex flex-wrap gap-8 mt-6 md:mt-0">
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('tri', event)">COACHING</a>
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#plans-section">PLANES</a>
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchView('gallery', event)">GALERÍA</a>
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#schedule-section">HORARIOS</a>
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('strength', event)">GIMNASIO</a>
-        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="openJoinModal()">CONTACTO</a>
-        <a class="font-label-sm text-xs text-[var(--accent-color)] uppercase tracking-wider hover:text-white transition-colors cursor-pointer font-bold" onclick="openAdminLoginModal()">PORTAL ENTRENADOR</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('tri', event)" data-i18n="menu_coaching">COACHING</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#plans-section" data-i18n="menu_plans">PLANES</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchView('gallery', event)" data-i18n="menu_gallery">GALERÍA</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" href="#schedule-section" data-i18n="menu_schedule">HORARIOS</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="switchPhase('strength', event)" data-i18n="menu_strength">GIMNASIO</a>
+        <a class="font-label-sm text-xs text-tertiary-fixed-dim uppercase tracking-wider hover:text-white transition-colors cursor-pointer" onclick="openJoinModal()" data-i18n="menu_contact">CONTACTO</a>
+        <a class="font-label-sm text-xs text-[var(--accent-color)] uppercase tracking-wider hover:text-white transition-colors cursor-pointer font-bold" onclick="openAdminLoginModal()" data-i18n="menu_coach_portal">PORTAL ENTRENADOR</a>
     </div>
 </footer>
 
@@ -686,26 +698,26 @@
         <!-- Step 1: Personal Details -->
         <div id="modalStep1" class="flex flex-col gap-6">
             <div>
-                <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PASO 01 / 03 ]</span>
-                <h3 class="font-headline-md text-2xl text-neutral-900 uppercase italic tracking-tighter">DATOS DE CONTACTO</h3>
+                <span data-i18n="join_step_1" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PASO 01 / 03 ]</span>
+                <h3 data-i18n="join_step_1_title" class="font-headline-md text-2xl text-neutral-900 uppercase italic tracking-tighter">DATOS DE CONTACTO</h3>
             </div>
             <div class="flex flex-col gap-4">
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientName">Nombre Completo</label>
-                    <input class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientName" placeholder="Juan Pérez" type="text"/>
-                    <span id="nameError" class="font-label-sm text-xs text-red-600 mt-1 hidden">El nombre es obligatorio.</span>
+                    <label data-i18n="join_label_name" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientName">Nombre Completo</label>
+                    <input data-i18n="join_placeholder_name" class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientName" placeholder="Juan Pérez" type="text"/>
+                    <span data-i18n="join_error_name" id="nameError" class="font-label-sm text-xs text-red-600 mt-1 hidden">El nombre es obligatorio.</span>
                 </div>
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientEmail">Correo Electrónico</label>
-                    <input class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientEmail" placeholder="juan@correo.com" type="email"/>
-                    <span id="emailError" class="font-label-sm text-xs text-red-600 mt-1 hidden">Ingresa un correo electrónico válido.</span>
+                    <label data-i18n="join_label_email" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientEmail">Correo Electrónico</label>
+                    <input data-i18n="join_placeholder_email" class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientEmail" placeholder="juan@correo.com" type="email"/>
+                    <span data-i18n="join_error_email" id="emailError" class="font-label-sm text-xs text-red-600 mt-1 hidden">Ingresa un correo electrónico válido.</span>
                 </div>
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientPhone">Teléfono / WhatsApp</label>
-                    <input class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientPhone" placeholder="+54 9 11 2345 6789" type="tel"/>
+                    <label data-i18n="join_label_phone" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="clientPhone">Teléfono / WhatsApp</label>
+                    <input data-i18n="join_placeholder_phone" class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="clientPhone" placeholder="+54 9 11 2345 6789" type="tel"/>
                 </div>
             </div>
-            <button onclick="goToStep(2)" class="w-full font-label-sm text-label-sm bg-black text-white hover:bg-neutral-800 font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+            <button onclick="goToStep(2)" data-i18n="join_btn_next" class="w-full font-label-sm text-label-sm bg-black text-white hover:bg-neutral-800 font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
                 SIGUIENTE PASO
             </button>
         </div>
@@ -713,38 +725,38 @@
         <!-- Step 2: Sports Profile -->
         <div id="modalStep2" class="flex flex-col gap-6 hidden">
             <div>
-                <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PASO 02 / 03 ]</span>
-                <h3 class="font-headline-md text-2xl text-neutral-900 uppercase italic tracking-tighter">PERFIL DEPORTIVO</h3>
+                <span data-i18n="join_step_2" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PASO 02 / 03 ]</span>
+                <h3 data-i18n="join_step_2_title" class="font-headline-md text-2xl text-neutral-900 uppercase italic tracking-tighter">PERFIL DEPORTIVO</h3>
             </div>
             <div class="flex flex-col gap-4">
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="sportInterest">Deporte de Interés</label>
+                    <label data-i18n="join_label_sport" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="sportInterest">Deporte de Interés</label>
                     <select class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="sportInterest">
-                        <option value="tri" selected>Triatlón (Completo)</option>
-                        <option value="swim">Natación (Aguas Abiertas / Piscina)</option>
-                        <option value="bike">Ciclismo (Ruta / Contrarreloj)</option>
-                        <option value="run">Atletismo (Maratón / Pista)</option>
-                        <option value="strength">Gimnasio & Fortalecimiento</option>
+                        <option value="tri" data-i18n="join_opt_tri" selected>Triatlón (Completo)</option>
+                        <option value="swim" data-i18n="join_opt_swim">Natación (Aguas Abiertas / Piscina)</option>
+                        <option value="bike" data-i18n="join_opt_bike">Ciclismo (Ruta / Contrarreloj)</option>
+                        <option value="run" data-i18n="join_opt_run">Atletismo (Maratón / Pista)</option>
+                        <option value="strength" data-i18n="join_opt_strength">Gimnasio & Fortalecimiento</option>
                     </select>
                 </div>
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2">Nivel Actual</label>
+                    <label data-i18n="join_label_experience" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2">Nivel Actual</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="selectLevel('principiante')" id="lvl-principiante" class="level-btn active font-label-sm text-xs py-3 border border-[var(--accent-color)] bg-[rgba(var(--accent-color-rgb),0.1)] text-black uppercase rounded-sm transition-all">Novato</button>
-                        <button onclick="selectLevel('intermedio')" id="lvl-intermedio" class="level-btn font-label-sm text-xs py-3 border border-neutral-300 bg-white text-neutral-600 uppercase rounded-sm transition-all hover:border-neutral-500 hover:text-black">Medio</button>
-                        <button onclick="selectLevel('avanzado')" id="lvl-avanzado" class="level-btn font-label-sm text-xs py-3 border border-neutral-300 bg-white text-neutral-600 uppercase rounded-sm transition-all hover:border-neutral-500 hover:text-black">Avanzado</button>
+                        <button onclick="selectLevel('principiante')" id="lvl-principiante" data-i18n="join_opt_beginner" class="level-btn active font-label-sm text-xs py-3 border border-[var(--accent-color)] bg-[rgba(var(--accent-color-rgb),0.1)] text-black uppercase rounded-sm transition-all">Novato</button>
+                        <button onclick="selectLevel('intermedio')" id="lvl-intermedio" data-i18n="join_opt_intermediate" class="level-btn font-label-sm text-xs py-3 border border-neutral-300 bg-white text-neutral-600 uppercase rounded-sm transition-all hover:border-neutral-500 hover:text-black">Medio</button>
+                        <button onclick="selectLevel('avanzado')" id="lvl-avanzado" data-i18n="join_opt_advanced" class="level-btn font-label-sm text-xs py-3 border border-neutral-300 bg-white text-neutral-600 uppercase rounded-sm transition-all hover:border-neutral-500 hover:text-black">Avanzado</button>
                     </div>
                 </div>
                 <div>
-                    <label class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="sportGoal">Objetivo Principal</label>
-                    <input class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="sportGoal" placeholder="Ej: Terminar mi primer Olímpico, bajar de 3h en maratón" type="text"/>
+                    <label data-i18n="join_label_goal" class="font-label-sm text-xs text-neutral-600 uppercase block mb-2" for="sportGoal">Objetivo Principal</label>
+                    <input data-i18n="join_placeholder_goal" class="w-full bg-white border border-neutral-300 rounded-sm text-black px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors" id="sportGoal" placeholder="Ej: Terminar mi primer Olímpico, bajar de 3h en maratón" type="text"/>
                 </div>
             </div>
             <div class="flex gap-2">
-                <button onclick="goToStep(1)" class="w-1/3 font-label-sm text-label-sm border border-neutral-300 text-neutral-700 bg-white font-bold py-4 uppercase hover:bg-neutral-100 transition-all">
+                <button onclick="goToStep(1)" data-i18n="join_btn_back" class="w-1/3 font-label-sm text-label-sm border border-neutral-300 text-neutral-700 bg-white font-bold py-4 uppercase hover:bg-neutral-100 transition-all">
                     ATRÁS
                 </button>
-                <button onclick="submitJoinForm()" class="w-2/3 font-label-sm text-label-sm bg-black text-white font-bold py-4 uppercase border border-black hover:bg-neutral-800 hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+                <button onclick="submitJoinForm()" data-i18n="join_btn_submit" class="w-2/3 font-label-sm text-label-sm bg-black text-white font-bold py-4 uppercase border border-black hover:bg-neutral-800 hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
                     ENVIAR SOLICITUD
                 </button>
             </div>
@@ -754,13 +766,13 @@
         <div id="modalStep3" class="flex flex-col items-center text-center gap-6 py-6 hidden">
             <span class="material-symbols-outlined text-6xl text-[var(--accent-color)] status-pulse">check_circle</span>
             <div>
-                <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ SOLICITUD ENVIADA ]</span>
-                <h3 class="font-headline-md text-3xl text-neutral-900 uppercase italic tracking-tighter">¡BIENVENIDO AL TEAM!</h3>
+                <span data-i18n="join_step_3" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ SOLICITUD ENVIADA ]</span>
+                <h3 data-i18n="join_step_3_title" class="font-headline-md text-3xl text-neutral-900 uppercase italic tracking-tighter">¡BIENVENIDO AL TEAM!</h3>
             </div>
-            <p class="font-body-md text-neutral-600 max-w-sm leading-relaxed">
+            <p data-i18n="contact_success_desc" class="font-body-md text-neutral-600 max-w-sm leading-relaxed">
                 Hemos recibido tu perfil deportivo con éxito. Un entrenador se pondrá en contacto contigo vía WhatsApp o Email dentro de las próximas 24 horas para coordinar tu test de nivelación bonificado.
             </p>
-            <button onclick="closeJoinModal()" class="mt-4 font-label-sm text-label-sm border border-black text-black hover:bg-black hover:text-white font-bold px-8 py-3 uppercase transition-all">
+            <button onclick="closeJoinModal()" data-i18n="join_btn_done" class="mt-4 font-label-sm text-label-sm border border-black text-black hover:bg-black hover:text-white font-bold px-8 py-3 uppercase transition-all">
                 ENTENDIDO
             </button>
         </div>
@@ -772,6 +784,392 @@
     const SUPABASE_URL = "https://qbkfwgrjovknyarkobyx.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFia2Z3Z3Jqb3ZrbnlhcmtvYnl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTk4MzcsImV4cCI6MjA5Nzk5NTgzN30.vQ_ImIPfmtkwsbuThksGVXKdxMVIyzfQDlw-8AN9RIY";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // --- Internationalization (i18n) Engine ---
+    let currentLang = localStorage.getItem("preferredLang") || "en";
+
+    const translations = {
+        en: {
+            "menu_tri": "TRIATHLON",
+            "menu_swim": "SWIMMING",
+            "menu_bike": "CYCLING",
+            "menu_run": "RUNNING",
+            "menu_strength": "STRENGTH",
+            "menu_gallery": "GALLERY",
+            "menu_my_plan": "MY PLAN",
+            "menu_join_elite": "JOIN ELITE",
+            "menu_coach_portal": "COACH PORTAL",
+            "menu_schedule": "SCHEDULE",
+            "menu_coaching": "COACHING",
+            "menu_plans": "PLANS",
+            "menu_contact": "CONTACT",
+            "btn_join_team": "JOIN THE TEAM",
+            "btn_view_plans": "VIEW PLANS",
+            "selector_label": "[ SELECT A PHASE TO ENTER IN DETAIL ]",
+            "hero_desc": "The ultimate sports high-performance center. We train triathletes of all levels with scientific methodologies, professional coaches, and an unbreakable community.",
+            "plans_tag": "[ SCIENTIFIC PROGRAMS ]",
+            "plans_title": "TRAINING PLANS",
+            "plans_desc": "Structured programs by periodic blocks combining volume, intensity, and technique to reach your peak performance intelligently.",
+            "plan_integrated_volume": "INTEGRATED VOLUME",
+            "plan_flat_rate": "FLAT RATE",
+            "plan_month_suffix": "/mo",
+            "plan_select_btn": "SELECT",
+            "sched_tag": "[ WEEKLY AGENDA ]",
+            "sched_title": "SESSION SCHEDULE",
+            "swipe_helper": "Swipe horizontally",
+            "sched_filter_all": "ALL",
+            "sched_filter_swim": "SWIMMING",
+            "sched_filter_bike": "CYCLING",
+            "sched_filter_run": "RUNNING",
+            "sched_filter_strength": "STRENGTH",
+            "sched_header_period": "PERIOD / TIME",
+            "sched_header_mon": "MONDAY",
+            "sched_header_tue": "TUESDAY",
+            "sched_header_wed": "WEDNESDAY",
+            "sched_header_thu": "THURSDAY",
+            "sched_header_fri": "FRIDAY",
+            "sched_header_sat": "SATURDAY",
+            "sched_period_morning": "MORNING",
+            "sched_period_afternoon": "AFTERNOON",
+            "sched_sport_rest": "REST",
+            "sched_sport_brick": "BRICK",
+            "sched_sport_swim": "SWIMMING",
+            "sched_sport_bike": "CYCLING",
+            "sched_sport_run": "RUNNING",
+            "sched_sport_strength": "STRENGTH / GYM",
+            "coach_tag": "[ ELITE COACHING ]",
+            "coach_title": "YOUR COACH",
+            "coach_desc": "TRI-ACADEMY is led by Luis Plasencia, combining sports science with advanced methodologies to provide you with comprehensive precision coaching.",
+            "coach_role_founder": "Founder",
+            "coach_header_specialty": "SPECIALTY",
+            "coach_header_description": "HEAD COACH",
+            "coach_header_pb": "PERSONAL BEST / FOCUS",
+            "gallery_tag": "[ ACADEMY GALLERY ]",
+            "gallery_header": "PHOTO GALLERY",
+            "gallery_desc": "Discover our facilities, workouts, and athletes in action. A community focused on excellence.",
+            "gallery_title": "MEDIA GALLERY",
+            "gallery_filter_all": "ALL",
+            "gallery_filter_photos": "PHOTOS",
+            "gallery_filter_videos": "VIDEOS",
+            "gallery_btn_upload": "UPLOAD PHOTO/VIDEO",
+            "gallery_view_detail": "VIEW DETAIL",
+            "cta_tag": "[ REGISTRATION OPEN ]",
+            "cta_header": "DO YOU HAVE WHAT IT TAKES TO BE ELITE?",
+            "cta_desc": "Limits exist only in your mind. Train with professionals, improve your biomechanics, and break your historic records. Your first performance test is 100% free.",
+            "cta_btn": "SCHEDULE MY FREE TEST",
+            "join_title": "JOIN THE ELITE TEAM",
+            "join_desc": "Complete the form below to apply for a personalized coaching program.",
+            "join_step_1": "[ STEP 01 / 03 ]",
+            "join_step_1_title": "CONTACT DETAILS",
+            "join_label_name": "Full Name",
+            "join_error_name": "Name is required.",
+            "join_label_email": "Email Address",
+            "join_error_email": "Enter a valid email address.",
+            "join_label_phone": "Phone / WhatsApp",
+            "join_btn_next": "NEXT STEP",
+            "join_step_2": "[ STEP 02 / 03 ]",
+            "join_step_2_title": "SPORTS PROFILE",
+            "join_opt_tri": "Triathlon (Full)",
+            "join_opt_swim": "Swimming (Open Water / Pool)",
+            "join_opt_bike": "Cycling (Road / TT)",
+            "join_opt_run": "Running (Marathon / Track)",
+            "join_opt_strength": "Gym & Strength",
+            "join_label_level": "Current Level",
+            "join_level_beginner": "Beginner",
+            "join_level_intermediate": "Intermediate",
+            "join_level_advanced": "Advanced",
+            "join_label_goal": "Primary Goal",
+            "join_placeholder_goal": "e.g. Finish my first Olympic, break 3h in marathon",
+            "join_btn_back": "BACK",
+            "join_step_3": "[ APPLICATION SENT ]",
+            "join_step_3_title": "WELCOME TO THE TEAM!",
+            "join_btn_done": "UNDERSTOOD",
+            "join_placeholder_name": "Full Name",
+            "join_placeholder_email": "Your Email Address",
+            "join_placeholder_phone": "Phone Number",
+            "join_label_sport": "SPORT OF INTEREST",
+            "join_label_experience": "EXPERIENCE LEVEL",
+            "join_opt_beginner": "Beginner",
+            "join_opt_intermediate": "Intermediate",
+            "join_opt_advanced": "Advanced",
+            "join_placeholder_goals": "Tell us about your sports goals...",
+            "join_btn_submit": "SUBMIT APPLICATION",
+            "athlete_login_title": "ATHLETE ACCESS",
+            "athlete_login_header": "MY TRAINING PLAN",
+            "athlete_login_label_email": "Email Address",
+            "athlete_login_desc": "Enter the email address you registered with at the academy to access your weekly planning and coach guidelines.",
+            "athlete_login_placeholder": "Your Registered Email",
+            "athlete_login_btn": "ENTER SYSTEM",
+            "athlete_login_error": "No record found for this email. Please register first or verify the address.",
+            "athlete_plan_welcome": "WELCOME, ATHLETE",
+            "athlete_plan_active_tag": "[ EXCLUSIVE ACTIVE PLAN ]",
+            "athlete_plan_sport_phase": "Phase",
+            "athlete_plan_assigned": "ASSIGNED PROGRAMMING",
+            "athlete_plan_duration": "DURATION",
+            "athlete_plan_volume": "VOLUME",
+            "athlete_plan_notes": "[ COACH LUIS GUIDELINES ]",
+            "athlete_plan_system": "TRI-ACADEMY SYSTEM 2026",
+            "athlete_plan_logout": "LOGOUT / CLOSE",
+            "athlete_plan_pending_title": "PLAN IS BEING DESIGNED",
+            "athlete_plan_pending_duration": "Pending",
+            "athlete_plan_pending_volume": "Pending",
+            "athlete_plan_pending_notes": "Head Coach Luis Plasencia is analyzing your sports profile to design your custom plan. You will receive a notification soon. Get ready!",
+            "athlete_plan_default_notes": "Keep up the consistency and dedication.",
+            "admin_login_title": "COACH PORTAL",
+            "admin_login_desc": "Enter the coach passcode to unlock the plans, schedule, and media administration console.",
+            "admin_login_placeholder": "Passcode",
+            "admin_login_btn": "LOGIN",
+            "admin_login_error": "Incorrect passcode. Try again.",
+            "admin_restricted_access": "[ RESTRICTED ACCESS ]",
+            "admin_panel_title": "COACH CONSOLE",
+            "admin_panel_tab_plans": "PLANS & COOP",
+            "admin_panel_tab_media": "MEDIA & COACH",
+            "admin_panel_tab_clients": "ATHLETES",
+            "admin_panel_tab_schedule": "SCHEDULE",
+            "admin_panel_tab_gallery": "MEDIA LIST",
+            "admin_panel_save": "SAVE CHANGES",
+            "admin_panel_reset": "RESET DEFAULTS",
+            "admin_panel_logout": "LOGOUT",
+            "admin_panel_close": "CLOSE",
+            "cropper_title": "ADJUST IMAGE CROP",
+            "cropper_step_1_label": "[ STEP 1 OF 2: DESKTOP CROP ]",
+            "cropper_step_1_desc": "Adjust the visible area for desktop screens (horizontal format).",
+            "cropper_step_1_btn": "CONFIRM AND NEXT",
+            "cropper_step_2_label": "[ STEP 2 OF 2: MOBILE CROP ]",
+            "cropper_step_2_desc": "Adjust the visible area for mobile screens (vertical format).",
+            "cropper_step_2_btn": "COMPLETE CROP",
+            "cropper_cancel": "CANCEL",
+            "contact_success_title": "APPLICATION RECEIVED",
+            "contact_success_desc": "We have received your sports profile successfully. A coach will contact you via WhatsApp or Email within 24 hours to coordinate your bonus placement test.",
+            "contact_success_btn": "UNDERSTOOD"
+        },
+        es: {
+            "menu_tri": "TRIATLÓN",
+            "menu_swim": "NATACIÓN",
+            "menu_bike": "CICLISMO",
+            "menu_run": "ATLETISMO",
+            "menu_strength": "GIMNASIO",
+            "menu_gallery": "GALERÍA",
+            "menu_my_plan": "MI PLAN",
+            "menu_join_elite": "JOIN ELITE",
+            "menu_coach_portal": "PORTAL ENTRENADOR",
+            "menu_schedule": "HORARIOS",
+            "menu_coaching": "COACHING",
+            "menu_plans": "PLANES",
+            "menu_contact": "CONTACTO",
+            "btn_join_team": "UNIRSE AL EQUIPO",
+            "btn_view_plans": "VER PLANES",
+            "selector_label": "[ SELECCIONA UNA FASE PARA ENTRAR EN DETALLE ]",
+            "hero_desc": "El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.",
+            "plans_tag": "[ PROGRAMAS CIENTÍFICOS ]",
+            "plans_title": "PLANES DE ENTRENAMIENTO",
+            "plans_desc": "Programas estructurados por bloques periódicos que combinan volumen, intensidad y técnica para alcanzar tu pico de forma de manera inteligente.",
+            "plan_integrated_volume": "VOLUMEN INTEGRADO",
+            "plan_flat_rate": "TARIFA PLANA",
+            "plan_month_suffix": "/mes",
+            "plan_select_btn": "SELECCIONAR",
+            "sched_tag": "[ AGENDA DE LA SEMANA ]",
+            "sched_title": "HORARIO DE SESIONES",
+            "swipe_helper": "Deslizar lateralmente",
+            "sched_filter_all": "TODOS",
+            "sched_filter_swim": "NATACIÓN",
+            "sched_filter_bike": "CICLISMO",
+            "sched_filter_run": "ATLETISMO",
+            "sched_filter_strength": "GIMNASIO",
+            "sched_header_period": "PERIODO / HORA",
+            "sched_header_mon": "LUNES",
+            "sched_header_tue": "MARTES",
+            "sched_header_wed": "MIÉRCOLES",
+            "sched_header_thu": "JUEVES",
+            "sched_header_fri": "VIERNES",
+            "sched_header_sat": "SÁBADO",
+            "sched_period_morning": "MAÑANA",
+            "sched_period_afternoon": "TARDE",
+            "sched_sport_rest": "DESCANSO",
+            "sched_sport_brick": "BRICK",
+            "sched_sport_swim": "NATACIÓN",
+            "sched_sport_bike": "CICLISMO",
+            "sched_sport_run": "ATLETISMO",
+            "sched_sport_strength": "FUERZA / GYM",
+            "coach_tag": "[ ELITE COACHING ]",
+            "coach_title": "TU ENTRENADOR",
+            "coach_desc": "TRI-ACADEMY está liderada por Luis Plasencia, unificando la ciencia del deporte con metodologías avanzadas para brindarte un coaching integral de precisión.",
+            "coach_role_founder": "Fundador",
+            "coach_header_specialty": "ESPECIALIDAD",
+            "coach_header_description": "ENTRENADOR PRINCIPAL",
+            "coach_header_pb": "MEJOR MARCA / FOCO",
+            "gallery_tag": "[ GALERÍA DE LA ACADEMIA ]",
+            "gallery_header": "GALERÍA DE FOTOS",
+            "gallery_desc": "Descubre nuestras instalaciones, entrenamientos y atletas en acción. Una comunidad enfocada en la excelencia.",
+            "gallery_title": "GALERÍA DE MEDIOS",
+            "gallery_filter_all": "TODOS",
+            "gallery_filter_photos": "FOTOS",
+            "gallery_filter_videos": "VIDEOS",
+            "gallery_btn_upload": "SUBIR FOTO/VIDEO",
+            "gallery_view_detail": "VER DETALLE",
+            "cta_tag": "[ INSCRIPCIONES ABIERTAS ]",
+            "cta_header": "¿TIENES LO QUE SE NECESITA PARA SER ELITE?",
+            "cta_desc": "Los límites están solo en tu mente. Entrena con profesionales, mejora tu biomecánica y supera tus marcas históricas. Tu primer test de rendimiento está bonificado al 100%.",
+            "cta_btn": "AGENDAR MI TEST GRATUITO",
+            "join_title": "ÚNETE AL EQUIPO ELITE",
+            "join_desc": "Completa el formulario a continuación para solicitar un programa de entrenamiento personalizado.",
+            "join_step_1": "[ PASO 01 / 03 ]",
+            "join_step_1_title": "DATOS DE CONTACTO",
+            "join_label_name": "Nombre Completo",
+            "join_error_name": "El nombre es obligatorio.",
+            "join_label_email": "Correo Electrónico",
+            "join_error_email": "Ingresa un correo electrónico válido.",
+            "join_label_phone": "Teléfono / WhatsApp",
+            "join_btn_next": "SIGUIENTE PASO",
+            "join_step_2": "[ PASO 02 / 03 ]",
+            "join_step_2_title": "PERFIL DEPORTIVO",
+            "join_opt_tri": "Triatlón (Completo)",
+            "join_opt_swim": "Natación (Aguas Abiertas / Piscina)",
+            "join_opt_bike": "Ciclismo (Ruta / Contrarreloj)",
+            "join_opt_run": "Atletismo (Maratón / Pista)",
+            "join_opt_strength": "Gimnasio & Fortalecimiento",
+            "join_label_level": "Nivel Actual",
+            "join_level_beginner": "Novato",
+            "join_level_intermediate": "Medio",
+            "join_level_advanced": "Avanzado",
+            "join_label_goal": "Objetivo Principal",
+            "join_placeholder_goal": "Ej: Terminar mi primer Olímpico, bajar de 3h en maratón",
+            "join_btn_back": "ATRÁS",
+            "join_step_3": "[ SOLICITUD ENVIADA ]",
+            "join_step_3_title": "¡BIENVENIDO AL TEAM!",
+            "join_btn_done": "ENTENDIDO",
+            "join_placeholder_name": "Nombre Completo",
+            "join_placeholder_email": "Tu Correo Electrónico",
+            "join_placeholder_phone": "Número de Teléfono",
+            "join_label_sport": "DEPORTE DE INTERÉS",
+            "join_label_experience": "NIVEL DE EXPERIENCIA",
+            "join_opt_beginner": "Principiante",
+            "join_opt_intermediate": "Intermedio",
+            "join_opt_advanced": "Avanzado",
+            "join_placeholder_goals": "Cuéntanos sobre tus objetivos deportivos...",
+            "join_btn_submit": "ENVIAR SOLICITUD",
+            "athlete_login_title": "ACCESO ATLETAS",
+            "athlete_login_header": "MI PLAN DE ENTRENAMIENTO",
+            "athlete_login_label_email": "Correo Electrónico",
+            "athlete_login_desc": "Ingresa el correo electrónico con el que te registraste en la academia para acceder a tu planificación semanal y notas del entrenador.",
+            "athlete_login_placeholder": "Tu Email de Registro",
+            "athlete_login_btn": "ENTRAR AL SISTEMA",
+            "athlete_login_error": "No se encontró ningún registro para este correo. Por favor, inscríbete primero o verifica la dirección.",
+            "athlete_plan_welcome": "BIENVENIDO, ATLETA",
+            "athlete_plan_active_tag": "[ PLAN ACTIVO EXCLUSIVO ]",
+            "athlete_plan_sport_phase": "Fase",
+            "athlete_plan_assigned": "PROGRAMACIÓN ASIGNADA",
+            "athlete_plan_duration": "DURACIÓN",
+            "athlete_plan_volume": "VOLUMEN",
+            "athlete_plan_notes": "[ INDICACIONES DEL COACH LUIS ]",
+            "athlete_plan_system": "TRI-ACADEMY SYSTEM 2026",
+            "athlete_plan_logout": "SALIR / CERRAR",
+            "athlete_plan_pending_title": "TU PLAN ESTÁ EN DISEÑO",
+            "athlete_plan_pending_duration": "Pendiente",
+            "athlete_plan_pending_volume": "Pendiente",
+            "athlete_plan_pending_notes": "El Head Coach Luis Plasencia está analizando tu perfil deportivo para diseñar tu plan a medida. Recibirás una notificación pronto. ¡Prepárate!",
+            "athlete_plan_default_notes": "Sigue tu constancia y consistencia.",
+            "admin_login_title": "PORTAL ENTRENADOR",
+            "admin_login_desc": "Ingresa la contraseña del entrenador para desbloquear la consola de administración de planes, horarios y medios.",
+            "admin_login_placeholder": "Contraseña",
+            "admin_login_btn": "INICIAR SESIÓN",
+            "admin_login_error": "Contraseña incorrecta. Inténtalo de nuevo.",
+            "admin_restricted_access": "[ ACCESO RESTRINGIDO ]",
+            "admin_panel_title": "CONSOLA DEL ENTRENADOR",
+            "admin_panel_tab_plans": "PLANES Y COOP",
+            "admin_panel_tab_media": "MEDIOS Y ENTRENADOR",
+            "admin_panel_tab_clients": "ATLETAS",
+            "admin_panel_tab_schedule": "HORARIO",
+            "admin_panel_tab_gallery": "MEDIOS",
+            "admin_panel_save": "GUARDAR CAMBIOS",
+            "admin_panel_reset": "RESTABLECER",
+            "admin_panel_logout": "SALIR",
+            "admin_panel_close": "CERRAR",
+            "cropper_title": "AJUSTAR ENCUADRE DE LA IMAGEN",
+            "cropper_step_1_label": "[ PASO 1 DE 2: ENCUADRE ESCRITORIO ]",
+            "cropper_step_1_desc": "Selecciona y ajusta la zona visible para pantallas de escritorio (formato horizontal).",
+            "cropper_step_1_btn": "CONFIRMAR Y SIGUIENTE",
+            "cropper_step_2_label": "[ PASO 2 DE 2: ENCUADRE MÓVIL ]",
+            "cropper_step_2_desc": "Selecciona y ajusta la zona visible para pantallas móviles (formato vertical).",
+            "cropper_step_2_btn": "COMPLETAR ENCUADRE",
+            "cropper_cancel": "CANCELAR",
+            "contact_success_title": "SOLICITUD RECIBIDA",
+            "contact_success_desc": "Hemos recibido tu perfil deportivo con éxito. Un entrenador se pondrá en contacto contigo vía WhatsApp o Email dentro de las próximas 24 horas para coordinar tu test de nivelación bonificado.",
+            "contact_success_btn": "ENTENDIDO"
+        }
+    };
+
+    function t(key) {
+        return (translations[currentLang] && translations[currentLang][key]) || key;
+    }
+
+    function getLocalizedValue(val) {
+        if (val && typeof val === 'object') {
+            return val[currentLang] || val['en'] || '';
+        }
+        return val || '';
+    }
+
+    function toggleLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem("preferredLang", currentLang);
+        translatePage();
+    }
+
+    function translatePage() {
+        document.querySelectorAll("[data-i18n]").forEach(elem => {
+            const key = elem.getAttribute("data-i18n");
+            const translation = translations[currentLang][key];
+            if (translation) {
+                if (elem.tagName === "INPUT" || elem.tagName === "TEXTAREA") {
+                    elem.placeholder = translation;
+                } else {
+                    elem.innerHTML = translation;
+                }
+            }
+        });
+        
+        // Update language selector active class
+        const btnEn = document.getElementById("lang-btn-en");
+        const btnEs = document.getElementById("lang-btn-es");
+        if (btnEn && btnEs) {
+            if (currentLang === "en") {
+                btnEn.classList.add("text-[var(--accent-color)]", "font-bold");
+                btnEn.classList.remove("text-tertiary");
+                btnEs.classList.remove("text-[var(--accent-color)]", "font-bold");
+                btnEs.classList.add("text-tertiary");
+            } else {
+                btnEs.classList.add("text-[var(--accent-color)]", "font-bold");
+                btnEs.classList.remove("text-tertiary");
+                btnEn.classList.remove("text-[var(--accent-color)]", "font-bold");
+                btnEn.classList.add("text-tertiary");
+            }
+        }
+        
+        const btnEnMob = document.getElementById("lang-btn-en-mob");
+        const btnEsMob = document.getElementById("lang-btn-es-mob");
+        if (btnEnMob && btnEsMob) {
+            if (currentLang === "en") {
+                btnEnMob.classList.add("text-[var(--accent-color)]", "font-bold");
+                btnEnMob.classList.remove("text-tertiary");
+                btnEsMob.classList.remove("text-[var(--accent-color)]", "font-bold");
+                btnEsMob.classList.add("text-tertiary");
+            } else {
+                btnEsMob.classList.add("text-[var(--accent-color)]", "font-bold");
+                btnEsMob.classList.remove("text-tertiary");
+                btnEnMob.classList.remove("text-[var(--accent-color)]", "font-bold");
+                btnEnMob.classList.add("text-tertiary");
+            }
+        }
+
+        // Re-render UI elements
+        renderPlans();
+        renderCoach();
+        filterSchedule(activeScheduleFilter);
+        renderGallery();
+        updateResponsiveBackgrounds();
+    }
+
 
     // Helper to convert base64 image string to Blob
     function dataURLtoBlob(dataurl) {
@@ -857,11 +1255,9 @@
                 });
                 // Re-initialize system data with updated storage
                 initSystemData();
-                // Re-render UI
+                // Re-render UI in active language
                 syncPhaseUI(activePhase);
-                renderPlans();
-                renderCoach();
-                renderGallery();
+                translatePage();
                 if (typeof renderAdminClients === 'function') renderAdminClients();
                 if (typeof renderAdminGalleryList === 'function') renderAdminGalleryList();
             }
@@ -874,14 +1270,25 @@
     let activePhase = 'tri';
     let activeLevel = 'principiante';
     let activeScheduleFilter = 'all';
-
     // 1. Initial Default Data Structures
     const defaultPhaseData = {
         tri: {
-            title: "TRI-ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>",
-            subtitle: "[ SIN LÍMITES. SIN EXCUSAS. ]",
-            desc: "El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.",
-            badge: "[ SIN LÍMITES. SIN EXCUSAS. ]",
+            title: {
+                en: "TRI-ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>",
+                es: "TRI-ACADEMY<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>SYSTEM</span>"
+            },
+            subtitle: {
+                en: "[ NO LIMITS. NO EXCUSES. ]",
+                es: "[ SIN LÍMITES. SIN EXCUSAS. ]"
+            },
+            desc: {
+                en: "The ultimate sports high-performance center. We train triathletes of all levels with scientific methodologies, professional coaches, and an unbreakable community.",
+                es: "El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable."
+            },
+            badge: {
+                en: "[ NO LIMITS. NO EXCUSES. ]",
+                es: "[ SIN LÍMITES. SIN EXCUSAS. ]"
+            },
             bg: "fpotos/david-jackson-Ftiy9wPLPdA-unsplash.jpg",
             metrics: {
                 val1: "10h - 18h", unit1: "horas/sem", label1: "Entrenamiento",
@@ -891,39 +1298,99 @@
                         <div class="h-2 w-[40%] bg-[var(--accent-color)]" title="Z2-Z3"></div>
                         <div class="h-2 w-[40%] bg-white/40" title="Z4-Z5"></div>`
             },
-            plansTitle: "TRIATLÓN",
+            plansTitle: {
+                en: "TRIATHLON",
+                es: "TRIATLÓN"
+            },
             plans: [
                 {
-                    level: "PLANIFICACIÓN ONLINE + GYM",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online de triatlón personalizada. Incluye trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños.",
+                    level: {
+                        en: "ONLINE PLANNING + GYM",
+                        es: "PLANIFICACIÓN ONLINE + GYM"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online triathlon planning. Includes strength and gym work. Adapted for adults and children.",
+                        es: "Planificación online de triatlón personalizada. Incluye trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños."
+                    },
                     price: "$250",
-                    badge: "Plan Completo"
+                    badge: {
+                        en: "Full Plan",
+                        es: "Plan Completo"
+                    }
                 },
                 {
-                    level: "TRIATLÓN ELITE + SWIM",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online completa de triatlón, fortalecimiento/gym y 2 clases presenciales de natación personalizadas. Adultos y niños.",
+                    level: {
+                        en: "TRIATHLON ELITE + SWIM",
+                        es: "TRIATLÓN ELITE + SWIM"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Complete online triathlon planning, strength/gym, and 2 customized in-person swimming lessons. Adults and children.",
+                        es: "Planificación online completa de triatlón, fortalecimiento/gym y 2 clases presenciales de natación personalizadas. Adultos y niños."
+                    },
                     price: "$300",
-                    badge: "Recomendado"
+                    badge: {
+                        en: "Recommended",
+                        es: "Recomendado"
+                    }
                 },
                 {
-                    level: "GYM & FORTALECIMIENTO",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online personalizada enfocada 100% en el trabajo de gimnasio y fortalecimiento muscular para triatletas. Adultos y niños.",
+                    level: {
+                        en: "GYM & STRENGTHENING",
+                        es: "GYM & FORTALECIMIENTO"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online planning 100% focused on gym work and muscle strengthening for triathletes. Adults and children.",
+                        es: "Planificación online personalizada enfocada 100% en el trabajo de gimnasio y fortalecimiento muscular para triatletas. Adultos y niños."
+                    },
                     price: "$150",
-                    badge: "Gimnasio"
+                    badge: {
+                        en: "Gym",
+                        es: "Gimnasio"
+                    }
                 }
             ]
         },
         swim: {
-            title: "SWIM<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
-            subtitle: "[ DOMINA EL AGUA ]",
-            desc: "Precisión en la piscina que se traduce en dominio en aguas abiertas. Cada brazada calculada, cada respiración bajo control. Mejora tu arrastre hidrodinámico.",
-            badge: "[ DOMINA EL AGUA ]",
+            title: {
+                en: "SWIM<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
+                es: "SWIM<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>"
+            },
+            subtitle: {
+                en: "[ DOMINATE THE WATER ]",
+                es: "[ DOMINA EL AGUA ]"
+            },
+            desc: {
+                en: "Precision in the pool that translates to open water mastery. Every stroke calculated, every breath under control. Improve your hydrodynamic drag.",
+                es: "Precisión en la piscina que se traduce en dominio en aguas abiertas. Cada brazada calculada, cada respiración bajo control. Mejora tu arrastre hidrodinámico."
+            },
+            badge: {
+                en: "[ DOMINATE THE WATER ]",
+                es: "[ DOMINA EL AGUA ]"
+            },
             bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "12k - 18k", unit1: "metros/sem", label1: "Volumen Semanal",
@@ -933,39 +1400,99 @@
                         <div class="h-2 w-[65%] bg-[var(--accent-color)]" title="Z2-Z3"></div>
                         <div class="h-2 w-[20%] bg-white/40" title="Z4-Z5"></div>`
             },
-            plansTitle: "NATACIÓN",
+            plansTitle: {
+                en: "SWIMMING",
+                es: "NATACIÓN"
+            },
             plans: [
                 {
-                    level: "NATACIÓN SEMANAL",
-                    duration: "Mensual",
-                    volume: "3 veces / semana",
-                    focus: "Entrenamiento de natación presencial 3 veces por semana en piscina/aguas abiertas. Sesiones personalizadas para adultos y niños.",
+                    level: {
+                        en: "WEEKLY SWIMMING",
+                        es: "NATACIÓN SEMANAL"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "3 times / week",
+                        es: "3 veces / semana"
+                    },
+                    focus: {
+                        en: "In-person swimming training 3 times a week in pool/open water. Customized sessions for adults and children.",
+                        es: "Entrenamiento de natación presencial 3 veces por semana en piscina/aguas abiertas. Sesiones personalizadas para adultos y niños."
+                    },
                     price: "$200",
-                    badge: "Recomendado"
+                    badge: {
+                        en: "Recommended",
+                        es: "Recomendado"
+                    }
                 },
                 {
-                    level: "CLASE PERSONALIZADA",
-                    duration: "Por Sesión",
-                    volume: "1 clase individual",
-                    focus: "Clase presencial individual de natación personalizada con el entrenador Luis Plasencia. Foco en corrección técnica biomecánica. Adultos y niños.",
+                    level: {
+                        en: "PERSONALIZED CLASS",
+                        es: "CLASE PERSONALIZADA"
+                    },
+                    duration: {
+                        en: "Per Session",
+                        es: "Por Sesión"
+                    },
+                    volume: {
+                        en: "1 individual class",
+                        es: "1 clase individual"
+                    },
+                    focus: {
+                        en: "Individual in-person swimming lesson personalized with coach Luis Plasencia. Focus on biomechanical technical correction. Adults and children.",
+                        es: "Clase presencial individual de natación personalizada con el entrenador Luis Plasencia. Foco en corrección técnica biomecánica. Adultos y niños."
+                    },
                     price: "$60",
-                    badge: "Individual"
+                    badge: {
+                        en: "Individual",
+                        es: "Individual"
+                    }
                 },
                 {
-                    level: "GYM & FORTALECIMIENTO",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online personalizada enfocada en el trabajo de gimnasio y fortalecimiento físico para nadadores. Adultos y niños.",
+                    level: {
+                        en: "GYM & STRENGTHENING",
+                        es: "GYM & FORTALECIMIENTO"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online planning focused on gym work and muscle strengthening for swimmers. Adults and children.",
+                        es: "Planificación online personalizada enfocada en el trabajo de gimnasio y fortalecimiento físico para nadadores. Adultos y niños."
+                    },
                     price: "$150",
-                    badge: "Gimnasio"
+                    badge: {
+                        en: "Gym",
+                        es: "Gimnasio"
+                    }
                 }
             ]
         },
         bike: {
-            title: "BIKE<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
-            subtitle: "[ MAXIMIZA TUS VATIOS ]",
-            desc: "Construye potencia muscular en las piernas y aerodinámica perfecta sobre la bicicleta. Intervalos de alta intensidad estructurados y salidas de fondo extremas.",
-            badge: "[ MAXIMIZA TUS VATIOS ]",
+            title: {
+                en: "BIKE<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
+                es: "BIKE<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>"
+            },
+            subtitle: {
+                en: "[ MAXIMIZE YOUR WATTS ]",
+                es: "[ MAXIMIZA TUS VATIOS ]"
+            },
+            desc: {
+                en: "Build power in your legs and achieve perfect aerodynamics on the bike. Structured high-intensity intervals and extreme long rides.",
+                es: "Construye potencia muscular en las piernas y aerodinámica perfecta sobre la bicicleta. Intervalos de alta intensidad estructurados y salidas de fondo extremas."
+            },
+            badge: {
+                en: "[ MAXIMIZE YOUR WATTS ]",
+                es: "[ MAXIMIZA TUS VATIOS ]"
+            },
             bg: "fpotos/maico-amorim-SJWPKMb9u-k-unsplash.jpg",
             metrics: {
                 val1: "180 - 300", unit1: "km/sem", label1: "Volumen Semanal",
@@ -975,31 +1502,76 @@
                         <div class="h-2 w-[50%] bg-[var(--accent-color)]" title="Z2-Z3"></div>
                         <div class="h-2 w-[40%] bg-white/40" title="Z4-Z5"></div>`
             },
-            plansTitle: "CICLISMO",
+            plansTitle: {
+                en: "CYCLING",
+                es: "CICLISMO"
+            },
             plans: [
                 {
-                    level: "CICLISMO ONLINE + GYM",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación de ciclismo online personalizada que incluye el trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños.",
+                    level: {
+                        en: "ONLINE CYCLING + GYM",
+                        es: "CICLISMO ONLINE + GYM"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online cycling planning including strength and gym work. Adapted for adults and children.",
+                        es: "Planificación de ciclismo online personalizada que incluye el trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños."
+                    },
                     price: "$150",
-                    badge: "Plan Completo"
+                    badge: {
+                        en: "Full Plan",
+                        es: "Plan Completo"
+                    }
                 },
                 {
-                    level: "GYM & FORTALECIMIENTO",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online de gimnasio y fortalecimiento físico enfocado en la potencia de pedaleo y core. Disponible para niños y adultos.",
+                    level: {
+                        en: "GYM & STRENGTHENING",
+                        es: "GYM & FORTALECIMIENTO"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Online gym and physical strengthening planning focused on pedaling power and core. Available for children and adults.",
+                        es: "Planificación online de gimnasio y fortalecimiento físico enfocado en la potencia de pedaleo y core. Disponible para niños y adultos."
+                    },
                     price: "$150",
-                    badge: "Gimnasio"
+                    badge: {
+                        en: "Gym",
+                        es: "Gimnasio"
+                    }
                 }
             ]
         },
         run: {
-            title: "RUN<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
-            subtitle: "[ VELOCIDAD Y RESILIENCIA ]",
-            desc: "Una zancada fluida y una mente inquebrantable. Entrenamientos dinámicos en pista de atletismo y series de cuestas para forjar corredores eficientes y veloces.",
-            badge: "[ VELOCIDAD Y RESILIENCIA ]",
+            title: {
+                en: "RUN<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>",
+                es: "RUN<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>PHASE</span>"
+            },
+            subtitle: {
+                en: "[ SPEED & RESILIENCE ]",
+                es: "[ VELOCIDAD Y RESILIENCIA ]"
+            },
+            desc: {
+                en: "A fluid stride and an unbreakable mind. Dynamic workouts on the athletic track and hill repeats to build efficient and fast runners.",
+                es: "Una zancada fluida y una mente inquebrantable. Entrenamientos dinámicos en pista de atletismo y series de cuestas para forjar corredores eficientes y veloces."
+            },
+            badge: {
+                en: "[ SPEED & RESILIENCE ]",
+                es: "[ VELOCIDAD Y RESILIENCIA ]"
+            },
             bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "40 - 80", unit1: "km/sem", label1: "Volumen Semanal",
@@ -1009,31 +1581,76 @@
                         <div class="h-2 w-[40%] bg-[var(--accent-color)]" title="Z2-Z3"></div>
                         <div class="h-2 w-[50%] bg-white/40" title="Z4-Z5"></div>`
             },
-            plansTitle: "ATLETISMO",
+            plansTitle: {
+                en: "RUNNING",
+                es: "ATLETISMO"
+            },
             plans: [
                 {
-                    level: "ATLETISMO ONLINE + GYM",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación de running/atletismo online personalizada que incluye trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños.",
+                    level: {
+                        en: "ONLINE RUNNING + GYM",
+                        es: "ATLETISMO ONLINE + GYM"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online running/athletics planning including strength and gym work. Adapted for adults and children.",
+                        es: "Planificación de running/atletismo online personalizada que incluye trabajo de fortalecimiento y gimnasio. Adaptado para adultos y niños."
+                    },
                     price: "$150",
-                    badge: "Plan Completo"
+                    badge: {
+                        en: "Full Plan",
+                        es: "Plan Completo"
+                    }
                 },
                 {
-                    level: "GYM & FORTALECIMIENTO",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online de gimnasio y fortalecimiento físico enfocado en la zancada, prevención de lesiones y core. Disponible para niños y adultos.",
+                    level: {
+                        en: "GYM & STRENGTHENING",
+                        es: "GYM & FORTALECIMIENTO"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Online gym and physical strengthening planning focused on stride, injury prevention and core. Available for children and adults.",
+                        es: "Planificación online de gimnasio y fortalecimiento físico enfocado en la zancada, prevención de lesiones y core. Disponible para niños y adultos."
+                    },
                     price: "$150",
-                    badge: "Gimnasio"
+                    badge: {
+                        en: "Gym",
+                        es: "Gimnasio"
+                    }
                 }
             ]
         },
         strength: {
-            title: "STRENGTH &<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>CONDITIONING</span>",
-            subtitle: "[ FORJA TU FORTALEZA ]",
-            desc: "Entrenamiento de fuerza y acondicionamiento muscular de alta eficiencia. Diseñado científicamente para potenciar atletas de resistencia, mejorar la estabilidad del core y prevenir lesiones biomecánicas.",
-            badge: "[ FORJA TU FORTALEZA ]",
+            title: {
+                en: "STRENGTH &<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>CONDITIONING</span>",
+                es: "STRENGTH &<br/><span class='text-transparent' style='-webkit-text-stroke: 1.5px var(--accent-color);'>CONDITIONING</span>"
+            },
+            subtitle: {
+                en: "[ FORGE YOUR STRENGTH ]",
+                es: "[ FORJA TU FORTALEZA ]"
+            },
+            desc: {
+                en: "High-efficiency strength and muscle conditioning. Scientifically designed to boost endurance athletes, improve core stability and prevent biomechanical injuries.",
+                es: "Entrenamiento de fuerza y acondicionamiento muscular de alta eficiencia. Diseñado científicamente para potenciar atletas de resistencia, mejorar la estabilidad del core y prevenir lesiones biomecánicas."
+            },
+            badge: {
+                en: "[ FORGE YOUR STRENGTH ]",
+                es: "[ FORJA TU FORTALEZA ]"
+            },
             bg: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg",
             metrics: {
                 val1: "3 - 5", unit1: "sesiones/sem", label1: "Frecuencia de Fuerza",
@@ -1043,52 +1660,81 @@
                         <div class="h-2 w-[40%] bg-[var(--accent-color)]" title="Potencia"></div>
                         <div class="h-2 w-[30%] bg-white/40" title="Resistencia"></div>`
             },
-            plansTitle: "GIMNASIO",
+            plansTitle: {
+                en: "GYM",
+                es: "GIMNASIO"
+            },
             plans: [
                 {
-                    level: "PLANIFICACIÓN GYM & FORTALECIMIENTO",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online personalizada enfocada en el trabajo de gimnasio y acondicionamiento general. Disponible para niños y adultos.",
+                    level: {
+                        en: "GYM & STRENGTHENING PLANNING",
+                        es: "PLANIFICACIÓN GYM & FORTALECIMIENTO"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Personalized online planning focused on gym work and general conditioning. Available for children and adults.",
+                        es: "Planificación online personalizada enfocada en el trabajo de gimnasio y acondicionamiento general. Disponible para niños y adultos."
+                    },
                     price: "$150",
-                    badge: "Recomendado"
+                    badge: {
+                        en: "Recommended",
+                        es: "Recomendado"
+                    }
                 },
                 {
-                    level: "FUERZA PRESENCIAL PERSONALIZADA",
-                    duration: "Mensual",
-                    volume: "2 clases presenciales",
-                    focus: "Planificación online personalizada de gimnasio + 2 sesiones individuales al mes para corrección técnica de levantamientos olímpicos y bio-mecánica.",
+                    level: {
+                        en: "PERSONALIZED IN-PERSON STRENGTH",
+                        es: "FUERZA PRESENCIAL PERSONALIZADA"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "2 in-person sessions",
+                        es: "2 clases presenciales"
+                    },
+                    focus: {
+                        en: "Personalized online gym planning + 2 individual sessions per month for technical correction of Olympic lifts and biomechanics.",
+                        es: "Planificación online personalizada de gimnasio + 2 sesiones individuales al mes para corrección técnica de levantamientos olímpicos y bio-mecánica."
+                    },
                     price: "$250",
-                    badge: "Presencial"
+                    badge: {
+                        en: "In-Person",
+                        es: "Presencial"
+                    }
                 },
                 {
-                    level: "COMBO MULTI-SPORT + GYM",
-                    duration: "Mensual",
-                    volume: "Personalizado",
-                    focus: "Planificación online combinada de fortalecimiento físico y acondicionamiento junto con rutinas de natación, ciclismo o running autónomas. Adultos y niños.",
+                    level: {
+                        en: "MULTI-SPORT + GYM COMBO",
+                        es: "COMBO MULTI-SPORT + GYM"
+                    },
+                    duration: {
+                        en: "Monthly",
+                        es: "Mensual"
+                    },
+                    volume: {
+                        en: "Customized",
+                        es: "Personalizado"
+                    },
+                    focus: {
+                        en: "Combined online physical strengthening and conditioning planning along with autonomous swimming, cycling, or running routines. Adults and children.",
+                        es: "Planificación online combinada de fortalecimiento físico y acondicionamiento junto con rutinas de natación, ciclismo o running autónomas. Adultos y niños."
+                    },
                     price: "$180",
-                    badge: "Híbrido"
+                    badge: {
+                        en: "Hybrid",
+                        es: "Híbrido"
+                    }
                 }
             ]
-        }
-    };
-
-    const defaultScheduleData = {
-        morning: {
-            lunes: { sport: 'swim', title: 'Técnica y Flotabilidad', location: 'Piscina Olímpica', isBrick: false },
-            martes: { sport: 'bike', title: 'Intervalos de FTP', location: 'Velódromo / Rodillo', isBrick: false },
-            miercoles: { sport: 'swim', title: 'Resistencia Aeróbica', location: 'Aguas Abiertas / Lago', isBrick: false },
-            jueves: { sport: 'bike', title: 'Recuperación Activa', location: 'Ruta Plana', isBrick: false },
-            viernes: { sport: 'swim', title: 'Pacing de Carrera', location: 'Piscina Olímpica', isBrick: false },
-            sabado: { sport: 'bike', title: 'Fondo de Resistencia', location: 'Salida a Carretera (80-120k)', isBrick: true }
-        },
-        afternoon: {
-            lunes: { sport: 'run', title: 'Series en Pista', location: 'Estadio Municipal', isBrick: false },
-            martes: { sport: 'strength', title: 'Fuerza y Core Pro', location: 'Gimnasio del Centro', isBrick: false },
-            miercoles: { sport: 'run', title: 'Fartlek Controlado', location: 'Parque Metropolitano', isBrick: false },
-            jueves: { sport: 'run', title: 'Transición Rápida', location: 'Pista + Rodillo (Gym)', isBrick: true },
-            viernes: { sport: 'strength', title: 'Flexibilidad y Estiramientos', location: 'Centro de Recuperación', isBrick: false },
-            sabado: { sport: 'rest', title: 'Recuperación Total', location: '-', isBrick: false }
         }
     };
 
@@ -1097,30 +1743,94 @@
         photo: "Gemini_Generated_Image_mlq6l2mlq6l2mlq6_Nero_AI_Image_Upscaler_Photo_Face.png",
         sports: {
             tri: {
-                specialty: "HEAD COACH / TRIATLÓN",
-                desc: "Fundador y Head Coach. Atleta de resistencia multidisciplinario. Diseña programas integrales combinando natación, ciclismo y atletismo con metodologías de periodización científica para todos los niveles.",
-                pb: "PB: 8h 42m (Ironman 140.6)"
+                specialty: {
+                    en: "HEAD COACH / TRIATHLON",
+                    es: "HEAD COACH / TRIATLÓN"
+                },
+                desc: {
+                    en: "Founder and Head Coach. Multidisciplinary endurance athlete. Designs comprehensive programs combining swimming, cycling, and running with scientific periodization methodologies for all levels.",
+                    es: "Fundador y Head Coach. Atleta de resistencia multidisciplinario. Diseña programas integrales combinando natación, ciclismo y atletismo con metodologías de periodización científica para todos los niveles."
+                },
+                pb: {
+                    en: "PB: 8h 42m (Ironman 140.6)",
+                    es: "PB: 8h 42m (Ironman 140.6)"
+                }
             },
             swim: {
-                specialty: "HEAD COACH / NATACIÓN",
-                desc: "Especialista en natación y aguas abiertas. Se enfoca en mejorar la hidrodinámica del nadador, la eficiencia de la brazada, la respiración de carrera y la táctica en corrientes de aguas abiertas.",
-                pb: "PB: 1h 55m (10k Aguas Abiertas)"
+                specialty: {
+                    en: "HEAD COACH / SWIMMING",
+                    es: "HEAD COACH / NATACIÓN"
+                },
+                desc: {
+                    en: "Swimming and open water specialist. Focuses on improving swimmer hydrodynamics, stroke efficiency, race breathing, and open water current tactics.",
+                    es: "Especialista en natación y aguas abiertas. Se enfoca en mejorar la hidrodinámica del nadador, la eficiencia de la brazada, la respiración de carrera y la táctica en corrientes de aguas abiertas."
+                },
+                pb: {
+                    en: "PB: 1h 55m (10k Open Water)",
+                    es: "PB: 1h 55m (10k Aguas Abiertas)"
+                }
             },
             bike: {
-                specialty: "HEAD COACH / CICLISMO",
-                desc: "Experto en entrenamiento por potencia. Especialista en análisis de vatios, optimización de FTP (Functional Threshold Power), cadencia eficiente y biomecánica sobre la bicicleta de ruta y contrarreloj.",
-                pb: "FTP: 410 Watts (5.2 W/kg)"
+                specialty: {
+                    en: "HEAD COACH / CYCLING",
+                    es: "HEAD COACH / CICLISMO"
+                },
+                desc: {
+                    en: "Expert in power training. Specialist in watt analysis, FTP (Functional Threshold Power) optimization, efficient cadence, and biomechanics on road and time trial bikes.",
+                    es: "Experto en entrenamiento por potencia. Especialista en análisis de vatios, optimización de FTP (Functional Threshold Power), cadencia eficiente y biomecánica sobre la bicicleta de ruta y contrarreloj."
+                },
+                pb: {
+                    en: "FTP: 410 Watts (5.2 W/kg)",
+                    es: "FTP: 410 Watts (5.2 W/kg)"
+                }
             },
             run: {
-                specialty: "HEAD COACH / ATLETISMO",
-                desc: "Especialista en biomecánica de carrera. Se enfoca en optimizar la cadencia de zancada (180ppm), la técnica de pisada de medio-pie, el aumento del VO2 Max y estrategias de ritmo para maratón.",
-                pb: "PB: 2h 38m (Maratón 42k)"
+                specialty: {
+                    en: "HEAD COACH / RUNNING",
+                    es: "HEAD COACH / ATLETISMO"
+                },
+                desc: {
+                    en: "Running biomechanics specialist. Focuses on optimizing stride cadence (180ppm), mid-foot strike technique, VO2 Max increase, and marathon pacing strategies.",
+                    es: "Especialista en biomecánica de carrera. Se enfoca en optimizar la cadencia de zancada (180ppm), la técnica de pisada de medio-pie, el aumento del VO2 Max y estrategias de ritmo para maratón."
+                },
+                pb: {
+                    en: "PB: 2h 38m (Marathon 42k)",
+                    es: "PB: 2h 38m (Maratón 42k)"
+                }
             },
             strength: {
-                specialty: "HEAD COACH / GIMNASIO & FUERZA",
-                desc: "Especialista en acondicionamiento físico de fuerza para deportistas de resistencia. Diseña programas que aumentan la potencia muscular, mejoran la estabilidad del core y corrigen la postura para evitar lesiones.",
-                pb: "PB: 180kg Peso Muerto / 140kg Sentadilla"
+                specialty: {
+                    en: "HEAD COACH / GYM & STRENGTH",
+                    es: "HEAD COACH / GIMNASIO & FUERZA"
+                },
+                desc: {
+                    en: "Strength conditioning specialist for endurance athletes. Designs programs that increase muscular power, improve core stability, and correct posture to prevent injuries.",
+                    es: "Especialista en acondicionamiento físico de fuerza para deportistas de resistencia. Diseña programas que aumentan la potencia muscular, mejoran la estabilidad del core y corrigen la postura para evitar lesiones."
+                },
+                pb: {
+                    en: "PB: 180kg Deadlift / 140kg Squat",
+                    es: "PB: 180kg Peso Muerto / 140kg Sentadilla"
+                }
             }
+        }
+    };
+
+    const defaultScheduleData = {
+        morning: {
+            lunes: { sport: 'swim', title: { en: 'Technique and Buoyancy', es: 'Técnica y Flotabilidad' }, location: { en: 'Olympic Pool', es: 'Piscina Olímpica' }, isBrick: false },
+            martes: { sport: 'bike', title: { en: 'FTP Intervals', es: 'Intervalos de FTP' }, location: { en: 'Velodrome / Trainer', es: 'Velódromo / Rodillo' }, isBrick: false },
+            miercoles: { sport: 'swim', title: { en: 'Aerobic Endurance', es: 'Resistencia Aeróbica' }, location: { en: 'Open Water / Lake', es: 'Aguas Abiertas / Lago' }, isBrick: false },
+            jueves: { sport: 'bike', title: { en: 'Active Recovery', es: 'Recuperación Activa' }, location: { en: 'Flat Road', es: 'Ruta Plana' }, isBrick: false },
+            viernes: { sport: 'swim', title: { en: 'Race Pacing', es: 'Pacing de Carrera' }, location: { en: 'Olympic Pool', es: 'Piscina Olímpica' }, isBrick: false },
+            sabado: { sport: 'bike', title: { en: 'Endurance Ride', es: 'Fondo de Resistencia' }, location: { en: 'Road Ride (80-120k)', es: 'Salida a Carretera (80-120k)' }, isBrick: true }
+        },
+        afternoon: {
+            lunes: { sport: 'run', title: { en: 'Track Intervals', es: 'Series en Pista' }, location: { en: 'Municipal Stadium', es: 'Estadio Municipal' }, isBrick: false },
+            martes: { sport: 'strength', title: { en: 'Strength & Core Pro', es: 'Fuerza y Core Pro' }, location: { en: 'Center Gym', es: 'Gimnasio del Centro' }, isBrick: false },
+            miercoles: { sport: 'run', title: { en: 'Controlled Fartlek', es: 'Fartlek Controlado' }, location: { en: 'Metropolitan Park', es: 'Parque Metropolitano' }, isBrick: false },
+            jueves: { sport: 'run', title: { en: 'Fast Transition', es: 'Transición Rápida' }, location: { en: 'Track + Trainer (Gym)', es: 'Pista + Rodillo (Gym)' }, isBrick: true },
+            viernes: { sport: 'strength', title: { en: 'Flexibility & Stretching', es: 'Flexibilidad y Estiramientos' }, location: { en: 'Recovery Center', es: 'Centro de Recuperación' }, isBrick: false },
+            sabado: { sport: 'rest', title: { en: 'Total Recovery', es: 'Recuperación Total' }, location: { en: '-', es: '-' }, isBrick: false }
         }
     };
 
@@ -1141,11 +1851,11 @@
 
     // Default Gallery Data
     const defaultGalleryData = [
-        { src: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg", caption: "Entrenamiento de resistencia aeróbica en aguas abiertas" },
-        { src: "fpotos/mario-la-pergola-XEOB-7BwrmU-unsplash.jpg", caption: "Sesión técnica de natación en piscina de 50 metros" },
-        { src: "fpotos/maico-amorim-SJWPKMb9u-k-unsplash.jpg", caption: "Bloque de ciclismo en ruta: series de contrarreloj" },
-        { src: "fpotos/david-jackson-Ftiy9wPLPdA-unsplash.jpg", caption: "Transición rápida en pista de atletismo" },
-        { src: "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg", caption: "Luis Plasencia liderando las salidas de resistencia larga" }
+        { src: "fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg", caption: { en: "Aerobic endurance training in open water", es: "Entrenamiento de resistencia aeróbica en aguas abiertas" } },
+        { src: "fpotos/mario-la-pergola-XEOB-7BwrmU-unsplash.jpg", caption: { en: "Technical swimming session in a 50-meter pool", es: "Sesión técnica de natación en piscina de 50 metros" } },
+        { src: "fpotos/maico-amorim-SJWPKMb9u-k-unsplash.jpg", caption: { en: "Road cycling block: time trial intervals", es: "Bloque de ciclismo en ruta: series de contrarreloj" } },
+        { src: "fpotos/david-jackson-Ftiy9wPLPdA-unsplash.jpg", caption: { en: "Fast transition on athletic track", es: "Transición rápida en pista de atletismo" } },
+        { src: "fpotos/paolo-candelo-53B17GiIhTA-unsplash.jpg", caption: { en: "Luis Plasencia leading long endurance rides", es: "Luis Plasencia liderando las salidas de resistencia larga" } }
     ];
 
     // Mutable runtime states
@@ -1205,21 +1915,21 @@
             card.innerHTML = `
                 <div>
                     <div class="flex justify-between items-start mb-6">
-                        <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase border border-[var(--accent-color)]/30 px-2.5 py-1 bg-white/5 transition-colors duration-300">${plan.badge}</span>
-                        <span class="font-label-sm text-xs text-tertiary uppercase">${plan.duration}</span>
+                        <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase border border-[var(--accent-color)]/30 px-2.5 py-1 bg-white/5 transition-colors duration-300">${getLocalizedValue(plan.badge)}</span>
+                        <span class="font-label-sm text-xs text-tertiary uppercase">${getLocalizedValue(plan.duration)}</span>
                     </div>
-                    <h3 class="font-headline-md text-2xl text-white uppercase italic tracking-tighter mb-4">${plan.level}</h3>
-                    <p class="font-body-md text-sm text-tertiary leading-relaxed mb-6">${plan.focus}</p>
-                    <span class="font-label-sm text-xs text-tertiary-fixed-dim block mb-1">VOLUMEN INTEGRADO</span>
-                    <span class="font-label-sm text-sm text-white font-bold block mb-8">${plan.volume}</span>
+                    <h3 class="font-headline-md text-2xl text-white uppercase italic tracking-tighter mb-4">${getLocalizedValue(plan.level)}</h3>
+                    <p class="font-body-md text-sm text-tertiary leading-relaxed mb-6">${getLocalizedValue(plan.focus)}</p>
+                    <span class="font-label-sm text-xs text-tertiary-fixed-dim block mb-1">${t("plan_integrated_volume")}</span>
+                    <span class="font-label-sm text-sm text-white font-bold block mb-8">${getLocalizedValue(plan.volume)}</span>
                 </div>
                 <div class="border-t border-white/10 pt-6 flex justify-between items-end">
                     <div>
-                        <span class="font-label-sm text-xs text-tertiary-fixed-dim block">TARIFA PLANA</span>
-                        <span class="font-display-lg text-4xl text-white italic">${plan.price}<span class="text-sm font-label-sm text-tertiary not-italic">/mes</span></span>
+                        <span class="font-label-sm text-xs text-tertiary-fixed-dim block">${t("plan_flat_rate")}</span>
+                        <span class="font-display-lg text-4xl text-white italic">${plan.price}<span class="text-sm font-label-sm text-tertiary not-italic">${t("plan_month_suffix")}</span></span>
                     </div>
                     <button onclick="openJoinModal('${activePhase}')" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-extrabold px-5 py-3 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
-                        SELECT
+                        ${t("plan_select_btn")}
                     </button>
                 </div>
             `;
@@ -1240,9 +1950,9 @@
         const coachPB = document.getElementById("coachPB");
 
         const info = coachData.sports[activePhase];
-        if (coachSpecialty) coachSpecialty.innerText = info.specialty;
-        if (coachDesc) coachDesc.innerText = info.desc;
-        if (coachPB) coachPB.innerText = info.pb;
+        if (coachSpecialty) coachSpecialty.innerText = getLocalizedValue(info.specialty);
+        if (coachDesc) coachDesc.innerText = getLocalizedValue(info.desc);
+        if (coachPB) coachPB.innerText = getLocalizedValue(info.pb);
     }
 
     // Dynamic rendering of schedule
@@ -1252,8 +1962,8 @@
         tbody.innerHTML = "";
 
         const periods = [
-            { key: 'morning', label: 'MAÑANA', time: '06:00 AM - 07:30 AM' },
-            { key: 'afternoon', label: 'TARDE', time: '05:30 PM - 07:00 PM' }
+            { key: 'morning', time: '06:00 AM - 07:30 AM' },
+            { key: 'afternoon', time: '05:30 PM - 07:00 PM' }
         ];
 
         const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
@@ -1262,7 +1972,7 @@
             const tr = document.createElement("tr");
             let tdHtml = `
                 <td class="py-8 px-6 border-r border-white/10 bg-white/[0.02]">
-                    <span class="font-label-sm text-label-sm text-white block font-bold">${period.label}</span>
+                    <span class="font-label-sm text-label-sm text-white block font-bold">${t("sched_period_" + period.key)}</span>
                     <span class="font-label-sm text-xs text-tertiary block mt-1">${period.time}</span>
                 </td>
             `;
@@ -1272,7 +1982,9 @@
                 const style = sportStyles[session.sport] || sportStyles.rest;
                 const isRunBrick = session.sport === 'run' && session.isBrick;
                 const isBikeBrick = session.sport === 'bike' && session.isBrick;
-                const labelText = isRunBrick ? 'RUN (BRICK)' : (isBikeBrick ? 'BIKE (BRICK)' : style.label);
+                
+                const sportLabel = t("sched_sport_" + session.sport);
+                const labelText = isRunBrick ? `${sportLabel} (BRICK)` : (isBikeBrick ? `${sportLabel} (BRICK)` : sportLabel);
 
                 let opacityStyle = "opacity: 1";
                 let blurStyle = "";
@@ -1289,8 +2001,8 @@
                     <td class="py-6 px-6 border-r border-white/10 align-top transition-all duration-300" style="${opacityStyle}">
                         <div class="p-3 ${style.bg} border-l-2 ${style.border} rounded-sm hover:-translate-y-1 transition-all" style="${blurStyle}">
                             <span class="font-label-sm text-xs ${style.text} tracking-wider block font-bold">${labelText}</span>
-                            <span class="font-body-md text-sm text-white block mt-1 font-semibold">${session.title}</span>
-                            <span class="text-xs text-tertiary block mt-2 font-label-sm">${session.location}</span>
+                            <span class="font-body-md text-sm text-white block mt-1 font-semibold">${getLocalizedValue(session.title)}</span>
+                            <span class="text-xs text-tertiary block mt-2 font-label-sm">${getLocalizedValue(session.location)}</span>
                         </div>
                     </td>
                 `;
@@ -1683,8 +2395,8 @@
 
         const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
         phases.forEach(p => {
-            document.getElementById(`adminCoachPB_${p}`).value = coachData.sports[p].pb;
-            document.getElementById(`adminCoachDesc_${p}`).value = coachData.sports[p].desc;
+            document.getElementById(`adminCoachPB_${p}`).value = getLocalizedValue(coachData.sports[p].pb);
+            document.getElementById(`adminCoachDesc_${p}`).value = getLocalizedValue(coachData.sports[p].desc);
             
             document.getElementById(`adminPhaseBgPreview_${p}`).src = phaseData[p].bg;
             document.getElementById(`adminPhaseBgName_${p}`).innerText = "Seleccionar archivo...";
@@ -1732,17 +2444,19 @@
         afternoonDiv.innerHTML = "";
 
         const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
-        const daysLabels = { lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles', jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado' };
 
         days.forEach(day => {
-            morningDiv.appendChild(createScheduleEditCard('morning', day, scheduleData.morning[day], daysLabels[day]));
-            afternoonDiv.appendChild(createScheduleEditCard('afternoon', day, scheduleData.afternoon[day], daysLabels[day]));
+            morningDiv.appendChild(createScheduleEditCard('morning', day, scheduleData.morning[day]));
+            afternoonDiv.appendChild(createScheduleEditCard('afternoon', day, scheduleData.afternoon[day]));
         });
     }
 
-    function createScheduleEditCard(period, day, session, dayLabel) {
+    function createScheduleEditCard(period, day, session) {
         const card = document.createElement("div");
         card.className = "flex flex-col gap-2 bg-[#121212] border border-white/5 p-3 rounded-sm text-xs text-left";
+        
+        const labelKeys = { lunes: 'mon', martes: 'tue', miercoles: 'wed', jueves: 'thu', viernes: 'fri', sabado: 'sat' };
+        const dayLabel = t("sched_header_" + labelKeys[day]);
         
         card.innerHTML = `
             <div class="flex justify-between items-center font-label-sm font-bold uppercase tracking-wider mb-1">
@@ -1759,16 +2473,28 @@
                 <input type="checkbox" id="brick-${period}-${day}" ${session.isBrick ? 'checked' : ''} onchange="updateAdminScheduleBrick('${period}', '${day}', this.checked)" class="rounded-sm bg-neutral-900 border-white/10 text-[var(--accent-color)] focus:ring-0 w-3.5 h-3.5"/>
                 <label for="brick-${period}-${day}" class="font-label-sm text-[10px] text-white/50 uppercase cursor-pointer">Brick session</label>
             </div>
-            <input type="text" value="${session.title}" placeholder="Título de la sesión" onchange="updateAdminScheduleTitle('${period}', '${day}', this.value)" class="w-full bg-[#181818] border border-white/10 text-white px-2 py-1 rounded-sm font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-[11px]"/>
-            <input type="text" value="${session.location}" placeholder="Ubicación / Detalle" onchange="updateAdminScheduleLocation('${period}', '${day}', this.value)" class="w-full bg-[#181818] border border-white/10 text-white px-2 py-1 rounded-sm font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-[11px]"/>
+            <input type="text" value="${getLocalizedValue(session.title)}" placeholder="Título de la sesión" onchange="updateAdminScheduleTitle('${period}', '${day}', this.value)" class="w-full bg-[#181818] border border-white/10 text-white px-2 py-1 rounded-sm font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-[11px]"/>
+            <input type="text" value="${getLocalizedValue(session.location)}" placeholder="Ubicación / Detalle" onchange="updateAdminScheduleLocation('${period}', '${day}', this.value)" class="w-full bg-[#181818] border border-white/10 text-white px-2 py-1 rounded-sm font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-[11px]"/>
         `;
         return card;
     }
 
     function updateAdminScheduleSport(period, day, val) { scheduleData[period][day].sport = val; }
     function updateAdminScheduleBrick(period, day, val) { scheduleData[period][day].isBrick = val; }
-    function updateAdminScheduleTitle(period, day, val) { scheduleData[period][day].title = val; }
-    function updateAdminScheduleLocation(period, day, val) { scheduleData[period][day].location = val; }
+    
+    function updateAdminScheduleTitle(period, day, val) { 
+        if (typeof scheduleData[period][day].title !== 'object') {
+            scheduleData[period][day].title = { en: scheduleData[period][day].title, es: scheduleData[period][day].title };
+        }
+        scheduleData[period][day].title[currentLang] = val;
+    }
+    
+    function updateAdminScheduleLocation(period, day, val) { 
+        if (typeof scheduleData[period][day].location !== 'object') {
+            scheduleData[period][day].location = { en: scheduleData[period][day].location, es: scheduleData[period][day].location };
+        }
+        scheduleData[period][day].location[currentLang] = val;
+    }
 
     // Plans bindings inside the admin workspace
     function loadPhasePlansForm() {
@@ -1837,8 +2563,19 @@
             // Upload Phase Backgrounds if changed
             const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
             for (const p of phases) {
-                coachData.sports[p].pb = document.getElementById(`adminCoachPB_${p}`).value;
-                coachData.sports[p].desc = document.getElementById(`adminCoachDesc_${p}`).value;
+                const pbVal = document.getElementById(`adminCoachPB_${p}`).value;
+                const descVal = document.getElementById(`adminCoachDesc_${p}`).value;
+                
+                if (typeof coachData.sports[p].pb !== 'object') {
+                    coachData.sports[p].pb = { en: coachData.sports[p].pb, es: coachData.sports[p].pb };
+                }
+                coachData.sports[p].pb[currentLang] = pbVal;
+
+                if (typeof coachData.sports[p].desc !== 'object') {
+                    coachData.sports[p].desc = { en: coachData.sports[p].desc, es: coachData.sports[p].desc };
+                }
+                coachData.sports[p].desc[currentLang] = descVal;
+
                 if (uploadedImages[`phaseBg_${p}`]) {
                     const url = await uploadBase64OrFileToSupabase(uploadedImages[`phaseBg_${p}`], `phaseBg_${p}`);
                     phaseData[p].bg = url;
@@ -1861,12 +2598,38 @@
 
             // Save current phase's plans
             phaseData[phase].plans.forEach((plan, index) => {
-                plan.level = document.getElementById(`planTitle-${phase}-${index}`).value;
-                plan.badge = document.getElementById(`planBadge-${phase}-${index}`).value;
+                const levelVal = document.getElementById(`planTitle-${phase}-${index}`).value;
+                const badgeVal = document.getElementById(`planBadge-${phase}-${index}`).value;
+                const durationVal = document.getElementById(`planDuration-${phase}-${index}`).value;
+                const volumeVal = document.getElementById(`planVolume-${phase}-${index}`).value;
+                const focusVal = document.getElementById(`planFocus-${phase}-${index}`).value;
+
+                if (typeof plan.level !== 'object') {
+                    plan.level = { en: plan.level, es: plan.level };
+                }
+                plan.level[currentLang] = levelVal;
+
+                if (typeof plan.badge !== 'object') {
+                    plan.badge = { en: plan.badge, es: plan.badge };
+                }
+                plan.badge[currentLang] = badgeVal;
+
+                if (typeof plan.duration !== 'object') {
+                    plan.duration = { en: plan.duration, es: plan.duration };
+                }
+                plan.duration[currentLang] = durationVal;
+
+                if (typeof plan.volume !== 'object') {
+                    plan.volume = { en: plan.volume, es: plan.volume };
+                }
+                plan.volume[currentLang] = volumeVal;
+
+                if (typeof plan.focus !== 'object') {
+                    plan.focus = { en: plan.focus, es: plan.focus };
+                }
+                plan.focus[currentLang] = focusVal;
+
                 plan.price = document.getElementById(`planPrice-${phase}-${index}`).value;
-                plan.duration = document.getElementById(`planDuration-${phase}-${index}`).value;
-                plan.volume = document.getElementById(`planVolume-${phase}-${index}`).value;
-                plan.focus = document.getElementById(`planFocus-${phase}-${index}`).value;
             });
 
             // Save everything to localStorage safely
@@ -2047,13 +2810,13 @@
         const nextBtn = document.getElementById("cropperNextBtn");
         
         if (cropperStep === 1) {
-            if (stepLabel) stepLabel.innerText = "[ PASO 1 DE 2: ENCUADRE ESCRITORIO ]";
-            if (desc) desc.innerText = "Selecciona y ajusta la zona visible para pantallas de escritorio (formato horizontal).";
-            if (nextBtn) nextBtn.innerText = "CONFIRMAR Y SIGUIENTE";
+            if (stepLabel) stepLabel.innerText = t("cropper_step_1_label");
+            if (desc) desc.innerText = t("cropper_step_1_desc");
+            if (nextBtn) nextBtn.innerText = t("cropper_step_1_btn");
         } else {
-            if (stepLabel) stepLabel.innerText = "[ PASO 2 DE 2: ENCUADRE MÓVIL ]";
-            if (desc) desc.innerText = "Selecciona y ajusta la zona visible para pantallas móviles (formato vertical).";
-            if (nextBtn) nextBtn.innerText = "COMPLETAR ENCUADRE";
+            if (stepLabel) stepLabel.innerText = t("cropper_step_2_label");
+            if (desc) desc.innerText = t("cropper_step_2_desc");
+            if (nextBtn) nextBtn.innerText = t("cropper_step_2_btn");
         }
         
         currentCropper = new Cropper(img, {
@@ -2184,27 +2947,33 @@
         document.getElementById("athletePlanView").classList.remove("hidden");
         
         // Populate plan view details
-        document.getElementById("athleteAthleteName").innerText = `¡HOLA, ${client.name.toUpperCase()}!`;
+        document.getElementById("athleteAthleteName").innerText = (currentLang === "en" ? "HELLO, " : "¡HOLA, ") + client.name.toUpperCase() + "!";
         
         const sportsLabels = {
-            tri: "Triatlón (Fase Completa)",
-            swim: "Natación",
-            bike: "Ciclismo",
-            run: "Atletismo",
-            strength: "Gimnasio & Fortalecimiento"
+            tri: t("menu_tri"),
+            swim: t("menu_swim"),
+            bike: t("menu_bike"),
+            run: t("menu_run"),
+            strength: t("menu_strength")
         };
-        document.getElementById("athleteSportInterest").innerText = `Deporte de Interés: ${sportsLabels[client.sport] || client.sport} | Nivel: ${client.level.toUpperCase()}`;
+        const levelLabels = {
+            principiante: t("join_opt_beginner"),
+            intermedio: t("join_opt_intermediate"),
+            avanzado: t("join_opt_advanced")
+        };
+        const levelStr = levelLabels[client.level] || client.level;
+        document.getElementById("athleteSportInterest").innerText = `${t("join_label_sport")}: ${sportsLabels[client.sport] || client.sport} | ${t("join_label_level")}: ${levelStr.toUpperCase()}`;
         
         if (client.plan) {
-            document.getElementById("athletePlanTitle").innerText = client.plan.title || "Plan Personalizado";
-            document.getElementById("athletePlanDuration").innerText = client.plan.duration || "N/A";
-            document.getElementById("athletePlanVolume").innerText = client.plan.volume || "N/A";
-            document.getElementById("athletePlanNotes").innerText = client.plan.notes || "Sigue tu constancia y consistencia.";
+            document.getElementById("athletePlanTitle").innerText = getLocalizedValue(client.plan.title) || (currentLang === "en" ? "Custom Plan" : "Plan Personalizado");
+            document.getElementById("athletePlanDuration").innerText = getLocalizedValue(client.plan.duration) || "N/A";
+            document.getElementById("athletePlanVolume").innerText = getLocalizedValue(client.plan.volume) || "N/A";
+            document.getElementById("athletePlanNotes").innerText = getLocalizedValue(client.plan.notes) || t("athlete_plan_default_notes");
         } else {
-            document.getElementById("athletePlanTitle").innerText = "TU PLAN ESTÁ EN DISEÑO";
-            document.getElementById("athletePlanDuration").innerText = "Pendiente";
-            document.getElementById("athletePlanVolume").innerText = "Pendiente";
-            document.getElementById("athletePlanNotes").innerText = "El Head Coach Luis Plasencia está analizando tu perfil deportivo para diseñar tu plan a medida. Recibirás una notificación pronto. ¡Prepárate!";
+            document.getElementById("athletePlanTitle").innerText = t("athlete_plan_pending_title");
+            document.getElementById("athletePlanDuration").innerText = t("athlete_plan_pending_duration");
+            document.getElementById("athletePlanVolume").innerText = t("athlete_plan_pending_volume");
+            document.getElementById("athletePlanNotes").innerText = t("athlete_plan_pending_notes");
         }
     }
 
@@ -2259,7 +3028,7 @@
         });
     }
 
-    function editClientPlan(email) {
+        function editClientPlan(email) {
         const client = clientsList.find(c => c.email === email);
         if (!client) return;
         
@@ -2267,15 +3036,15 @@
         document.getElementById("editorClientName").value = `${client.name} (${client.email})`;
         
         if (client.plan) {
-            document.getElementById("editorPlanTitle").value = client.plan.title || "";
-            document.getElementById("editorPlanDuration").value = client.plan.duration || "";
-            document.getElementById("editorPlanVolume").value = client.plan.volume || "";
-            document.getElementById("editorPlanNotes").value = client.plan.notes || "";
+            document.getElementById("editorPlanTitle").value = getLocalizedValue(client.plan.title) || "";
+            document.getElementById("editorPlanDuration").value = getLocalizedValue(client.plan.duration) || "";
+            document.getElementById("editorPlanVolume").value = getLocalizedValue(client.plan.volume) || "";
+            document.getElementById("editorPlanNotes").value = getLocalizedValue(client.plan.notes) || "";
         } else {
-            document.getElementById("editorPlanTitle").value = `Plan Personalizado: ${client.goal || 'Rendimiento'}`;
-            document.getElementById("editorPlanDuration").value = "12 Semanas";
-            document.getElementById("editorPlanVolume").value = "8 - 10 horas / semana";
-            document.getElementById("editorPlanNotes").value = `Hola ${client.name.split(' ')[0]},\n\nAquí tienes las pautas específicas para tu objetivo:\n"${client.goal || 'Mejora general'}".\n\n1. Resistencia Base (Z1-Z2): ...\n2. Trabajo técnico: ...\n3. Nutrición: ...`;
+            document.getElementById("editorPlanTitle").value = currentLang === "en" ? `Custom Plan: ${client.goal || 'Performance'}` : `Plan Personalizado: ${client.goal || 'Rendimiento'}`;
+            document.getElementById("editorPlanDuration").value = currentLang === "en" ? "12 Weeks" : "12 Semanas";
+            document.getElementById("editorPlanVolume").value = currentLang === "en" ? "8 - 10 hours / week" : "8 - 10 horas / semana";
+            document.getElementById("editorPlanNotes").value = currentLang === "en" ? `Hello ${client.name.split(' ')[0]},\n\nHere are the specific guidelines for your goal:\n"${client.goal || 'General improvement'}".\n\n1. Base Endurance (Z1-Z2): ...\n2. Technical work: ...\n3. Nutrition: ...` : `Hola ${client.name.split(' ')[0]},\n\nAquí tienes las pautas específicas para tu objetivo:\n"${client.goal || 'Mejora general'}".\n\n1. Resistencia Base (Z1-Z2): ...\n2. Trabajo técnico: ...\n3. Nutrición: ...`;
         }
         
         document.getElementById("adminPlanEditorPlaceholder").classList.add("hidden");
@@ -2292,12 +3061,20 @@
         const volume = document.getElementById("editorPlanVolume").value.trim();
         const notes = document.getElementById("editorPlanNotes").value.trim();
         
-        clientsList[clientIndex].plan = {
-            title: title || "Plan Personalizado",
-            duration: duration || "12 Semanas",
-            volume: volume || "8 - 10 horas / semana",
-            notes: notes || ""
-        };
+        if (!clientsList[clientIndex].plan) {
+            clientsList[clientIndex].plan = { title: {}, duration: {}, volume: {}, notes: {} };
+        }
+        const plan = clientsList[clientIndex].plan;
+        
+        if (typeof plan.title !== 'object') plan.title = { en: plan.title, es: plan.title };
+        if (typeof plan.duration !== 'object') plan.duration = { en: plan.duration, es: plan.duration };
+        if (typeof plan.volume !== 'object') plan.volume = { en: plan.volume, es: plan.volume };
+        if (typeof plan.notes !== 'object') plan.notes = { en: plan.notes, es: plan.notes };
+
+        plan.title[currentLang] = title || (currentLang === "en" ? "Custom Plan" : "Plan Personalizado");
+        plan.duration[currentLang] = duration || (currentLang === "en" ? "12 Weeks" : "12 Semanas");
+        plan.volume[currentLang] = volume || (currentLang === "en" ? "8 - 10 hours / week" : "8 - 10 horas / semana");
+        plan.notes[currentLang] = notes || "";
         
         localStorage.setItem("clientsList", JSON.stringify(clientsList));
         saveConfigToSupabase("clientsList", clientsList);
@@ -2385,7 +3162,7 @@
             
             if (ytId) {
                 mediaElement = `
-                    <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" alt="${item.caption}" class="w-full h-auto object-cover transition-all duration-500 filter contrast-125 mix-blend-luminosity hover:mix-blend-normal group-hover:scale-105"/>
+                    <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" alt="${getLocalizedValue(item.caption)}" class="w-full h-auto object-cover transition-all duration-500 filter contrast-125 mix-blend-luminosity hover:mix-blend-normal group-hover:scale-105"/>
                     <div class="absolute inset-0 flex items-center justify-center z-10">
                         <span class="material-symbols-outlined text-white text-5xl bg-black/40 rounded-full p-2 transition-transform duration-300 scale-100 group-hover:scale-110">play_circle</span>
                     </div>
@@ -2398,7 +3175,7 @@
                     </div>
                 `;
             } else {
-                mediaElement = `<img src="${item.src}" alt="${item.caption}" class="w-full h-auto object-cover transition-all duration-500 filter contrast-125 mix-blend-luminosity hover:mix-blend-normal group-hover:scale-105" onerror="this.src='https://placehold.co/400x300/fecaca/333333?text=Image+Not+Found'"/>`;
+                mediaElement = `<img src="${item.src}" alt="${getLocalizedValue(item.caption)}" class="w-full h-auto object-cover transition-all duration-500 filter contrast-125 mix-blend-luminosity hover:mix-blend-normal group-hover:scale-105" onerror="this.src='https://placehold.co/400x300/fecaca/333333?text=Image+Not+Found'"/>`;
             }
             
             div.innerHTML = `
@@ -2415,8 +3192,8 @@
                         </button>
                     </div>
                     <div>
-                        <p class="text-white font-bold text-sm truncate mb-0.5">${item.caption}</p>
-                        <span class="font-label-sm text-[9px] text-white/50 uppercase tracking-widest">[ VER DETALLE ]</span>
+                        <p class="text-white font-bold text-sm truncate mb-0.5">${getLocalizedValue(item.caption)}</p>
+                        <span class="font-label-sm text-[9px] text-white/50 uppercase tracking-widest">[ ${t("gallery_view_detail")} ]</span>
                     </div>
                 </div>
             `;
@@ -2502,12 +3279,12 @@
             } else {
                 // Render image
                 wrapper.innerHTML = `
-                    <img src="${item.src}" alt="${item.caption}" 
+                    <img src="${item.src}" alt="${getLocalizedValue(item.caption)}" 
                          class="max-w-full max-h-[65vh] object-contain border border-white/10 shadow-[8px_8px_0px_#000000]"/>
                 `;
             }
             
-            caption.innerText = item.caption;
+            caption.innerText = getLocalizedValue(item.caption);
             count.innerText = `[ ${lightboxIndex + 1} / ${galleryData.length} ]`;
             wrapper.style.opacity = 1;
         }, 150);
@@ -2750,8 +3527,7 @@
     window.onload = () => {
         initSystemData();
         syncPhaseUI(activePhase);
-        filterSchedule('all');
-        renderGallery();
+        translatePage();
 
         window.addEventListener("resize", updateResponsiveBackgrounds);
 
@@ -2770,17 +3546,17 @@
         <div class="flex flex-col gap-6 text-center">
             <span class="material-symbols-outlined text-5xl text-[var(--accent-color)]">lock</span>
             <div>
-                <span class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO RESTRINGIDO ]</span>
-                <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">PORTAL ENTRENADOR</h3>
+                <span data-i18n="admin_restricted_access" class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO RESTRINGIDO ]</span>
+                <h3 data-i18n="admin_login_title" class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">PORTAL ENTRENADOR</h3>
             </div>
-            <p class="font-body-md text-sm text-tertiary leading-relaxed">
+            <p data-i18n="admin_login_desc" class="font-body-md text-sm text-tertiary leading-relaxed">
                 Ingresa la contraseña del entrenador para desbloquear la consola de administración de planes, horarios y medios.
             </p>
             <div class="flex flex-col gap-2">
-                <input class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md text-center focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="adminPasscode" placeholder="Contraseña" type="password" onkeyup="if(event.key === 'Enter') submitAdminLogin()"/>
-                <span id="loginError" class="font-label-sm text-xs text-red-500 mt-1 hidden">Contraseña incorrecta. Inténtalo de nuevo.</span>
+                <input data-i18n="admin_login_placeholder" class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md text-center focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="adminPasscode" placeholder="Contraseña" type="password" onkeyup="if(event.key === 'Enter') submitAdminLogin()"/>
+                <span data-i18n="admin_login_error" id="loginError" class="font-label-sm text-xs text-red-500 mt-1 hidden">Contraseña incorrecta. Inténtalo de nuevo.</span>
             </div>
-            <button onclick="submitAdminLogin()" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+            <button onclick="submitAdminLogin()" data-i18n="admin_login_btn" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
                 INICIAR SESIÓN
             </button>
         </div>
@@ -2795,10 +3571,10 @@
         <div class="flex justify-between items-center border-b border-white/10 px-6 py-4 bg-surface-container-low">
             <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-3xl text-[var(--accent-color)]">admin_panel_settings</span>
-                <span class="font-headline-md text-xl md:text-2xl text-white uppercase italic tracking-tighter">CONSOLA DE ADMINISTRACIÓN</span>
+                <span data-i18n="admin_panel_title" class="font-headline-md text-xl md:text-2xl text-white uppercase italic tracking-tighter">CONSOLA DE ADMINISTRACIÓN</span>
             </div>
             <div class="flex items-center gap-4">
-                <button onclick="saveAdminChanges()" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold px-4 py-2 uppercase hover:bg-white transition-all">
+                <button onclick="saveAdminChanges()" data-i18n="admin_panel_save" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold px-4 py-2 uppercase hover:bg-white transition-all">
                     GUARDAR CAMBIOS
                 </button>
                 <button onclick="closeAdminPanel()" class="text-tertiary hover:text-white transition-colors">
@@ -2811,27 +3587,27 @@
         <div class="flex flex-1 overflow-hidden">
             <div class="w-48 bg-surface-container-low border-r border-white/10 flex flex-col justify-between p-4">
                 <div class="flex flex-col gap-2">
-                    <button onclick="switchAdminTab('plans')" id="tabBtn-plans" class="admin-tab-btn active w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-white uppercase bg-[rgba(var(--accent-color-rgb),0.1)] border-[var(--accent-color)]/30 font-bold transition-all">
+                    <button onclick="switchAdminTab('plans')" id="tabBtn-plans" data-i18n="admin_panel_tab_plans" class="admin-tab-btn active w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-white uppercase bg-[rgba(var(--accent-color-rgb),0.1)] border-[var(--accent-color)]/30 font-bold transition-all">
                         PLANES
                     </button>
-                    <button onclick="switchAdminTab('schedule')" id="tabBtn-schedule" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
+                    <button onclick="switchAdminTab('schedule')" id="tabBtn-schedule" data-i18n="admin_panel_tab_schedule" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
                         HORARIOS
                     </button>
-                    <button onclick="switchAdminTab('media')" id="tabBtn-media" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
+                    <button onclick="switchAdminTab('media')" id="tabBtn-media" data-i18n="admin_panel_tab_media" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
                         MEDIA & COACH
                     </button>
-                    <button onclick="switchAdminTab('clients')" id="tabBtn-clients" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
+                    <button onclick="switchAdminTab('clients')" id="tabBtn-clients" data-i18n="admin_panel_tab_clients" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
                         CLIENTES
                     </button>
-                    <button onclick="switchAdminTab('gallery')" id="tabBtn-gallery" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
+                    <button onclick="switchAdminTab('gallery')" id="tabBtn-gallery" data-i18n="admin_panel_tab_gallery" class="admin-tab-btn w-full text-left font-label-sm text-xs py-3 px-4 rounded-sm border border-transparent text-tertiary uppercase hover:bg-white/5 transition-all">
                         GALERÍA
                     </button>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <button onclick="resetToDefaults()" class="w-full font-label-sm text-[10px] border border-red-500/30 text-red-400 py-2 uppercase hover:bg-red-500/10 transition-all text-center">
+                    <button onclick="resetToDefaults()" data-i18n="admin_panel_reset" class="w-full font-label-sm text-[10px] border border-red-500/30 text-red-400 py-2 uppercase hover:bg-red-500/10 transition-all text-center">
                         RECOMPILAR DEFAULT
                     </button>
-                    <button onclick="logoutAdmin()" class="w-full font-label-sm text-[10px] border border-white/10 text-tertiary py-2 uppercase hover:bg-white/5 transition-all text-center">
+                    <button onclick="logoutAdmin()" data-i18n="admin_panel_logout" class="w-full font-label-sm text-[10px] border border-white/10 text-tertiary py-2 uppercase hover:bg-white/5 transition-all text-center">
                         CERRAR SESIÓN
                     </button>
                 </div>
@@ -3188,22 +3964,22 @@
             <div class="text-center flex flex-col items-center">
                 <span class="material-symbols-outlined text-5xl text-[var(--accent-color)] mb-2">directions_run</span>
                 <div>
-                    <span class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO ATLETAS ]</span>
-                    <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">MI PLAN DE ENTRENAMIENTO</h3>
+                    <span data-i18n="athlete_login_title" class="font-label-sm text-xs text-tertiary tracking-widest uppercase block mb-1">[ ACCESO ATLETAS ]</span>
+                    <h3 data-i18n="athlete_login_header" class="font-headline-md text-3xl text-white uppercase italic tracking-tighter">MI PLAN DE ENTRENAMIENTO</h3>
                 </div>
-                <p class="font-body-md text-sm text-tertiary leading-relaxed mt-4 max-w-md mx-auto">
+                <p data-i18n="athlete_login_desc" class="font-body-md text-sm text-tertiary leading-relaxed mt-4 max-w-md mx-auto">
                     Ingresa el correo electrónico con el que te registraste en la academia para acceder a tu planificación semanal y notas del entrenador.
                 </p>
             </div>
             
             <div class="flex flex-col gap-2 max-w-md mx-auto w-full">
-                <label class="font-label-sm text-xs text-tertiary uppercase block mb-1">Correo Electrónico</label>
-                <input class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="athleteEmail" placeholder="juan@correo.com" type="email" onkeyup="if(event.key === 'Enter') loginAthlete()"/>
-                <span id="athleteLoginError" class="font-label-sm text-xs text-red-500 mt-1 hidden">No se encontró ningún registro para este correo. Por favor, inscríbete primero o verifica la dirección.</span>
+                <label data-i18n="athlete_login_label_email" class="font-label-sm text-xs text-tertiary uppercase block mb-1">Correo Electrónico</label>
+                <input data-i18n="athlete_login_placeholder" class="w-full bg-[#181818] border border-white/10 rounded-sm text-white px-4 py-3 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none transition-colors text-sm" id="athleteEmail" placeholder="juan@correo.com" type="email" onkeyup="if(event.key === 'Enter') loginAthlete()"/>
+                <span data-i18n="athlete_login_error" id="athleteLoginError" class="font-label-sm text-xs text-red-500 mt-1 hidden">No se encontró ningún registro para este correo. Por favor, inscríbete primero o verifica la dirección.</span>
             </div>
             
             <div class="flex flex-col gap-2 max-w-md mx-auto w-full">
-                <button onclick="loginAthlete()" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+                <button onclick="loginAthlete()" data-i18n="athlete_login_btn" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-bold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
                     ACCEDER A MI PLAN
                 </button>
             </div>
@@ -3212,7 +3988,7 @@
         <!-- Step 2: Plan Display -->
         <div id="athletePlanView" class="flex flex-col gap-6 hidden">
             <div class="border-b border-white/10 pb-4">
-                <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
+                <span data-i18n="athlete_plan_active_tag" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ PLAN ACTIVO EXCLUSIVO ]</span>
                 <h3 class="font-headline-md text-3xl text-white uppercase italic tracking-tighter" id="athleteAthleteName">HOLA, DEPORTISTA</h3>
                 <p class="font-body-md text-xs text-tertiary mt-1" id="athleteSportInterest">Fase: Triatlón</p>
             </div>
@@ -3221,25 +3997,25 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                 <!-- Plan Title Card -->
                 <div class="bg-[#181818] border border-white/5 p-5 rounded-sm">
-                    <span class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
+                    <span data-i18n="athlete_plan_assigned" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">PROGRAMACIÓN ASIGNADA</span>
                     <h4 class="font-headline-md text-xl text-white uppercase italic" id="athletePlanTitle">PLAN PERSONALIZADO</h4>
                 </div>
                 
                 <!-- Plan Metrics Card -->
                 <div class="bg-[#181818] border border-white/5 p-5 rounded-sm grid grid-cols-2 gap-4">
                     <div>
-                        <span class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
+                        <span data-i18n="athlete_plan_duration" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">DURACIÓN</span>
                         <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanDuration">12 Semanas</span>
                     </div>
                     <div>
-                        <span class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
+                        <span data-i18n="athlete_plan_volume" class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">VOLUMEN</span>
                         <span class="font-label-sm text-sm text-white font-bold block mt-1" id="athletePlanVolume">6-8 hrs/sem</span>
                     </div>
                 </div>
                 
                 <!-- Notes and Guidelines (Spans both cols) -->
                 <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
-                    <span class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES DEL COACH LUIS ]</span>
+                    <span data-i18n="athlete_plan_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES DEL COACH LUIS ]</span>
                     <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
                         Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
                     </p>
@@ -3247,8 +4023,8 @@
             </div>
             
             <div class="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
-                <span class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-ACADEMY SYSTEM 2026</span>
-                <button onclick="logoutAthlete()" class="font-label-sm text-xs border border-white/10 text-tertiary px-4 py-2 hover:bg-white/5 hover:text-white transition-all">
+                <span data-i18n="athlete_plan_system" class="font-label-sm text-[10px] text-tertiary-fixed-dim uppercase">TRI-ACADEMY SYSTEM 2026</span>
+                <button onclick="logoutAthlete()" data-i18n="athlete_plan_logout" class="font-label-sm text-xs border border-white/10 text-tertiary px-4 py-2 hover:bg-white/5 hover:text-white transition-all">
                     SALIR / CERRAR
                 </button>
             </div>
@@ -3294,14 +4070,14 @@
         </button>
         <div class="mb-4">
             <span class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1" id="cropperStepLabel">[ PASO 1 DE 2: ENCUADRE ESCRITORIO ]</span>
-            <h3 class="font-headline-md text-2xl text-white uppercase italic tracking-tighter" id="cropperTitle">AJUSTAR ENCUADRE DE LA IMAGEN</h3>
+            <h3 class="font-headline-md text-2xl text-white uppercase italic tracking-tighter" id="cropperTitle" data-i18n="cropper_title">AJUSTAR ENCUADRE DE LA IMAGEN</h3>
             <p class="font-body-md text-xs text-tertiary mt-1" id="cropperDesc">Ajusta la zona visible para pantallas de escritorio.</p>
         </div>
         <div class="flex-1 bg-black rounded-sm overflow-hidden flex items-center justify-center min-h-[300px] max-h-[50vh] relative mb-6">
             <img id="cropperImage" class="max-w-full max-h-full object-contain"/>
         </div>
         <div class="flex justify-between items-center gap-4">
-            <button onclick="closeCropperModal()" class="font-label-sm text-xs border border-white/15 text-tertiary px-6 py-3 uppercase hover:bg-white/5 hover:text-white transition-all">CANCELAR</button>
+            <button onclick="closeCropperModal()" data-i18n="cropper_cancel" class="font-label-sm text-xs border border-white/15 text-tertiary px-6 py-3 uppercase hover:bg-white/5 hover:text-white transition-all">CANCELAR</button>
             <button id="cropperNextBtn" onclick="nextCropperStep()" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold px-8 py-3 uppercase border border-black hover:bg-white transition-all">CONFIRMAR Y SIGUIENTE</button>
         </div>
     </div>
