@@ -764,17 +764,19 @@
 
         <!-- Step 3: Success Screen -->
         <div id="modalStep3" class="flex flex-col items-center text-center gap-6 py-6 hidden">
-            <span class="material-symbols-outlined text-6xl text-[var(--accent-color)] status-pulse">check_circle</span>
+            <span id="step3Icon" class="material-symbols-outlined text-6xl text-[var(--accent-color)] status-pulse">check_circle</span>
             <div>
-                <span data-i18n="join_step_3" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ SOLICITUD ENVIADA ]</span>
-                <h3 data-i18n="join_step_3_title" class="font-headline-md text-3xl text-neutral-900 uppercase italic tracking-tighter">¡BIENVENIDO AL TEAM!</h3>
+                <span id="step3Tag" data-i18n="join_step_3" class="font-label-sm text-xs text-[var(--accent-color)] tracking-widest uppercase block mb-1">[ SOLICITUD ENVIADA ]</span>
+                <h3 id="step3Title" data-i18n="join_step_3_title" class="font-headline-md text-3xl text-neutral-900 uppercase italic tracking-tighter">¡BIENVENIDO AL TEAM!</h3>
             </div>
-            <p data-i18n="contact_success_desc" class="font-body-md text-neutral-600 max-w-sm leading-relaxed">
+            <p id="step3Desc" data-i18n="contact_success_desc" class="font-body-md text-neutral-600 max-w-sm leading-relaxed">
                 Hemos recibido tu perfil deportivo con éxito. Un entrenador se pondrá en contacto contigo vía WhatsApp o Email dentro de las próximas 24 horas para coordinar tu test de nivelación bonificado.
             </p>
-            <button onclick="closeJoinModal()" data-i18n="join_btn_done" class="mt-4 font-label-sm text-label-sm border border-black text-black hover:bg-black hover:text-white font-bold px-8 py-3 uppercase transition-all">
-                ENTENDIDO
-            </button>
+            <div id="step3ActionContainer" class="flex flex-col gap-3 w-full max-w-xs mt-2">
+                <button onclick="closeJoinModal()" data-i18n="join_btn_done" class="w-full font-label-sm text-label-sm border border-black text-black hover:bg-black hover:text-white font-bold py-3 uppercase transition-all">
+                    ENTENDIDO
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -964,7 +966,13 @@
             "btn_complete_workout": "Complete Workout",
             "workout_feedback_placeholder": "Workout comments (optional)...",
             "btn_confirm_completion": "Confirm",
-            "workout_feedback_label": "Athlete Feedback:"
+            "workout_feedback_label": "Athlete Feedback:",
+            "stripe_payment_title": "PLAN PAYMENT REQUIRED",
+            "stripe_payment_desc": "To finalize your registration, please complete the payment for your selected plan.",
+            "btn_pay_stripe": "PAY WITH STRIPE",
+            "admin_stripe_config_title": "STRIPE GATEWAY SETTINGS",
+            "admin_stripe_pub_key": "Stripe Publishable Key",
+            "admin_stripe_link_label": "Stripe Price ID or Payment Link"
         },
         es: {
             "menu_tri": "TRIATLÓN",
@@ -1141,7 +1149,13 @@
             "btn_complete_workout": "Completar Entrenamiento",
             "workout_feedback_placeholder": "Comentarios del entrenamiento (opcional)...",
             "btn_confirm_completion": "Confirmar",
-            "workout_feedback_label": "Comentarios del Atleta:"
+            "workout_feedback_label": "Comentarios del Atleta:",
+            "stripe_payment_title": "PAGO DEL PLAN REQUERIDO",
+            "stripe_payment_desc": "Para finalizar tu inscripción, por favor completa el pago del plan seleccionado.",
+            "btn_pay_stripe": "PAGAR CON STRIPE",
+            "admin_stripe_config_title": "CONFIGURACIÓN DE PASARELA STRIPE",
+            "admin_stripe_pub_key": "Clave Pública de Stripe",
+            "admin_stripe_link_label": "ID de Precio o Link de Pago de Stripe"
         }
     };
 
@@ -1910,6 +1924,7 @@
     let coachData = null;
     let clientsList = null;
     let galleryData = null;
+    let stripeConfig = null;
     let uploadedImages = {}; // Temp device uploads
 
     // Load state from local storage or fallback to defaults
@@ -1940,7 +1955,10 @@
         clientsList = localClients ? JSON.parse(localClients) : defaultClientsList;
         galleryData = localGallery ? JSON.parse(localGallery) : defaultGalleryData;
 
-
+        const localStripe = localStorage.getItem("stripeConfig");
+        stripeConfig = localStripe ? JSON.parse(localStripe) : {
+            publishableKey: "pk_live_51TmcTnQ6n2mgIT1gh7q652fv6M7mo1uojUL223EB2jAIsx5qJMgXpCUL3FWj1l03rKM2KGiio6OB9IyX6T2aTMWw00DEFkxLba"
+        };
     }
 
     // Dynamic rendering of plans
@@ -1974,7 +1992,7 @@
                         <span class="font-label-sm text-xs text-tertiary-fixed-dim block">${t("plan_flat_rate")}</span>
                         <span class="font-display-lg text-4xl text-white italic">${plan.price}<span class="text-sm font-label-sm text-tertiary not-italic">${t("plan_month_suffix")}</span></span>
                     </div>
-                    <button onclick="openJoinModal('${activePhase}')" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-extrabold px-5 py-3 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+                    <button onclick="openJoinModal('${activePhase}', ${index})" class="font-label-sm text-xs bg-[var(--accent-color)] text-black font-extrabold px-5 py-3 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
                         ${t("plan_select_btn")}
                     </button>
                 </div>
@@ -2230,9 +2248,14 @@
 
     // Join Modal Actions
     let currentStep = 1;
+    let selectedPlanPhase = null;
+    let selectedPlanIndex = null;
 
-    function openJoinModal(preselectedSport) {
+    function openJoinModal(preselectedSport, planIndex) {
         const modal = document.getElementById("joinModal");
+        
+        selectedPlanPhase = preselectedSport || activePhase;
+        selectedPlanIndex = typeof planIndex === 'number' ? planIndex : null;
         
         if (preselectedSport) {
             document.getElementById("sportInterest").value = preselectedSport;
@@ -2357,6 +2380,66 @@
             localStorage.setItem("clientsList", JSON.stringify(clientsList));
             saveConfigToSupabase("clientsList", clientsList);
             
+            // Check if plan has stripeLink
+            let hasPayment = false;
+            let targetPlan = null;
+            if (selectedPlanPhase && selectedPlanIndex !== null) {
+                const phaseObj = phaseData[selectedPlanPhase];
+                if (phaseObj && phaseObj.plans && phaseObj.plans[selectedPlanIndex]) {
+                    targetPlan = phaseObj.plans[selectedPlanIndex];
+                    if (targetPlan.stripeLink) {
+                        hasPayment = true;
+                    }
+                }
+            }
+
+            const step3Title = document.getElementById("step3Title");
+            const step3Tag = document.getElementById("step3Tag");
+            const step3Desc = document.getElementById("step3Desc");
+            const step3Icon = document.getElementById("step3Icon");
+            const actionContainer = document.getElementById("step3ActionContainer");
+
+            if (hasPayment && targetPlan) {
+                // Change step 3 content to Stripe checkout
+                step3Icon.innerText = "payment";
+                step3Icon.className = "material-symbols-outlined text-6xl text-[var(--accent-color)] status-pulse";
+                
+                step3Tag.removeAttribute("data-i18n");
+                step3Tag.innerText = t("stripe_payment_title");
+                
+                step3Title.removeAttribute("data-i18n");
+                step3Title.innerText = getLocalizedValue(targetPlan.level).toUpperCase();
+                
+                step3Desc.removeAttribute("data-i18n");
+                step3Desc.innerText = t("stripe_payment_desc");
+                
+                actionContainer.innerHTML = `
+                    <button onclick="handlePlanPayment(phaseData['${selectedPlanPhase}'].plans[${selectedPlanIndex}], '${email}')" class="w-full font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold py-4 uppercase border border-black hover:-translate-y-0.5 active:translate-y-0.5 transition-all">
+                        ${t("btn_pay_stripe")}
+                    </button>
+                    <button onclick="closeJoinModal()" class="w-full font-label-sm text-[10px] text-neutral-500 uppercase hover:underline mt-1">
+                        ${currentLang === 'en' ? 'Pay Later' : 'Pagar más tarde'}
+                    </button>
+                `;
+            } else {
+                // Default success screen
+                step3Icon.innerText = "check_circle";
+                step3Tag.setAttribute("data-i18n", "join_step_3");
+                step3Tag.innerText = t("join_step_3");
+                
+                step3Title.setAttribute("data-i18n", "join_step_3_title");
+                step3Title.innerText = t("join_step_3_title");
+                
+                step3Desc.setAttribute("data-i18n", "contact_success_desc");
+                step3Desc.innerText = t("contact_success_desc");
+                
+                actionContainer.innerHTML = `
+                    <button onclick="closeJoinModal()" data-i18n="join_btn_done" class="w-full font-label-sm text-label-sm border border-black text-black hover:bg-black hover:text-white font-bold py-3 uppercase transition-all">
+                        ${t("join_btn_done")}
+                    </button>
+                `;
+            }
+
             goToStep(3);
             
             // Clear inputs
@@ -2431,6 +2514,9 @@
 
         // Populate panel inputs and previews with active states
         document.getElementById("adminCoachName").value = coachData.name;
+        if (document.getElementById("adminStripePublicKey")) {
+            document.getElementById("adminStripePublicKey").value = stripeConfig.publishableKey;
+        }
         
         document.getElementById("adminCoachPhotoPreview").src = coachData.photo;
         document.getElementById("adminCoachPhotoName").innerText = "Seleccionar archivo...";
@@ -2576,6 +2662,10 @@
                         <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Volumen Semanal</label>
                         <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planVolume-${phase}-${index}" type="text" value="${plan.volume}"/>
                     </div>
+                    <div>
+                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">ID de Precio o Link de Pago (Stripe)</label>
+                        <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-1.5 font-body-md text-xs focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none" id="planStripeLink-${phase}-${index}" type="text" value="${plan.stripeLink || ''}" placeholder="price_... o https://buy.stripe.com/..."/>
+                    </div>
                 </div>
                 <div>
                     <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Enfoque del Plan / Descripción</label>
@@ -2676,14 +2766,19 @@
                 plan.focus[currentLang] = focusVal;
 
                 plan.price = document.getElementById(`planPrice-${phase}-${index}`).value;
+                plan.stripeLink = document.getElementById(`planStripeLink-${phase}-${index}`).value.trim();
             });
 
             // Save everything to localStorage safely
+            const stripePubVal = document.getElementById("adminStripePublicKey") ? document.getElementById("adminStripePublicKey").value.trim() : stripeConfig.publishableKey;
+            stripeConfig.publishableKey = stripePubVal;
+            localStorage.setItem("stripeConfig", JSON.stringify(stripeConfig));
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
             localStorage.setItem("scheduleData", JSON.stringify(scheduleData));
             localStorage.setItem("coachData", JSON.stringify(coachData));
 
             // Sync to Supabase Database in background
+            await saveConfigToSupabase("stripeConfig", stripeConfig);
             await saveConfigToSupabase("phaseData", phaseData);
             await saveConfigToSupabase("scheduleData", scheduleData);
             await saveConfigToSupabase("coachData", coachData);
@@ -4044,6 +4139,60 @@
         renderAdminChatFeed(client);
     }
 
+    // --- Stripe Payments Integration ---
+    function handlePlanPayment(plan, email) {
+        if (!plan || !plan.stripeLink) return;
+        const stripeLink = plan.stripeLink.trim();
+        
+        if (stripeLink.startsWith('http://') || stripeLink.startsWith('https://')) {
+            // Stripe Payment Link
+            let redirectUrl = stripeLink;
+            const separator = redirectUrl.includes('?') ? '&' : '?';
+            redirectUrl += `${separator}prefilled_email=${encodeURIComponent(email)}&client_reference_id=${encodeURIComponent(email)}`;
+            window.location.href = redirectUrl;
+        } else {
+            // Stripe Price ID
+            if (typeof Stripe === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://js.stripe.com/v3/';
+                script.onload = () => {
+                    executeStripeCheckout(stripeLink, email, plan);
+                };
+                document.head.appendChild(script);
+            } else {
+                executeStripeCheckout(stripeLink, email, plan);
+            }
+        }
+    }
+
+    function executeStripeCheckout(priceId, email, plan) {
+        try {
+            const pubKey = (stripeConfig && stripeConfig.publishableKey) || "pk_live_51TmcTnQ6n2mgIT1gh7q652fv6M7mo1uojUL223EB2jAIsx5qJMgXpCUL3FWj1l03rKM2KGiio6OB9IyX6T2aTMWw00DEFkxLba";
+            const stripeInstance = Stripe(pubKey);
+            
+            const durationLower = (plan.duration && typeof plan.duration === 'object' ? getLocalizedValue(plan.duration) : (plan.duration || "")).toLowerCase();
+            const isOneTime = durationLower.includes('sesión') || 
+                              durationLower.includes('sesion') || 
+                              durationLower.includes('once') || 
+                              durationLower.includes('sesión');
+            
+            stripeInstance.redirectToCheckout({
+                lineItems: [{ price: priceId, quantity: 1 }],
+                mode: isOneTime ? 'payment' : 'subscription',
+                successUrl: window.location.origin + '?payment_status=success&email=' + encodeURIComponent(email),
+                cancelUrl: window.location.origin + '?payment_status=cancel',
+                customerEmail: email
+            }).then((result) => {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            });
+        } catch (err) {
+            console.error("Stripe Checkout error:", err);
+            alert("Error al iniciar el pago con Stripe: " + err.message);
+        }
+    }
+
     // Initial render
     window.onload = () => {
         initSystemData();
@@ -4341,6 +4490,17 @@
                                             <span class="material-symbols-outlined text-sm">upload</span>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pasarela Stripe -->
+                        <div class="border border-white/5 rounded-sm p-4 bg-[#181818] md:col-span-2 flex flex-col gap-4">
+                            <span class="font-label-sm text-xs text-[var(--accent-color)] font-bold block uppercase border-b border-white/10 pb-2">[ CONFIGURACIÓN DE PASARELA STRIPE ]</span>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Clave Pública (Publishable Key)</label>
+                                    <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs" id="adminStripePublicKey" type="text" placeholder="pk_live_..."/>
                                 </div>
                             </div>
                         </div>
