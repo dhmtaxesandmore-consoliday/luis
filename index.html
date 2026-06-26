@@ -460,7 +460,7 @@
                     TRI-ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
                 </h1>
                 <!-- Description -->
-                <p id="heroDesc" data-i18n="hero_desc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
+                <p id="heroDesc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
                     El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.
                 </p>
                 <div class="flex flex-wrap gap-4 mt-6">
@@ -1271,6 +1271,17 @@
                 btnEnMob.classList.remove("text-[var(--accent-color)]", "font-bold");
                 btnEnMob.classList.add("text-tertiary");
             }
+        }
+
+        // Update phase specific texts in the active language
+        const phaseDataActive = phaseData ? phaseData[activePhase] : null;
+        if (phaseDataActive) {
+            const heroTitle = document.getElementById("heroTitle");
+            const heroDesc = document.getElementById("heroDesc");
+            const plansTitlePhase = document.getElementById("plansTitlePhase");
+            if (heroTitle) heroTitle.innerHTML = getLocalizedValue(phaseDataActive.title);
+            if (heroDesc) heroDesc.innerText = getLocalizedValue(phaseDataActive.desc);
+            if (plansTitlePhase) plansTitlePhase.innerText = getLocalizedValue(phaseDataActive.plansTitle);
         }
 
         // Re-render UI elements
@@ -2275,22 +2286,61 @@
         const localClients = localStorage.getItem("clientsList");
         const localGallery = localStorage.getItem("galleryData");
 
-        // Force upgrade/sync defaultPhaseData if localPhase is outdated or has old background images or lacks strength
-        if (!localPhase || localPhase.includes("PROGRESIVO SPRINT") || localPhase.includes("SWIM FUNDAMENTAL") || localPhase.includes("mario-la-pergola-XEOB-7BwrmU-unsplash.jpg") || !localPhase.includes("\"strength\"") || localPhase.includes("paolo-candelo-53B17GiIhTA-unsplash.jpg")) {
+        // Parse phaseData safely, ensuring all sport phases exist without brittle resets
+        if (!localPhase) {
             phaseData = defaultPhaseData;
             localStorage.setItem("phaseData", JSON.stringify(phaseData));
         } else {
-            phaseData = JSON.parse(localPhase);
+            try {
+                phaseData = JSON.parse(localPhase);
+                let modified = false;
+                const requiredPhases = ['tri', 'swim', 'bike', 'run', 'strength'];
+                requiredPhases.forEach(p => {
+                    if (!phaseData[p]) {
+                        phaseData[p] = defaultPhaseData[p];
+                        modified = true;
+                    }
+                });
+                if (modified) {
+                    localStorage.setItem("phaseData", JSON.stringify(phaseData));
+                }
+            } catch (e) {
+                console.error("Error parsing localPhase, resetting to default:", e);
+                phaseData = defaultPhaseData;
+                localStorage.setItem("phaseData", JSON.stringify(phaseData));
+            }
         }
 
         scheduleData = localSched ? JSON.parse(localSched) : defaultScheduleData;
         
-        // Force upgrade coachData if it lacks strength sport profile
-        if (!localCoach || !localCoach.includes("\"strength\"")) {
+        // Parse coachData safely, ensuring all sports profiles exist
+        if (!localCoach) {
             coachData = defaultCoachData;
             localStorage.setItem("coachData", JSON.stringify(coachData));
         } else {
-            coachData = JSON.parse(localCoach);
+            try {
+                coachData = JSON.parse(localCoach);
+                let modified = false;
+                if (!coachData.sports) {
+                    coachData.sports = defaultCoachData.sports;
+                    modified = true;
+                } else {
+                    const requiredSports = ['tri', 'swim', 'bike', 'run', 'strength'];
+                    requiredSports.forEach(s => {
+                        if (!coachData.sports[s]) {
+                            coachData.sports[s] = defaultCoachData.sports[s];
+                            modified = true;
+                        }
+                    });
+                }
+                if (modified) {
+                    localStorage.setItem("coachData", JSON.stringify(coachData));
+                }
+            } catch (e) {
+                console.error("Error parsing localCoach, resetting to default:", e);
+                coachData = defaultCoachData;
+                localStorage.setItem("coachData", JSON.stringify(coachData));
+            }
         }
         clientsList = localClients ? JSON.parse(localClients) : defaultClientsList;
         galleryData = localGallery ? JSON.parse(localGallery) : defaultGalleryData;
@@ -2538,9 +2588,9 @@
         if (heroBg) {
             heroBg.style.backgroundImage = `url('${data.bg}')`;
         }
-        if (heroTitle) heroTitle.innerHTML = data.title;
-        if (heroDesc) heroDesc.innerText = data.desc;
-        if (plansTitlePhase) plansTitlePhase.innerText = data.plansTitle;
+        if (heroTitle) heroTitle.innerHTML = getLocalizedValue(data.title);
+        if (heroDesc) heroDesc.innerText = getLocalizedValue(data.desc);
+        if (plansTitlePhase) plansTitlePhase.innerText = getLocalizedValue(data.plansTitle);
 
         if (heroTitle && heroDesc) {
             heroTitle.classList.remove("fade-in-up");
