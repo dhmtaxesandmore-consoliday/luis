@@ -454,29 +454,33 @@
         </div>
         
         <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-4 md:grid-cols-12 gap-gutter py-12 items-center">
-            <div class="col-span-4 md:col-span-7 flex flex-col gap-6 w-full">
-                <!-- Main Header with stroke text effect (Desktop) -->
-                <h1 id="heroTitle" class="hidden md:block font-display-lg text-5xl sm:text-6xl md:text-8xl text-white uppercase italic tracking-tighter leading-[0.85]">
+            <div class="col-span-4 md:col-span-7 flex flex-col gap-6 w-full text-center md:text-left items-center md:items-start">
+                <!-- Mobile Swipe Zone & Header (Only visible on mobile) -->
+                <div id="mobileSwipeZone" class="block md:hidden w-full py-6 px-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing select-none transition-all">
+                    <!-- Dynamic Sport Title (e.g. TRIATLÓN) -->
+                    <h1 id="mobileHeroTitle" class="font-display-lg text-5xl text-white uppercase italic tracking-tighter leading-none text-center">
+                        TRIATLÓN
+                    </h1>
+                    <!-- Brand Label (e.g. TRI-LION ACADEMY) -->
+                    <span class="font-label-sm text-[10px] text-tertiary tracking-widest uppercase mt-2">[ TRI-LION ACADEMY ]</span>
+                    <!-- Swipe Hint -->
+                    <div class="flex items-center gap-1.5 text-[var(--accent-color)] font-label-sm text-[9px] uppercase tracking-widest mt-3 animate-pulse">
+                        <span class="material-symbols-outlined text-[12px] select-none">chevron_left</span>
+                        <span>Deslizar para cambiar</span>
+                        <span class="material-symbols-outlined text-[12px] select-none">chevron_right</span>
+                    </div>
+                </div>
+
+                <!-- Main Header with stroke text effect (Desktop Only) -->
+                <h1 id="heroTitle" class="hidden md:block font-display-lg text-5xl sm:text-6xl md:text-8xl text-white uppercase italic tracking-tighter leading-[0.85] text-left">
                     TRI-LION ACADEMY<br/><span class="text-transparent" style="-webkit-text-stroke: 1.5px var(--accent-color);">SYSTEM</span>
                 </h1>
                 
-                <!-- Mobile Swipe Zone & Header -->
-                <div id="mobileSwipeZone" class="block md:hidden w-full py-5 px-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-center gap-1 cursor-pointer select-none active:bg-white/[0.04] transition-all">
-                    <span class="font-label-sm text-[10px] text-tertiary tracking-widest uppercase mb-1">[ TRI-LION ACADEMY ]</span>
-                    <h1 id="mobileHeroTitle" class="font-display-lg text-5xl text-white uppercase italic tracking-tighter leading-none">
-                        TRIATLÓN
-                    </h1>
-                    <div class="flex items-center gap-1.5 text-tertiary font-label-sm text-[9px] uppercase tracking-widest mt-2 animate-pulse">
-                        <span class="material-symbols-outlined text-[10px]">chevron_left</span>
-                        <span>Deslizar para cambiar</span>
-                        <span class="material-symbols-outlined text-[10px]">chevron_right</span>
-                    </div>
-                </div>
                 <!-- Description -->
-                <p id="heroDesc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed">
+                <p id="heroDesc" class="font-body-lg text-body-lg text-tertiary max-w-2xl leading-relaxed text-center md:text-left">
                     El centro definitivo de alto rendimiento deportivo. Entrenamos triatletas de todos los niveles con metodologías científicas, entrenadores profesionales y una comunidad inquebrantable.
                 </p>
-                <div class="flex flex-wrap gap-4 mt-6">
+                <div class="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
                     <button onclick="openJoinModal()" data-i18n="btn_join_team" class="font-label-sm text-label-sm bg-[var(--accent-color)] text-black font-extrabold px-8 py-4 uppercase border border-black hover:-translate-y-1 hover:shadow-[4px_4px_0px_#ffffff] active:translate-y-0 active:shadow-none transition-all duration-150 hard-shadow-btn">
                         UNIRSE AL EQUIPO
                     </button>
@@ -5067,44 +5071,75 @@
 
     function initMobileSwipeGestures() {
         const swipeZone = document.getElementById("mobileSwipeZone");
-        if (swipeZone) {
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let touchEndX = 0;
-            let touchEndY = 0;
+        const heroSection = document.getElementById("hero-section");
+        
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isSwiping = false;
 
-            swipeZone.addEventListener("touchstart", function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
+        function onTouchStart(e) {
+            if (e.touches && e.touches.length > 0) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwiping = true;
+            }
+        }
 
-            swipeZone.addEventListener("touchend", function(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                handleSwipeGesture();
-            }, { passive: true });
+        function onTouchMove(e) {
+            if (!isSwiping || !e.touches || e.touches.length === 0) return;
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const diffX = currentX - touchStartX;
+            const diffY = currentY - touchStartY;
 
-            function handleSwipeGesture() {
-                const diffX = touchEndX - touchStartX;
-                const diffY = touchEndY - touchStartY;
-
-                // Only trigger if horizontal swipe is significant and vertical movement is minor
-                if (Math.abs(diffX) > 40 && Math.abs(diffY) < 40) {
-                    const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
-                    let currentIndex = phases.indexOf(activePhase);
-                    if (currentIndex === -1) currentIndex = 0;
-
-                    if (diffX < 0) {
-                        // Swipe left -> Next phase
-                        let nextIndex = (currentIndex + 1) % phases.length;
-                        switchPhase(phases[nextIndex]);
-                    } else {
-                        // Swipe right -> Previous phase
-                        let nextIndex = (currentIndex - 1 + phases.length) % phases.length;
-                        switchPhase(phases[nextIndex]);
-                    }
+            // If horizontal movement is greater than vertical movement, prevent vertical scrolling
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (e.cancelable) {
+                    e.preventDefault();
                 }
             }
+        }
+
+        function onTouchEnd(e) {
+            if (!isSwiping) return;
+            isSwiping = false;
+            
+            if (!e.changedTouches || e.changedTouches.length === 0) return;
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            // Only trigger if horizontal swipe is significant and vertical movement is minor
+            if (Math.abs(diffX) > 50 && Math.abs(diffY) < 60) {
+                const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
+                let currentIndex = phases.indexOf(activePhase);
+                if (currentIndex === -1) currentIndex = 0;
+
+                if (diffX < 0) {
+                    // Swipe left -> Next phase
+                    let nextIndex = (currentIndex + 1) % phases.length;
+                    switchPhase(phases[nextIndex]);
+                } else {
+                    // Swipe right -> Previous phase
+                    let nextIndex = (currentIndex - 1 + phases.length) % phases.length;
+                    switchPhase(phases[nextIndex]);
+                }
+            }
+        }
+
+        if (swipeZone) {
+            swipeZone.addEventListener("touchstart", onTouchStart, { passive: true });
+            swipeZone.addEventListener("touchmove", onTouchMove, { passive: false });
+            swipeZone.addEventListener("touchend", onTouchEnd, { passive: true });
+        }
+        
+        if (heroSection) {
+            heroSection.addEventListener("touchstart", onTouchStart, { passive: true });
+            heroSection.addEventListener("touchmove", onTouchMove, { passive: false });
+            heroSection.addEventListener("touchend", onTouchEnd, { passive: true });
         }
     }
 
