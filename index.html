@@ -615,7 +615,7 @@
             <div class="glass-panel p-6 md:p-10 border-t-4 border-[var(--accent-color)] transition-colors duration-500 rounded-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-4xl mx-auto shadow-[4px_4px_0px_rgba(255,255,255,0.05)]">
                 <!-- Left: Coach Image -->
                 <div class="col-span-1 md:col-span-5 relative flex justify-center group">
-                    <div id="coachPhoto" class="w-full max-w-[280px] md:max-w-none aspect-[4/5] bg-cover bg-center mix-blend-luminosity hover:mix-blend-normal transition-all duration-500 filter contrast-125 border border-white/10 shadow-[4px_4px_0px_#000000] hover:shadow-[4px_4px_0px_var(--accent-color)]" style="background-image: url('fpotos/Gemini_Generated_Image_98x5oo98x5oo98x5.png')"></div>
+                    <div id="coachPhoto" class="w-full max-w-[280px] md:max-w-none aspect-[4/5] bg-cover bg-center mix-blend-luminosity hover:mix-blend-normal transition-all duration-500 filter contrast-125 border border-white/10 shadow-[4px_4px_0px_#000000] hover:shadow-[4px_4px_0px_var(--accent-color)]" style="background-image: url('fpotos/e.png')"></div>
                 </div>
                 <!-- Right: Coach Bio -->
                 <div class="col-span-1 md:col-span-7 flex flex-col justify-center gap-4">
@@ -2165,7 +2165,7 @@
 
     const defaultCoachData = {
         name: "Luis Plasencia",
-        photo: "fpotos/Gemini_Generated_Image_98x5oo98x5oo98x5.png",
+        photo: "fpotos/e.png",
         sports: {
             tri: {
                 specialty: {
@@ -2337,8 +2337,8 @@
                 coachData = JSON.parse(localCoach);
                 let modified = false;
                 
-                // Force update coach photo to ensure the new Gemini image is loaded
-                if (!coachData.photo || !coachData.photo.includes("Gemini_Generated_Image_98x5oo98x5oo98x5.png")) {
+                // Force update coach photo to ensure the new e.png image is loaded
+                if (!coachData.photo || !coachData.photo.includes("e.png")) {
                     coachData.photo = defaultCoachData.photo;
                     coachData.photoMobile = defaultCoachData.photo;
                     modified = true;
@@ -5348,7 +5348,7 @@
                                 <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Foto de Perfil (Subir desde Dispositivo)</label>
                                 <div class="flex items-center gap-4">
                                     <div class="w-16 h-20 bg-[#121212] border border-white/10 rounded-sm flex items-center justify-center overflow-hidden shrink-0">
-                                        <img id="adminCoachPhotoPreview" src="" class="w-full h-full object-cover" onerror="this.src='fpotos/Gemini_Generated_Image_98x5oo98x5oo98x5.png';"/>
+                                        <img id="adminCoachPhotoPreview" src="" class="w-full h-full object-cover" onerror="this.src='fpotos/e.png';"/>
                                     </div>
                                     <div class="flex-1 relative bg-surface-container border border-white/10 rounded-sm py-2 px-3 flex items-center justify-between text-xs text-tertiary cursor-pointer hover:border-[var(--accent-color)]/30">
                                         <span class="truncate" id="adminCoachPhotoName">Seleccionar archivo...</span>
