@@ -986,7 +986,10 @@
             "btn_schedule_here": "+ Schedule",
             "workout_day_label": "Scheduled Day",
             "athlete_tab_calendar": "My Calendar",
-            "admin_tab_calendar": "Weekly Calendar"
+            "admin_tab_calendar": "Weekly Calendar",
+            "athlete_plan_daily_header": "DAILY PLANNING",
+            "athlete_plan_general_notes": "GENERAL GUIDELINES",
+            "day_rest_default": "Rest or autonomous activity"
         },
         es: {
             "menu_tri": "TRIATLÓN",
@@ -1183,7 +1186,10 @@
             "btn_schedule_here": "+ Programar",
             "workout_day_label": "Día Programado",
             "athlete_tab_calendar": "Mi Calendario",
-            "admin_tab_calendar": "Calendario Semanal"
+            "admin_tab_calendar": "Calendario Semanal",
+            "athlete_plan_daily_header": "PLANIFICACIÓN DIARIA",
+            "athlete_plan_general_notes": "INDICACIONES GENERALES",
+            "day_rest_default": "Descanso o actividad autónoma"
         }
     };
 
@@ -1256,6 +1262,15 @@
         filterSchedule(activeScheduleFilter);
         renderGallery();
         updateResponsiveBackgrounds();
+
+        // Refresh athlete view if logged in
+        const athletePlanView = document.getElementById("athletePlanView");
+        if (athletePlanView && !athletePlanView.classList.contains("hidden")) {
+            const emailInput = document.getElementById("athleteEmail");
+            if (emailInput && emailInput.value.trim()) {
+                loginAthlete();
+            }
+        }
     }
 
 
@@ -3142,11 +3157,53 @@
             document.getElementById("athletePlanDuration").innerText = getLocalizedValue(client.plan.duration) || "N/A";
             document.getElementById("athletePlanVolume").innerText = getLocalizedValue(client.plan.volume) || "N/A";
             document.getElementById("athletePlanNotes").innerText = getLocalizedValue(client.plan.notes) || t("athlete_plan_default_notes");
+            
+            // Render Daily Plan
+            const dailyContainer = document.getElementById("athleteDailyPlanContainer");
+            if (dailyContainer) {
+                dailyContainer.innerHTML = "";
+                const days = [
+                    { key: "monday", label: t("day_monday") },
+                    { key: "tuesday", label: t("day_tuesday") },
+                    { key: "wednesday", label: t("day_wednesday") },
+                    { key: "thursday", label: t("day_thursday") },
+                    { key: "friday", label: t("day_friday") },
+                    { key: "saturday", label: t("day_saturday") },
+                    { key: "sunday", label: t("day_sunday") }
+                ];
+                
+                const todayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday, etc.
+                const dayKeys = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+                const currentDayKey = dayKeys[todayIndex];
+
+                days.forEach(day => {
+                    const isToday = currentDayKey === day.key;
+                    const rawNotes = client.plan.dailyNotes ? client.plan.dailyNotes[day.key] : "";
+                    const dayNotes = rawNotes ? getLocalizedValue(rawNotes) : "";
+                    
+                    const dayCard = document.createElement("div");
+                    dayCard.className = `bg-[#181818] border ${isToday ? 'border-[var(--accent-color)]/30 bg-[#202020]' : 'border-white/5'} p-4 rounded-sm flex flex-col gap-2 text-xs transition-all`;
+                    
+                    dayCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="font-label-sm font-bold uppercase tracking-wider ${isToday ? 'text-[var(--accent-color)]' : 'text-white'}">${day.label}</span>
+                            ${isToday ? `<span class="bg-[var(--accent-color)] text-black font-bold px-1.5 py-0.5 rounded-sm text-[8px] uppercase font-label-sm">TODAY</span>` : ''}
+                        </div>
+                        <p class="font-body-md text-sm ${dayNotes ? 'text-secondary leading-relaxed' : 'text-tertiary italic'} whitespace-pre-wrap mt-1">
+                            ${dayNotes || t("day_rest_default")}
+                        </p>
+                    `;
+                    dailyContainer.appendChild(dayCard);
+                });
+            }
         } else {
             document.getElementById("athletePlanTitle").innerText = t("athlete_plan_pending_title");
             document.getElementById("athletePlanDuration").innerText = t("athlete_plan_pending_duration");
             document.getElementById("athletePlanVolume").innerText = t("athlete_plan_pending_volume");
             document.getElementById("athletePlanNotes").innerText = t("athlete_plan_pending_notes");
+            
+            const dailyContainer = document.getElementById("athleteDailyPlanContainer");
+            if (dailyContainer) dailyContainer.innerHTML = "";
         }
     }
 
@@ -3212,12 +3269,23 @@
             document.getElementById("editorPlanTitle").value = getLocalizedValue(client.plan.title) || "";
             document.getElementById("editorPlanDuration").value = getLocalizedValue(client.plan.duration) || "";
             document.getElementById("editorPlanVolume").value = getLocalizedValue(client.plan.volume) || "";
-            document.getElementById("editorPlanNotes").value = getLocalizedValue(client.plan.notes) || "";
+            document.getElementById("editorPlanNotes-general").value = getLocalizedValue(client.plan.notes) || "";
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            days.forEach(day => {
+                const dayNotes = (client.plan.dailyNotes && client.plan.dailyNotes[day]) ? getLocalizedValue(client.plan.dailyNotes[day]) : "";
+                document.getElementById(`editorPlanNotes-${day}`).value = dayNotes;
+            });
         } else {
             document.getElementById("editorPlanTitle").value = currentLang === "en" ? `Custom Plan: ${client.goal || 'Performance'}` : `Plan Personalizado: ${client.goal || 'Rendimiento'}`;
             document.getElementById("editorPlanDuration").value = currentLang === "en" ? "12 Weeks" : "12 Semanas";
             document.getElementById("editorPlanVolume").value = currentLang === "en" ? "8 - 10 hours / week" : "8 - 10 horas / semana";
-            document.getElementById("editorPlanNotes").value = currentLang === "en" ? `Hello ${client.name.split(' ')[0]},\n\nHere are the specific guidelines for your goal:\n"${client.goal || 'General improvement'}".\n\n1. Base Endurance (Z1-Z2): ...\n2. Technical work: ...\n3. Nutrition: ...` : `Hola ${client.name.split(' ')[0]},\n\nAquí tienes las pautas específicas para tu objetivo:\n"${client.goal || 'Mejora general'}".\n\n1. Resistencia Base (Z1-Z2): ...\n2. Trabajo técnico: ...\n3. Nutrición: ...`;
+            document.getElementById("editorPlanNotes-general").value = currentLang === "en" ? `Hello ${client.name.split(' ')[0]},\n\nHere are the specific guidelines for your goal:\n"${client.goal || 'General improvement'}".\n\n1. Base Endurance (Z1-Z2): ...\n2. Technical work: ...\n3. Nutrition: ...` : `Hola ${client.name.split(' ')[0]},\n\nAquí tienes las pautas específicas para tu objetivo:\n"${client.goal || 'Mejora general'}".\n\n1. Resistencia Base (Z1-Z2): ...\n2. Trabajo técnico: ...\n3. Nutrición: ...`;
+            
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            days.forEach(day => {
+                document.getElementById(`editorPlanNotes-${day}`).value = "";
+            });
         }
         
         document.getElementById("adminPlanEditorPlaceholder").classList.add("hidden");
@@ -3235,10 +3303,10 @@
         const title = document.getElementById("editorPlanTitle").value.trim();
         const duration = document.getElementById("editorPlanDuration").value.trim();
         const volume = document.getElementById("editorPlanVolume").value.trim();
-        const notes = document.getElementById("editorPlanNotes").value.trim();
+        const notesGeneral = document.getElementById("editorPlanNotes-general").value.trim();
         
         if (!clientsList[clientIndex].plan) {
-            clientsList[clientIndex].plan = { title: {}, duration: {}, volume: {}, notes: {} };
+            clientsList[clientIndex].plan = { title: {}, duration: {}, volume: {}, notes: {}, dailyNotes: {} };
         }
         const plan = clientsList[clientIndex].plan;
         
@@ -3246,11 +3314,21 @@
         if (typeof plan.duration !== 'object') plan.duration = { en: plan.duration, es: plan.duration };
         if (typeof plan.volume !== 'object') plan.volume = { en: plan.volume, es: plan.volume };
         if (typeof plan.notes !== 'object') plan.notes = { en: plan.notes, es: plan.notes };
+        if (!plan.dailyNotes) plan.dailyNotes = {};
 
         plan.title[currentLang] = title || (currentLang === "en" ? "Custom Plan" : "Plan Personalizado");
         plan.duration[currentLang] = duration || (currentLang === "en" ? "12 Weeks" : "12 Semanas");
         plan.volume[currentLang] = volume || (currentLang === "en" ? "8 - 10 hours / week" : "8 - 10 horas / semana");
-        plan.notes[currentLang] = notes || "";
+        plan.notes[currentLang] = notesGeneral || "";
+        
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        days.forEach(day => {
+            if (!plan.dailyNotes[day] || typeof plan.dailyNotes[day] !== 'object') {
+                const oldVal = plan.dailyNotes[day] || "";
+                plan.dailyNotes[day] = { en: oldVal, es: oldVal };
+            }
+            plan.dailyNotes[day][currentLang] = document.getElementById(`editorPlanNotes-${day}`).value.trim();
+        });
         
         localStorage.setItem("clientsList", JSON.stringify(clientsList));
         saveConfigToSupabase("clientsList", clientsList);
@@ -3260,7 +3338,7 @@
         document.getElementById("adminPlanEditor").classList.add("hidden");
         document.getElementById("adminPlanEditorPlaceholder").classList.remove("hidden");
         
-        alert("¡Plan personalizado asignado correctamente!");
+        alert(currentLang === "en" ? "Custom plan assigned successfully!" : "¡Plan personalizado asignado correctamente!");
     }
 
     // --- Interactive Photo Gallery ---
@@ -4909,9 +4987,42 @@
                                             <input class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-sm" id="editorPlanVolume" placeholder="Ej: 8 - 12 horas" type="text"/>
                                         </div>
                                     </div>
-                                    <div>
-                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1">Indicaciones Especiales y Planificación</label>
-                                        <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs h-32" id="editorPlanNotes" placeholder="Describe el plan detallado, días de descanso, nutrición y ritmos..."></textarea>
+                                    <div class="border-t border-white/10 pt-3">
+                                        <span class="font-label-sm text-[10px] text-[var(--accent-color)] font-bold block uppercase mb-3" data-i18n="athlete_plan_daily_header">[ PLANIFICACIÓN DIARIA ]</span>
+                                        <div class="grid grid-cols-1 gap-2.5 max-h-60 overflow-y-auto no-scrollbar border border-white/5 p-2 rounded-sm bg-black/20">
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_monday">Lunes</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-monday" placeholder="Rutina o indicaciones del Lunes..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_tuesday">Martes</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-tuesday" placeholder="Rutina o indicaciones del Martes..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_wednesday">Miércoles</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-wednesday" placeholder="Rutina o indicaciones del Miércoles..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_thursday">Jueves</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-thursday" placeholder="Rutina o indicaciones del Jueves..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_friday">Viernes</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-friday" placeholder="Rutina o indicaciones del Viernes..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_saturday">Sábado</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-saturday" placeholder="Rutina o indicaciones del Sábado..."></textarea>
+                                            </div>
+                                            <div>
+                                                <label class="font-label-sm text-[9px] text-tertiary uppercase block mb-0.5" data-i18n="day_sunday">Domingo</label>
+                                                <textarea class="w-full bg-[#121212] border border-white/10 rounded-sm text-white px-2.5 py-1 text-[11px] focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none h-12" id="editorPlanNotes-sunday" placeholder="Rutina o indicaciones del Domingo..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1.5">
+                                        <label class="font-label-sm text-[10px] text-tertiary uppercase block mb-1" data-i18n="athlete_plan_general_notes">Indicaciones Generales</label>
+                                        <textarea class="w-full bg-surface-container border border-white/10 rounded-sm text-white px-3 py-2 font-body-md focus:border-[var(--accent-color)] focus:ring-0 focus:outline-none text-xs h-20" id="editorPlanNotes-general" placeholder="Describe consejos de nutrición, ritmos generales y pautas..."></textarea>
                                     </div>
                                     <button onclick="saveClientPlan()" class="w-full font-label-sm text-xs bg-[var(--accent-color)] text-black font-bold py-2.5 uppercase border border-black hover:bg-white transition-all">
                                         ASIGNAR PLAN
@@ -5127,10 +5238,18 @@
                     
                     <!-- Notes and Guidelines (Spans both cols) -->
                     <div class="bg-[#181818] border border-white/5 p-5 rounded-sm md:col-span-2">
-                        <span data-i18n="athlete_plan_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES DEL COACH LUIS ]</span>
+                        <span data-i18n="athlete_plan_general_notes" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-2 font-bold">[ INDICACIONES GENERALES ]</span>
                         <p class="font-body-md text-sm text-tertiary leading-relaxed whitespace-pre-wrap" id="athletePlanNotes">
                             Tu entrenador está diseñando tu plan personalizado en este momento. Te notificaremos cuando esté listo.
                         </p>
+                    </div>
+                    
+                    <!-- Daily Plan (Spans both cols) -->
+                    <div class="md:col-span-2 flex flex-col gap-3">
+                        <span data-i18n="athlete_plan_daily_header" class="font-label-sm text-[10px] text-[var(--accent-color)] uppercase block mb-1 font-bold">[ PLANIFICACIÓN DIARIA ]</span>
+                        <div id="athleteDailyPlanContainer" class="flex flex-col gap-3">
+                            <!-- Daily cards generated dynamically -->
+                        </div>
                     </div>
                 </div>
             </div>
