@@ -466,7 +466,7 @@
                     <!-- Swipe Hint -->
                     <div class="flex items-center gap-1.5 text-[var(--accent-color)] font-label-sm text-[9px] uppercase tracking-widest mt-3 animate-pulse">
                         <span onclick="navigatePhase(-1, event)" class="material-symbols-outlined text-[14px] select-none cursor-pointer hover:scale-125 transition-all p-1">chevron_left</span>
-                        <span>Deslizar para cambiar</span>
+                        <span>Click para cambiar</span>
                         <span onclick="navigatePhase(1, event)" class="material-symbols-outlined text-[14px] select-none cursor-pointer hover:scale-125 transition-all p-1">chevron_right</span>
                     </div>
                 </div>
@@ -1301,6 +1301,7 @@
             if (heroDesc) heroDesc.innerText = getLocalizedValue(phaseDataActive.desc);
             if (plansTitlePhase) plansTitlePhase.innerText = getLocalizedValue(phaseDataActive.plansTitle);
             if (mobileHeroTitle) mobileHeroTitle.innerText = getLocalizedValue(phaseDataActive.plansTitle);
+            document.title = `${getLocalizedValue(phaseDataActive.plansTitle)} | TRI-LION ACADEMY`;
         }
 
         // Re-render UI elements
@@ -2335,6 +2336,14 @@
             try {
                 coachData = JSON.parse(localCoach);
                 let modified = false;
+                
+                // Force update coach photo to ensure the new Gemini image is loaded
+                if (!coachData.photo || !coachData.photo.includes("Gemini_Generated_Image_98x5oo98x5oo98x5.png")) {
+                    coachData.photo = defaultCoachData.photo;
+                    coachData.photoMobile = defaultCoachData.photo;
+                    modified = true;
+                }
+
                 if (!coachData.sports) {
                     coachData.sports = defaultCoachData.sports;
                     modified = true;
@@ -2609,6 +2618,9 @@
         if (mobileHeroTitle) {
             mobileHeroTitle.innerText = getLocalizedValue(data.plansTitle);
         }
+        
+        // Update browser tab title dynamically
+        document.title = `${getLocalizedValue(data.plansTitle)} | TRI-LION ACADEMY`;
 
         if (heroTitle && heroDesc) {
             heroTitle.classList.remove("fade-in-up");
