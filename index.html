@@ -443,7 +443,7 @@
 
 <main>
     <!-- Hero Section -->
-    <section id="hero-section" class="relative min-h-[85vh] md:min-h-[780px] flex items-end border-b border-white/10 pb-margin-mobile md:pb-margin-desktop overflow-hidden">
+    <section id="hero-section" class="relative min-h-[85vh] md:min-h-[780px] flex items-end border-b border-white/10 pb-margin-mobile md:pb-margin-desktop overflow-hidden" style="touch-action: pan-y;">
         <div class="absolute inset-0 z-0">
             <!-- Dynamic Background Images -->
             <div id="heroBg" class="absolute inset-0 bg-cover bg-center mix-blend-luminosity opacity-40 transition-all duration-700 scale-100 filter contrast-125" style="background-image: url('fpotos/jorge-romero-mfCFuPfTtdU-unsplash.jpg')"></div>
@@ -456,7 +456,7 @@
         <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-4 md:grid-cols-12 gap-gutter py-12 items-center">
             <div class="col-span-4 md:col-span-7 flex flex-col gap-6 w-full text-center md:text-left items-center md:items-start">
                 <!-- Mobile Swipe Zone & Header (Only visible on mobile) -->
-                <div id="mobileSwipeZone" class="block md:hidden w-full py-6 px-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing select-none transition-all">
+                <div id="mobileSwipeZone" class="block md:hidden w-full py-6 px-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing select-none transition-all" style="touch-action: pan-y;">
                     <!-- Dynamic Sport Title (e.g. TRIATLÓN) -->
                     <h1 id="mobileHeroTitle" class="font-display-lg text-5xl text-white uppercase italic tracking-tighter leading-none text-center">
                         TRIATLÓN
@@ -465,9 +465,9 @@
                     <span class="font-label-sm text-[10px] text-tertiary tracking-widest uppercase mt-2">[ TRI-LION ACADEMY ]</span>
                     <!-- Swipe Hint -->
                     <div class="flex items-center gap-1.5 text-[var(--accent-color)] font-label-sm text-[9px] uppercase tracking-widest mt-3 animate-pulse">
-                        <span class="material-symbols-outlined text-[12px] select-none">chevron_left</span>
+                        <span onclick="navigatePhase(-1, event)" class="material-symbols-outlined text-[14px] select-none cursor-pointer hover:scale-125 transition-all p-1">chevron_left</span>
                         <span>Deslizar para cambiar</span>
-                        <span class="material-symbols-outlined text-[12px] select-none">chevron_right</span>
+                        <span onclick="navigatePhase(1, event)" class="material-symbols-outlined text-[14px] select-none cursor-pointer hover:scale-125 transition-all p-1">chevron_right</span>
                     </div>
                 </div>
 
@@ -5069,6 +5069,18 @@
         }
     }
 
+    function navigatePhase(direction, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
+        let currentIndex = phases.indexOf(activePhase);
+        if (currentIndex === -1) currentIndex = 0;
+        let nextIndex = (currentIndex + direction + phases.length) % phases.length;
+        switchPhase(phases[nextIndex]);
+    }
+
     function initMobileSwipeGestures() {
         const swipeZone = document.getElementById("mobileSwipeZone");
         const heroSection = document.getElementById("hero-section");
@@ -5076,24 +5088,30 @@
         let touchStartX = 0;
         let touchStartY = 0;
         let isSwiping = false;
+        let isMoving = false;
 
         function onTouchStart(e) {
-            if (e.touches && e.touches.length > 0) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                touchStartX = e.changedTouches[0].clientX;
+                touchStartY = e.changedTouches[0].clientY;
                 isSwiping = true;
+                isMoving = false;
             }
         }
 
         function onTouchMove(e) {
-            if (!isSwiping || !e.touches || e.touches.length === 0) return;
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
+            if (!isSwiping || !e.changedTouches || e.changedTouches.length === 0) return;
+            const currentX = e.changedTouches[0].clientX;
+            const currentY = e.changedTouches[0].clientY;
             
             const diffX = currentX - touchStartX;
             const diffY = currentY - touchStartY;
 
-            // If horizontal movement is greater than vertical movement, prevent vertical scrolling
+            if (Math.abs(diffX) > 10 || Math.abs(diffY) > 10) {
+                isMoving = true;
+            }
+
+            // If horizontal movement dominates vertical movement, prevent default scrolling
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (e.cancelable) {
                     e.preventDefault();
@@ -5112,21 +5130,18 @@
             const diffX = touchEndX - touchStartX;
             const diffY = touchEndY - touchStartY;
 
-            // Only trigger if horizontal swipe is significant and vertical movement is minor
-            if (Math.abs(diffX) > 50 && Math.abs(diffY) < 60) {
-                const phases = ['tri', 'swim', 'bike', 'run', 'strength'];
-                let currentIndex = phases.indexOf(activePhase);
-                if (currentIndex === -1) currentIndex = 0;
-
+            // Only trigger if horizontal swipe is significant and horizontal movement dominates
+            if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
                 if (diffX < 0) {
                     // Swipe left -> Next phase
-                    let nextIndex = (currentIndex + 1) % phases.length;
-                    switchPhase(phases[nextIndex]);
+                    navigatePhase(1);
                 } else {
                     // Swipe right -> Previous phase
-                    let nextIndex = (currentIndex - 1 + phases.length) % phases.length;
-                    switchPhase(phases[nextIndex]);
+                    navigatePhase(-1);
                 }
+            } else if (!isMoving && e.currentTarget === swipeZone) {
+                // If it was a simple tap/click on the swipeZone (and not a swipe/drag), cycle to the next phase
+                navigatePhase(1);
             }
         }
 
@@ -5134,12 +5149,23 @@
             swipeZone.addEventListener("touchstart", onTouchStart, { passive: true });
             swipeZone.addEventListener("touchmove", onTouchMove, { passive: false });
             swipeZone.addEventListener("touchend", onTouchEnd, { passive: true });
+            swipeZone.addEventListener("touchcancel", () => { isSwiping = false; }, { passive: true });
+            
+            // Register click listener for non-touch devices or fallback taps
+            swipeZone.addEventListener("click", (e) => {
+                if (!isMoving) {
+                    if (!e.target.closest('span.material-symbols-outlined')) {
+                        navigatePhase(1, e);
+                    }
+                }
+            });
         }
         
         if (heroSection) {
             heroSection.addEventListener("touchstart", onTouchStart, { passive: true });
             heroSection.addEventListener("touchmove", onTouchMove, { passive: false });
             heroSection.addEventListener("touchend", onTouchEnd, { passive: true });
+            heroSection.addEventListener("touchcancel", () => { isSwiping = false; }, { passive: true });
         }
     }
 
